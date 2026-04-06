@@ -346,14 +346,7 @@ function bColor(t){return{c:'#a038f2',r:'#3939bc',i:'rgba(247,178,79,.8)',s:'#a0
 function ePill(p){if(p>=5)return`<span class="eng-pill eng-h">${p.toFixed(1)}%</span>`;if(p>=2)return`<span class="eng-pill eng-m">${p.toFixed(1)}%</span>`;return`<span class="eng-l">${p.toFixed(1)}%</span>`}
 function sc(url){if(!url)return null;const m=url.match(/\/(?:p|reel)\/([A-Za-z0-9_-]+)/);return m?m[1]:null}
 function sum(arr,k){return arr.reduce((a,r)=>a+(parseInt(r[k],10)||0),0)}
-function parsePosts(rows){
-  // Tenta primeiro o formato antigo: linha com Data==='Total' (resumo agregado)
-  const totals=rows.filter(r=>(r['Data']||'').trim()==='Total');
-  if(totals.length)return totals;
-  // Formato novo do Meta: sem linha 'Total', cada linha é uma publicação individual
-  // Retorna linhas que tenham ao menos URL ou Visualizações preenchido
-  return rows.filter(r=>(r['Url do conteúdo']||r['URL do conteúdo']||r['Link do conteúdo']||'').trim()||parseInt(r['Visualizações'],10)>0);
-}
+function parsePosts(rows){return rows.filter(r=>(r['Data']||'').trim()==='Total')}
 function pillLabel(k,n){return{c:n===1?'Carrossel':'Carrosseis',r:'Reels',i:n===1?'Post':'Posts',s:n===1?'Story':'Stories'}[k]}
 
 /* ── Charts ── */
