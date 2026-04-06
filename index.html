@@ -13,9 +13,9 @@
 <script>const CLIENT_NAME='SetUp English School';const ACCOUNT='setup.english';</script>
 <style>
 :root{
-  --bg:#0d0b0e;--surface:#161218;--surface2:#1e1820;--border:rgba(255,255,255,0.07);
-  --orange:#f05924;--blue:#84d1eb;--green:#34d399;--yellow:#f7b24f;--purple:#c4b0fd;
-  --beige:#fcf6ec;--muted:#7a6e78;--dimmed:rgba(252,246,236,0.5);
+  --bg:#080a2e;--surface:#12155a;--surface2:#181c6a;--border:rgba(255,255,255,0.09);
+  --orange:#3939bc;--blue:#a038f2;--green:#a2e259;--yellow:#f7b24f;--purple:#a038f2;
+  --beige:#efecef;--muted:rgba(239,236,239,0.45);--dimmed:rgba(239,236,239,0.5);
   --radius:12px;--font:'Bricolage Grotesque',sans-serif;
   --sidebar-open:224px;--sidebar-closed:46px;
 }
@@ -55,7 +55,7 @@ body{background:var(--bg);color:var(--beige);font-family:var(--font);font-size:1
 .sidebar-divider{height:1px;background:var(--border);margin:10px 14px}
 .nav-tab{display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:color .15s,background .15s;position:relative;font-family:var(--font);white-space:nowrap}
 .nav-tab:hover{color:var(--beige);background:rgba(255,255,255,.03)}
-.nav-tab.active{color:var(--beige);background:rgba(240,89,36,.08)}
+.nav-tab.active{color:var(--beige);background:rgba(57,57,188,.08)}
 .nav-tab.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--orange);border-radius:0 2px 2px 0}
 .nav-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .year-group{overflow:hidden;transition:max-height .25s ease}
@@ -81,10 +81,10 @@ body{background:var(--bg);color:var(--beige);font-family:var(--font);font-size:1
 .pill{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:700;border:1px solid}
 .pill-dot{width:5px;height:5px;border-radius:50%}
 .pill-total{border-color:rgba(255,255,255,.12);color:var(--beige);background:rgba(255,255,255,.05)}
-.pill-c{border-color:rgba(132,209,235,.3);color:var(--blue);background:rgba(132,209,235,.08)}
-.pill-r{border-color:rgba(240,89,36,.3);color:var(--orange);background:rgba(240,89,36,.08)}
+.pill-c{border-color:rgba(160,56,242,.3);color:var(--blue);background:rgba(160,56,242,.08)}
+.pill-r{border-color:rgba(57,57,188,.3);color:var(--orange);background:rgba(57,57,188,.08)}
 .pill-i{border-color:rgba(247,178,79,.3);color:var(--yellow);background:rgba(247,178,79,.08)}
-.pill-s{border-color:rgba(196,176,253,.3);color:var(--purple);background:rgba(196,176,253,.08)}
+.pill-s{border-color:rgba(160,56,242,.3);color:var(--purple);background:rgba(160,56,242,.08)}
 
 /* Month tabs */
 .month-tabs{display:flex;gap:0;margin-bottom:1.5rem;border-bottom:1px solid var(--border)}
@@ -132,7 +132,7 @@ body{background:var(--bg);color:var(--beige);font-family:var(--font);font-size:1
 /* Weekday */
 .weekday-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:1.25rem;overflow:hidden}
 .weekday-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 6px;text-align:center;min-width:0;overflow:hidden}
-.weekday-card.wd-best{border-color:rgba(132,209,235,.4);background:rgba(132,209,235,.05)}
+.weekday-card.wd-best{border-color:rgba(160,56,242,.4);background:rgba(160,56,242,.05)}
 .weekday-name{font-size:12px;font-weight:800;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
 .weekday-card.wd-best .weekday-name{color:var(--blue)}
 .wd-metric-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:8px;margin-bottom:2px;font-weight:700}
@@ -150,7 +150,7 @@ body{background:var(--bg);color:var(--beige);font-family:var(--font);font-size:1
 
 /* NEW POST CARD FORMAT (Image ~55%, Pills transparentes com borda) */
 .post-card-v2{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;text-decoration:none;display:flex;flex-direction:row;align-items:stretch;transition:border-color .2s,transform .15s,box-shadow .2s;min-width:0;position:relative;padding:16px;gap:16px}
-.post-card-v2:hover{border-color:rgba(240,89,36,.4);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.3)}
+.post-card-v2:hover{border-color:rgba(57,57,188,.4);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.3)}
 .post-card-v2-img{flex-shrink:0;width:175px;position:relative;overflow:hidden;background:var(--surface2);border-radius:12px;align-self:flex-start}
 .post-card-v2-body{padding:0;display:flex;flex-direction:column;min-width:0;flex:1;justify-content:center}
 .post-card-rank{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;color:var(--blue)}
@@ -170,7 +170,7 @@ body{background:var(--bg);color:var(--beige);font-family:var(--font);font-size:1
 .card{position:relative;transition:border-color .2s}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--orange);border-radius:var(--radius) var(--radius) 0 0;opacity:0;transition:opacity .25s;pointer-events:none;z-index:1}
 .card:hover::before{opacity:.5}
-.card:hover{border-color:rgba(240,89,36,.15)}
+.card:hover{border-color:rgba(57,57,188,.15)}
 
 /* Format section */
 .format-section{margin-bottom:1.75rem}
@@ -185,18 +185,18 @@ th{text-align:left;padding:8px 10px;font-size:10px;text-transform:uppercase;lett
 td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--beige);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(255,255,255,.02)}
-tr.top-row td{background:rgba(240,89,36,.04)}
+tr.top-row td{background:rgba(57,57,188,.04)}
 .num{text-align:right!important}
 .thumb-cell img,.thumb-cell .th-ph{width:40px;height:40px;object-fit:cover;border-radius:6px;display:block;background:var(--surface2)}
 .thumb-cell .th-ph{display:flex;align-items:center;justify-content:center;font-size:16px;opacity:.2}
 .badge{display:inline-block;font-size:10px;padding:3px 8px;border-radius:99px;font-weight:700;white-space:nowrap}
-.badge-c{background:rgba(132,209,235,.12);color:#84d1eb}
-.badge-r{background:rgba(240,89,36,.12);color:#f07a55}
+.badge-c{background:rgba(160,56,242,.12);color:#a038f2}
+.badge-r{background:rgba(57,57,188,.12);color:#f07a55}
 .badge-i{background:rgba(247,178,79,.1);color:var(--yellow)}
-.badge-s{background:rgba(196,176,253,.12);color:var(--purple)}
+.badge-s{background:rgba(160,56,242,.12);color:var(--purple)}
 .eng-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:12px;font-weight:700}
-.eng-h{background:rgba(240,89,36,.15);color:var(--orange)}
-.eng-m{background:rgba(132,209,235,.12);color:var(--blue)}
+.eng-h{background:rgba(57,57,188,.15);color:var(--orange)}
+.eng-m{background:rgba(160,56,242,.12);color:var(--blue)}
 .eng-l{color:var(--muted)}
 .star{color:var(--orange);margin-right:3px;font-size:11px}
 .desc-cell{max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--dimmed)}
@@ -221,7 +221,7 @@ tr.top-row td{background:rgba(240,89,36,.04)}
 /* Annual */
 .annual-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.25rem}
 .ms-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;cursor:pointer;transition:border-color .2s,transform .15s,box-shadow .2s;min-width:0}
-.ms-card:hover{border-color:rgba(240,89,36,.35);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.3)}
+.ms-card:hover{border-color:rgba(57,57,188,.35);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.3)}
 .ms-name{font-size:13px;font-weight:700;color:var(--beige);margin-bottom:4px}
 .ms-views{font-size:20px;font-weight:800;color:var(--beige);letter-spacing:-.03em}
 .ms-label{font-size:10px;color:var(--muted);font-weight:600;margin-bottom:6px}
@@ -237,8 +237,8 @@ tr.top-row td{background:rgba(240,89,36,.04)}
 code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px;font-size:13px}
 
 /* ── Home ── */
-.home-hero{background:linear-gradient(135deg,rgba(240,89,36,.1),rgba(132,209,235,.05));border:1px solid rgba(240,89,36,.18);border-radius:var(--radius);padding:2rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
-.home-hero::after{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(240,89,36,.12),transparent 70%);pointer-events:none}
+.home-hero{background:linear-gradient(135deg,rgba(57,57,188,.1),rgba(160,56,242,.05));border:1px solid rgba(57,57,188,.18);border-radius:var(--radius);padding:2rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.home-hero::after{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(57,57,188,.12),transparent 70%);pointer-events:none}
 .home-hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);margin-bottom:8px}
 .home-hero-title{font-size:34px;font-weight:800;letter-spacing:-.04em;color:var(--beige);line-height:1.1;margin-bottom:6px}
 .home-hero-sub{font-size:14px;color:var(--muted)}
@@ -248,11 +248,11 @@ code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px;font-siz
 
 .year-boxes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:1.5rem}
 .year-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;cursor:pointer;transition:border-color .2s,transform .15s,box-shadow .2s;position:relative;overflow:hidden;text-decoration:none;display:block}
-.year-box:hover{border-color:rgba(240,89,36,.4);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.year-box:hover{border-color:rgba(57,57,188,.4);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.35)}
 .year-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--yb-accent,var(--orange))}
 .year-box-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem}
 .year-box-year{font-size:32px;font-weight:800;letter-spacing:-.04em;color:var(--beige);line-height:1}
-.year-box-badge{font-size:10px;font-weight:700;padding:4px 9px;border-radius:99px;background:rgba(240,89,36,.12);color:var(--orange);letter-spacing:.06em;text-transform:uppercase;align-self:flex-start;margin-top:4px}
+.year-box-badge{font-size:10px;font-weight:700;padding:4px 9px;border-radius:99px;background:rgba(57,57,188,.12);color:var(--orange);letter-spacing:.06em;text-transform:uppercase;align-self:flex-start;margin-top:4px}
 .year-box-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-bottom:1.25rem}
 .year-box-metric{padding-right:12px}
 .year-box-metric+.year-box-metric{border-left:1px solid var(--border);padding-left:12px;padding-right:0}
@@ -266,7 +266,7 @@ code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px;font-siz
 /* Nav home button */
 .nav-home{display:flex;align-items:center;gap:8px;padding:10px 14px 10px 14px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:var(--font);white-space:nowrap;border-bottom:1px solid var(--border);margin-bottom:6px;transition:color .15s,background .15s;position:relative}
 .nav-home:hover{color:var(--beige);background:rgba(255,255,255,.03)}
-.nav-home.active{color:var(--beige);background:rgba(240,89,36,.08)}
+.nav-home.active{color:var(--beige);background:rgba(57,57,188,.08)}
 .nav-home.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--orange);border-radius:0 2px 2px 0}
 
 @media(max-width:1200px){
@@ -342,7 +342,7 @@ function sDate(s){const r=parsePostDate(s);if(!r)return'—';return`${String(r.d
 function tKey(t){const s=(t||'').toLowerCase();if(s.includes('carrossel'))return'c';if(s.includes('reel'))return'r';if(s.includes('story')||s.includes('storie'))return's';return'i'}
 function sTipo(t){return{c:'Carrossel',r:'Reel',i:'Post',s:'Story'}[tKey(t)]}
 function bCls(t){return{c:'badge-c',r:'badge-r',i:'badge-i',s:'badge-s'}[tKey(t)]}
-function bColor(t){return{c:'#84d1eb',r:'#f05924',i:'rgba(247,178,79,.8)',s:'#c4b0fd'}[tKey(t)]}
+function bColor(t){return{c:'#a038f2',r:'#3939bc',i:'rgba(247,178,79,.8)',s:'#a038f2'}[tKey(t)]}
 function ePill(p){if(p>=5)return`<span class="eng-pill eng-h">${p.toFixed(1)}%</span>`;if(p>=2)return`<span class="eng-pill eng-m">${p.toFixed(1)}%</span>`;return`<span class="eng-l">${p.toFixed(1)}%</span>`}
 function sc(url){if(!url)return null;const m=url.match(/\/(?:p|reel)\/([A-Za-z0-9_-]+)/);return m?m[1]:null}
 function sum(arr,k){return arr.reduce((a,r)=>a+(parseInt(r[k],10)||0),0)}
@@ -352,7 +352,7 @@ function pillLabel(k,n){return{c:n===1?'Carrossel':'Carrosseis',r:'Reels',i:n===
 /* ── Charts ── */
 const charts={};
 function mkChart(id,cfg){if(charts[id])charts[id].destroy();const el=document.getElementById(id);if(el)charts[id]=new Chart(el,cfg)}
-const cOpts=()=>({responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1e1820',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:'#fcf6ec',bodyColor:'#7a6e78',titleFont:{family:"'Bricolage Grotesque',sans-serif",weight:'700'},bodyFont:{family:"'Bricolage Grotesque',sans-serif",size:12}}},scales:{x:{grid:{display:false},ticks:{color:'#7a6e78',font:{size:11,family:"'Bricolage Grotesque',sans-serif"},maxTicksLimit:12}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#7a6e78',font:{size:11,family:"'Bricolage Grotesque',sans-serif"},callback:v=>v>=1000?(v/1000).toFixed(1)+'k':v}}}});
+const cOpts=()=>({responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#181c6a',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:'#efecef',bodyColor:'#8a87a0',titleFont:{family:"'Bricolage Grotesque',sans-serif",weight:'700'},bodyFont:{family:"'Bricolage Grotesque',sans-serif",size:12}}},scales:{x:{grid:{display:false},ticks:{color:'#8a87a0',font:{size:11,family:"'Bricolage Grotesque',sans-serif"},maxTicksLimit:12}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#8a87a0',font:{size:11,family:"'Bricolage Grotesque',sans-serif"},callback:v=>v>=1000?(v/1000).toFixed(1)+'k':v}}}});
 function yMax(vals){const m=Math.max(...vals.filter(v=>v!=null&&!isNaN(v)),0);return m===0?10:Math.ceil(m*1.4);}
 
 function thumbBlock(code,url){
@@ -405,10 +405,10 @@ function postCard(p,rank,rankColor){
 /* ── Posts by format ── */
 function postsByFormat(posts){
   const formats=[
-    {key:'c',label:'Carrosseis',color:'#84d1eb'},
-    {key:'r',label:'Reels',color:'#f05924'},
+    {key:'c',label:'Carrosseis',color:'#a038f2'},
+    {key:'r',label:'Reels',color:'#3939bc'},
     {key:'i',label:'Posts',color:'#f7b24f'},
-    {key:'s',label:'Stories',color:'#c4b0fd'},
+    {key:'s',label:'Stories',color:'#a038f2'},
   ];
   return formats.map(f=>{
     const fp=[...posts].filter(p=>tKey(p['Tipo de post'])===f.key).sort((a,b)=>(parseInt(b['Visualizações'],10)||0)-(parseInt(a['Visualizações'],10)||0));
@@ -527,7 +527,7 @@ function renderPublico(pub){
   const countHtml=countries.slice(0,8).map((c,i)=>`<div class="rank-row">
     <div class="rank-num">${i+1}</div>
     <div class="rank-name">${c.name}</div>
-    <div class="rank-bar-wrap"><div class="rank-bar" style="width:${(c.pct/maxC*100).toFixed(0)}%;background:#84d1eb"></div></div>
+    <div class="rank-bar-wrap"><div class="rank-bar" style="width:${(c.pct/maxC*100).toFixed(0)}%;background:#a038f2"></div></div>
     <div class="rank-pct">${c.pct}%</div>
   </div>`).join('');
   const maxCi=Math.max(...cities.map(c=>c.pct),1);
@@ -559,7 +559,7 @@ function buildHome(years,byYear,acctMap){
     const yViews=sum(yPosts,'Visualizações');
     const yAlc=sum(yPosts,'Alcance');
     const yLikes=sum(yPosts,'Curtidas');
-    const accents=['#f05924','#84d1eb','#34d399','#f7b24f'];
+    const accents=['#3939bc','#a038f2','#a2e259','#f7b24f'];
     const accent=accents[yi%accents.length];
     const sparkData=Array.from({length:12},(_,i)=>{const m=yM.find(m=>m.mi===i);return m?sum(m.posts,'Visualizações'):null;});
     const isLatest=yi===years.length-1;
@@ -596,7 +596,7 @@ function buildHome(years,byYear,acctMap){
   </div>
   <div class="year-boxes">${yBoxes}</div>
   ${showComparison?`<div class="card section-gap">
-    <div class="card-header"><div class="card-title">Comparativo entre anos</div><div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#f05924"></span>Views</div><div class="legend-item"><span class="legend-dot" style="background:#84d1eb"></span>Alcance</div></div></div>
+    <div class="card-header"><div class="card-title">Comparativo entre anos</div><div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#3939bc"></span>Views</div><div class="legend-item"><span class="legend-dot" style="background:#a038f2"></span>Alcance</div></div></div>
     <div style="position:relative;height:200px"><canvas id="home-ch-compare"></canvas></div>
   </div>`:''}
   ${hasFollData?`<div class="card">
@@ -618,13 +618,13 @@ function buildMonth(mi,posts,key,year,multiYear,acct,hasMetrics){
   const latest=datas.reduce((a,b)=>a>b?a:b,datas[0]||'');
   const counts={c:0,r:0,i:0,s:0};posts.forEach(p=>counts[tKey(p['Tipo de post'])]++);
   const pillsHtml=`<span class="pill pill-total">${posts.length} publicações</span>`+
-    [{k:'c',c:'pill-c',d:'#84d1eb'},{k:'r',c:'pill-r',d:'#f05924'},{k:'i',c:'pill-i',d:'#f7b24f'},{k:'s',c:'pill-s',d:'#c4b0fd'}]
+    [{k:'c',c:'pill-c',d:'#a038f2'},{k:'r',c:'pill-r',d:'#3939bc'},{k:'i',c:'pill-i',d:'#f7b24f'},{k:'s',c:'pill-s',d:'#a038f2'}]
     .filter(x=>counts[x.k]).map(x=>`<span class="pill ${x.c}"><span class="pill-dot" style="background:${x.d}"></span>${counts[x.k]} ${pillLabel(x.k,counts[x.k])}</span>`).join('');
   const typesP=[...new Set(chrono.map(p=>tKey(p['Tipo de post'])))];
-  const lgCfg={c:{l:'Carrossel',c:'#84d1eb'},r:{l:'Reel',c:'#f05924'},i:{l:'Post',c:'rgba(247,178,79,.8)'},s:{l:'Story',c:'#c4b0fd'}};
+  const lgCfg={c:{l:'Carrossel',c:'#a038f2'},r:{l:'Reel',c:'#3939bc'},i:{l:'Post',c:'rgba(247,178,79,.8)'},s:{l:'Story',c:'#a038f2'}};
   const legendHtml=typesP.map(k=>`<div class="legend-item"><span class="legend-dot" style="background:${lgCfg[k].c}"></span>${lgCfg[k].l}</div>`).join('');
   const maxE=Math.max(likes,shares,comments,saves,1);
-  const engHtml=[{l:'Curtidas',v:likes,c:'#f05924'},{l:'Compartilh.',v:shares,c:'#84d1eb'},{l:'Comentários',v:comments,c:'rgba(252,246,236,.6)'},{l:'Salvamentos',v:saves,c:'#c4b0fd'}]
+  const engHtml=[{l:'Curtidas',v:likes,c:'#3939bc'},{l:'Compartilh.',v:shares,c:'#a038f2'},{l:'Comentários',v:comments,c:'rgba(239,236,239,.6)'},{l:'Salvamentos',v:saves,c:'#a038f2'}]
     .map(e=>`<div class="eng-row"><div class="eng-name">${e.l}</div><div class="eng-bar-bg"><div class="eng-bar" style="width:${(e.v/maxE*100).toFixed(1)}%;background:${e.c}"></div></div><div class="eng-num">${fmt(e.v)}</div></div>`).join('');
   const label=multiYear?`${MO[mi]} ${year}`:MO[mi];
   const publicoTab=hasMetrics?`<button class="mtab" onclick="showTab('${key}','publico')">Público</button>`:'';
@@ -642,12 +642,12 @@ function buildMonth(mi,posts,key,year,multiYear,acct,hasMetrics){
 
   <div class="tab-content active" id="tab-${key}-geral">
     <div class="kpi-row">
-      <div class="kpi" style="--kpi-line:#f05924"><div class="kpi-label">Visualizações</div><div class="kpi-val">${fmt(views)}</div><div class="kpi-sub">total do período</div></div>
-      <div class="kpi" style="--kpi-line:#84d1eb"><div class="kpi-label">Alcance</div><div class="kpi-val">${fmt(alc)}</div><div class="kpi-sub">contas únicas</div></div>
-      <div class="kpi" style="--kpi-line:#fcf6ec"><div class="kpi-label">Curtidas</div><div class="kpi-val">${fmt(likes)}</div><div class="kpi-sub">reações</div></div>
-      <div class="kpi" style="--kpi-line:#f05924"><div class="kpi-label">Compartilhamentos</div><div class="kpi-val">${fmt(shares)}</div><div class="kpi-sub">envios</div></div>
-      <div class="kpi" style="--kpi-line:#84d1eb"><div class="kpi-label">Comentários</div><div class="kpi-val">${fmt(comments)}</div><div class="kpi-sub">interações</div></div>
-      <div class="kpi" style="--kpi-line:#fcf6ec"><div class="kpi-label">Salvamentos</div><div class="kpi-val">${fmt(saves)}</div><div class="kpi-sub">saves</div></div>
+      <div class="kpi" style="--kpi-line:#3939bc"><div class="kpi-label">Visualizações</div><div class="kpi-val">${fmt(views)}</div><div class="kpi-sub">total do período</div></div>
+      <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">Alcance</div><div class="kpi-val">${fmt(alc)}</div><div class="kpi-sub">contas únicas</div></div>
+      <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">Curtidas</div><div class="kpi-val">${fmt(likes)}</div><div class="kpi-sub">reações</div></div>
+      <div class="kpi" style="--kpi-line:#3939bc"><div class="kpi-label">Compartilhamentos</div><div class="kpi-val">${fmt(shares)}</div><div class="kpi-sub">envios</div></div>
+      <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">Comentários</div><div class="kpi-val">${fmt(comments)}</div><div class="kpi-sub">interações</div></div>
+      <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">Salvamentos</div><div class="kpi-val">${fmt(saves)}</div><div class="kpi-sub">saves</div></div>
     </div>
     ${renderAcct(acct)}
     ${hasMetrics?`
@@ -712,7 +712,7 @@ function buildAnnual(yearMonths,year,acctMap){
     if(!m)return`<div class="ms-card no-data"><div class="ms-name">${MO[i]}</div><div class="ms-views">sem dados</div></div>`;
     const mv=sum(m.posts,'Visualizações'),ma=sum(m.posts,'Alcance'),ml=sum(m.posts,'Curtidas'),ms2=sum(m.posts,'Compartilhamentos');
     const isBest=m===bestMonth;
-    return`<div class="ms-card" style="${isBest?'border-color:rgba(240,89,36,.4)':''}" onclick="showView('view-${m.key}')">
+    return`<div class="ms-card" style="${isBest?'border-color:rgba(57,57,188,.4)':''}" onclick="showView('view-${m.key}')">
       <div class="ms-name" style="${isBest?'color:var(--orange)':''}">${MO[i]}${isBest?' ★':''}</div>
       <div class="ms-views">${fmt(mv)}</div>
       <div class="ms-label">visualizações · ${m.posts.length} publicações</div>
@@ -725,16 +725,16 @@ function buildAnnual(yearMonths,year,acctMap){
     <div><div class="page-eyebrow">Visão Anual</div><div class="page-title">${year}</div><div class="page-sub">@${ACCOUNT} · ${yearMonths.length} ${yearMonths.length===1?'mês':'meses'} · ${allPosts.length} publicações</div></div>
   </div>
   <div class="kpi-row">
-    <div class="kpi" style="--kpi-line:#f05924"><div class="kpi-label">Visualizações</div><div class="kpi-val">${fmt(views)}</div><div class="kpi-sub">no ano</div></div>
-    <div class="kpi" style="--kpi-line:#84d1eb"><div class="kpi-label">Alcance</div><div class="kpi-val">${fmt(alc)}</div><div class="kpi-sub">no ano</div></div>
-    <div class="kpi" style="--kpi-line:#fcf6ec"><div class="kpi-label">Curtidas</div><div class="kpi-val">${fmt(likes)}</div><div class="kpi-sub">no ano</div></div>
-    <div class="kpi" style="--kpi-line:#f05924"><div class="kpi-label">Compartilhamentos</div><div class="kpi-val">${fmt(shares)}</div><div class="kpi-sub">no ano</div></div>
-    <div class="kpi" style="--kpi-line:#84d1eb"><div class="kpi-label">Comentários</div><div class="kpi-val">${fmt(comments)}</div><div class="kpi-sub">no ano</div></div>
-    <div class="kpi" style="--kpi-line:#fcf6ec"><div class="kpi-label">Publicações</div><div class="kpi-val">${allPosts.length}</div><div class="kpi-sub">${yearMonths.length} meses</div></div>
+    <div class="kpi" style="--kpi-line:#3939bc"><div class="kpi-label">Visualizações</div><div class="kpi-val">${fmt(views)}</div><div class="kpi-sub">no ano</div></div>
+    <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">Alcance</div><div class="kpi-val">${fmt(alc)}</div><div class="kpi-sub">no ano</div></div>
+    <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">Curtidas</div><div class="kpi-val">${fmt(likes)}</div><div class="kpi-sub">no ano</div></div>
+    <div class="kpi" style="--kpi-line:#3939bc"><div class="kpi-label">Compartilhamentos</div><div class="kpi-val">${fmt(shares)}</div><div class="kpi-sub">no ano</div></div>
+    <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">Comentários</div><div class="kpi-val">${fmt(comments)}</div><div class="kpi-sub">no ano</div></div>
+    <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">Publicações</div><div class="kpi-val">${allPosts.length}</div><div class="kpi-sub">${yearMonths.length} meses</div></div>
   </div>
   <div class="charts-row section-gap">
     <div class="card">
-      <div class="card-header"><div class="card-title">Views e Alcance por mês</div><div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#f05924"></span>Views</div><div class="legend-item"><span class="legend-dot" style="background:#84d1eb"></span>Alcance</div></div></div>
+      <div class="card-header"><div class="card-title">Views e Alcance por mês</div><div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#3939bc"></span>Views</div><div class="legend-item"><span class="legend-dot" style="background:#a038f2"></span>Alcance</div></div></div>
       <div style="position:relative;height:200px"><canvas id="ch-annual-${year}"></canvas></div>
     </div>
     ${hasFollData?`<div class="card">
@@ -836,7 +836,7 @@ function renderWdCharts(key,posts){
     const vals=dayPosts.map(p=>parseInt(p['Visualizações'],10)||0);
     const maxV=Math.max(...vals,1);
     const isBestDay=i===posts.reduce((bi,p)=>{const r=parsePostDate(p['Horário de publicação']);if(!r)return bi;const d=r.date.getDay();const byDay={};posts.forEach(q=>{const rq=parsePostDate(q['Horário de publicação']);if(!rq)return;const dq=rq.date.getDay();if(!byDay[dq])byDay[dq]=0;byDay[dq]+=(parseInt(q['Visualizações'],10)||0);});return Object.entries(byDay).reduce((a,b)=>b[1]>a[1]?b:a,[0,0])[0]*1;},0);
-    mkChart(id,{type:'bar',data:{labels:dayPosts.map((_,wi)=>`S${wi+1}`),datasets:[{data:vals,backgroundColor:Array(vals.length).fill(document.getElementById(id).closest('.wd-best')?'#84d1eb':'rgba(255,255,255,.2)'),borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:true,callbacks:{label:ctx=>` ${fmt(ctx.parsed.y)} views`}}},scales:{x:{display:true,ticks:{color:'#7a6e78',font:{size:8,family:"'Bricolage Grotesque',sans-serif"},maxRotation:0},grid:{display:false}},y:{display:false,min:0,max:maxV*1.15}}}});
+    mkChart(id,{type:'bar',data:{labels:dayPosts.map((_,wi)=>`S${wi+1}`),datasets:[{data:vals,backgroundColor:Array(vals.length).fill(document.getElementById(id).closest('.wd-best')?'#a038f2':'rgba(255,255,255,.2)'),borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:true,callbacks:{label:ctx=>` ${fmt(ctx.parsed.y)} views`}}},scales:{x:{display:true,ticks:{color:'#8a87a0',font:{size:8,family:"'Bricolage Grotesque',sans-serif"},maxRotation:0},grid:{display:false}},y:{display:false,min:0,max:maxV*1.15}}}});
   });
 }
 
@@ -852,9 +852,9 @@ function renderMonthGeralCharts(key){
     const vals=data.map(r=>parseInt(r['Primary'],10)||0);
     mkChart(id,{type:'line',data:{labels,datasets:[{data:vals,borderColor:color,backgroundColor:color.replace(')',', .08)').replace('rgb','rgba'),borderWidth:2,fill:true,tension:.4,pointRadius:2,pointHoverRadius:4}]},options:{...cOpts(),scales:{...cOpts().scales,y:{...cOpts().scales.y,max:yMax(vals)}}}});
   }
-  dailyChart(`ch-dv-${key}`,m.views,'#f05924');
-  dailyChart(`ch-dr-${key}`,m.reach,'#84d1eb');
-  dailyChart(`ch-df-${key}`,m.followers,'#34d399');
+  dailyChart(`ch-dv-${key}`,m.views,'#3939bc');
+  dailyChart(`ch-dr-${key}`,m.reach,'#a038f2');
+  dailyChart(`ch-df-${key}`,m.followers,'#a2e259');
 }
 
 async function renderPublicoTab(key){
@@ -890,7 +890,7 @@ function showView(vid){
     const reach12=labels12.map((_,i)=>{const m=yM.find(m=>m.mi===i);return m?sum(m.posts,'Alcance'):null;});
     setTimeout(()=>{
       const v12=views12.filter(v=>v!==null);
-      mkChart(`ch-annual-${y}`,{type:'bar',data:{labels:labels12,datasets:[{label:'Views',data:views12,backgroundColor:views12.map(v=>v===null?'rgba(255,255,255,.05)':'#f05924'),borderRadius:4,borderSkipped:false},{label:'Alcance',data:reach12,backgroundColor:reach12.map(v=>v===null?'rgba(255,255,255,.03)':'#84d1eb'),borderRadius:3,borderSkipped:false}]},options:{...cOpts(),plugins:{...cOpts().plugins,legend:{display:false}},scales:{...cOpts().scales,x:{...cOpts().scales.x,ticks:{...cOpts().scales.x.ticks,maxTicksLimit:12}},y:{...cOpts().scales.y,max:yMax(v12)}}}});
+      mkChart(`ch-annual-${y}`,{type:'bar',data:{labels:labels12,datasets:[{label:'Views',data:views12,backgroundColor:views12.map(v=>v===null?'rgba(255,255,255,.05)':'#3939bc'),borderRadius:4,borderSkipped:false},{label:'Alcance',data:reach12,backgroundColor:reach12.map(v=>v===null?'rgba(255,255,255,.03)':'#a038f2'),borderRadius:3,borderSkipped:false}]},options:{...cOpts(),plugins:{...cOpts().plugins,legend:{display:false}},scales:{...cOpts().scales,x:{...cOpts().scales.x,ticks:{...cOpts().scales.x.ticks,maxTicksLimit:12}},y:{...cOpts().scales.y,max:yMax(v12)}}}});
       const follPts=Array.from({length:12},(_,i)=>{const m=yM.find(m=>m.mi===i);const v=m?parseFloat((window.acctMap?.[m.key]||{})['Total seguidores'])||null:null;return{label:labels12[i],val:v};});
       const hasFoll=follPts.some(p=>p.val!==null);
       if(hasFoll&&document.getElementById(`ch-annual-foll-${y}`)){
@@ -902,7 +902,7 @@ function showView(vid){
         const sxy=xs.reduce((a,x,i)=>a+x*ys[i],0),sx2=xs.reduce((a,x)=>a+x*x,0);
         const slope=(n*sxy-sx*sy)/(n*sx2-sx*sx||1),intercept=(sy-slope*sx)/n;
         let ti=0;const trend12=follPts.map(p=>{if(p.val!==null){const v=Math.round(slope*ti+intercept);ti++;return v;}return null;});
-        mkChart(`ch-annual-foll-${y}`,{type:'line',data:{labels:labels12,datasets:[{label:'Seguidores',data:follPts.map(p=>p.val),borderColor:'#34d399',backgroundColor:'rgba(52,211,153,.08)',borderWidth:2,fill:true,tension:.4,pointRadius:follPts.map(p=>p.val!==null?3:0),spanGaps:false},{label:'Tendência',data:trend12,borderColor:'rgba(52,211,153,.35)',borderDash:[4,4],borderWidth:1.5,fill:false,tension:0,pointRadius:0,spanGaps:false}]},options:{...cOpts(),plugins:{...cOpts().plugins,legend:{display:false}},scales:{...cOpts().scales,y:{...cOpts().scales.y,min:yMinV,max:yMaxV}}}});
+        mkChart(`ch-annual-foll-${y}`,{type:'line',data:{labels:labels12,datasets:[{label:'Seguidores',data:follPts.map(p=>p.val),borderColor:'#a2e259',backgroundColor:'rgba(162,226,89,.08)',borderWidth:2,fill:true,tension:.4,pointRadius:follPts.map(p=>p.val!==null?3:0),spanGaps:false},{label:'Tendência',data:trend12,borderColor:'rgba(162,226,89,.35)',borderDash:[4,4],borderWidth:1.5,fill:false,tension:0,pointRadius:0,spanGaps:false}]},options:{...cOpts(),plugins:{...cOpts().plugins,legend:{display:false}},scales:{...cOpts().scales,y:{...cOpts().scales.y,min:yMinV,max:yMaxV}}}});
       }
       const wdEl=document.getElementById(`annual-wd-${y}`);
       if(wdEl){
@@ -1075,24 +1075,24 @@ function showView(vid){
     const yM=byYear[y]||[];
     const sparkData=Array.from({length:12},(_,i)=>{const m=yM.find(m=>m.mi===i);return m?sum(m.posts,'Visualizações'):null;});
     const el=document.getElementById(`home-ch-${y}`);if(!el)return;
-    const accents=['#f05924','#84d1eb','#34d399','#f7b24f'];
+    const accents=['#3939bc','#a038f2','#a2e259','#f7b24f'];
     const accent=accents[years.indexOf(y)%accents.length];
-    mkChart(`home-ch-${y}`,{type:'bar',data:{labels:MO.map(m=>m.slice(0,3)),datasets:[{data:sparkData,backgroundColor:sparkData.map(v=>v===null?'rgba(255,255,255,.04)':accent+'cc'),borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1e1820',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:'#fcf6ec',bodyColor:'#7a6e78',callbacks:{label:ctx=>ctx.parsed.y===null?'sem dados':` ${fmt(ctx.parsed.y)} views`}}},scales:{x:{grid:{display:false},ticks:{color:'#7a6e78',font:{size:9,family:"'Bricolage Grotesque',sans-serif"}}},y:{display:false}}}});
+    mkChart(`home-ch-${y}`,{type:'bar',data:{labels:MO.map(m=>m.slice(0,3)),datasets:[{data:sparkData,backgroundColor:sparkData.map(v=>v===null?'rgba(255,255,255,.04)':accent+'cc'),borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#181c6a',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:'#efecef',bodyColor:'#8a87a0',callbacks:{label:ctx=>ctx.parsed.y===null?'sem dados':` ${fmt(ctx.parsed.y)} views`}}},scales:{x:{grid:{display:false},ticks:{color:'#8a87a0',font:{size:9,family:"'Bricolage Grotesque',sans-serif"}}},y:{display:false}}}});
   });
   if(years.length>1&&document.getElementById('home-ch-compare')){
-    const accents=['#f05924','#84d1eb','#34d399','#f7b24f'];
+    const accents=['#3939bc','#a038f2','#a2e259','#f7b24f'];
     const datasets=years.map((y,yi)=>{
       const yM=byYear[y]||[];
       const vals=Array.from({length:12},(_,i)=>{const m=yM.find(m=>m.mi===i);return m?sum(m.posts,'Visualizações'):null;});
       return{label:String(y),data:vals,backgroundColor:accents[yi%accents.length]+'cc',borderRadius:3,borderSkipped:false};
     });
     const allViewVals=datasets.flatMap(d=>d.data).filter(v=>v!==null);
-    mkChart('home-ch-compare',{type:'bar',data:{labels:MO.map(m=>m.slice(0,3)),datasets},options:{...cOpts(),plugins:{...cOpts().plugins,legend:{display:true,labels:{color:'#7a6e78',font:{family:"'Bricolage Grotesque',sans-serif",size:11},boxWidth:10,boxHeight:10}}},scales:{...cOpts().scales,x:{...cOpts().scales.x,ticks:{...cOpts().scales.x.ticks,maxTicksLimit:12}},y:{...cOpts().scales.y,max:yMax(allViewVals)}}}});
+    mkChart('home-ch-compare',{type:'bar',data:{labels:MO.map(m=>m.slice(0,3)),datasets},options:{...cOpts(),plugins:{...cOpts().plugins,legend:{display:true,labels:{color:'#8a87a0',font:{family:"'Bricolage Grotesque',sans-serif",size:11},boxWidth:10,boxHeight:10}}},scales:{...cOpts().scales,x:{...cOpts().scales.x,ticks:{...cOpts().scales.x.ticks,maxTicksLimit:12}},y:{...cOpts().scales.y,max:yMax(allViewVals)}}}});
   }
   const allMonthsFlat2=results.sort((a,b)=>a.key.localeCompare(b.key));
   const homeFoll=allMonthsFlat2.map(m=>({label:`${MS[m.mi]}/${String(m.year).slice(-2)}`,val:parseFloat((acctMap[m.key]||{})['Total seguidores'])||null}));
   if(homeFoll.some(f=>f.val!==null)&&document.getElementById('home-ch-foll')){
-    mkChart('home-ch-foll',{type:'line',data:{labels:homeFoll.map(f=>f.label),datasets:[{data:homeFoll.map(f=>f.val),borderColor:'#34d399',backgroundColor:'rgba(52,211,153,.08)',borderWidth:2,fill:true,tension:.4,pointRadius:homeFoll.map(f=>f.val!==null?3:0),spanGaps:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1e1820',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:'#fcf6ec',bodyColor:'#7a6e78'}},scales:{x:{grid:{display:false},ticks:{color:'#7a6e78',font:{size:11}}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#7a6e78',font:{size:11},callback:v=>`${fmt(v)}`}}}}});
+    mkChart('home-ch-foll',{type:'line',data:{labels:homeFoll.map(f=>f.label),datasets:[{data:homeFoll.map(f=>f.val),borderColor:'#a2e259',backgroundColor:'rgba(162,226,89,.08)',borderWidth:2,fill:true,tension:.4,pointRadius:homeFoll.map(f=>f.val!==null?3:0),spanGaps:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#181c6a',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:'#efecef',bodyColor:'#8a87a0'}},scales:{x:{grid:{display:false},ticks:{color:'#8a87a0',font:{size:11}}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#8a87a0',font:{size:11},callback:v=>`${fmt(v)}`}}}}});
   }
 
   const layout=document.getElementById('layout');
