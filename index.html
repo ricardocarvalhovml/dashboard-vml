@@ -902,7 +902,7 @@ function showView(vid){
         const sxy=xs.reduce((a,x,i)=>a+x*ys[i],0),sx2=xs.reduce((a,x)=>a+x*x,0);
         const slope=(n*sxy-sx*sy)/(n*sx2-sx*sx||1),intercept=(sy-slope*sx)/n;
         let ti=0;const trend12=follPts.map(p=>{if(p.val!==null){const v=Math.round(slope*ti+intercept);ti++;return v;}return null;});
-        mkChart(`ch-annual-foll-${y}`,{type:'line',data:{labels:labels12,datasets:[{label:'Seguidores',data:follPts.map(p=>p.val),borderColor:'#a2e259',backgroundColor:'rgba(162,226,89,.35)',borderDash:[4,4],borderWidth:1.5,fill:false,tension:0,pointRadius:0,spanGaps:false}]},options:{...cOpts(),plugins:{...cOpts().plugins,legend:{display:false}},scales:{...cOpts().scales,y:{...cOpts().scales.y,min:yMinV,max:yMaxV}}}});
+        mkChart(`ch-annual-foll-${y}`,{type:'line',data:{labels:labels12,datasets:[{label:'Seguidores',data:follPts.map(p=>p.val),borderColor:'#a2e259',backgroundColor:'rgba(162,226,89,.08)',borderWidth:2,fill:true,tension:.4,pointRadius:follPts.map(p=>p.val!==null?3:0),spanGaps:false},{label:'Tendência',data:trend12,borderColor:'rgba(162,226,89,.35)',borderDash:[4,4],borderWidth:1.5,fill:false,tension:0,pointRadius:0,spanGaps:false}]},options:{...cOpts(),plugins:{...cOpts().plugins,legend:{display:false}},scales:{...cOpts().scales,y:{...cOpts().scales.y,min:yMinV,max:yMaxV}}}});
       }
       const wdEl=document.getElementById(`annual-wd-${y}`);
       if(wdEl){
