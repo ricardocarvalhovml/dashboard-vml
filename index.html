@@ -971,7 +971,10 @@ function showView(vid){
   results.sort((a,b)=>a.key.localeCompare(b.key));
 
   if(!results.length){
-    document.getElementById('app-loading').innerHTML=`<div class="empty-wrap"><div class="et">Nenhum dado encontrado</div><p>Suba os arquivos em <code>data/${currYear}/${currMo}/${currKey}.csv</code></p></div>`;return;
+    // Debug: check which paths were tried and what happened
+    const debugPaths = candidates.slice(0,6).map(c=>`data/${c.year}/${c.mo}/${c.key}.csv`);
+    const debugChecks = await Promise.all(debugPaths.map(p=>fetch(p).then(r=>`${p} → ${r.status}`).catch(e=>`${p} → ERRO: ${e.message}`)));
+    document.getElementById('app-loading').innerHTML=`<div class="empty-wrap"><div class="et">Nenhum dado encontrado</div><p>Suba os arquivos em <code>data/${currYear}/${currMo}/${currKey}.csv</code></p><details style="margin-top:1rem;font-size:11px;color:#8a87a0;text-align:left;max-width:500px"><summary style="cursor:pointer">Debug — caminhos tentados</summary><pre style="margin-top:.5rem;line-height:1.6">${debugChecks.join('\n')}</pre></details></div>`;return;
   }
 
   const years=[...new Set(results.map(m=>m.year))].sort();
