@@ -1,4 +1,4 @@
-# Dashboard VML Company
+# Dashboard vml company
 
 Dashboard estático para visualização de métricas de Instagram, alimentado por exportações do Meta Business Suite e hospedado via GitHub + Vercel.
 
@@ -7,11 +7,11 @@ Dashboard estático para visualização de métricas de Instagram, alimentado po
 ## Estrutura de arquivos
 
 ```
-dashboard-vml/
+dashboard-setup/
 ├── index.html                  ← dashboard principal (não editar)
-├── logo.png                    ← logotipo VML Company (barra lateral)
+├── logo.png                    ← logotipo do cliente (barra lateral)
 ├── favicon.png                 ← ícone da aba
-├── temeron-logo.png            ← logotipo do rodapé
+├── vml-logo.png                ← logotipo vml company (rodapé)
 ├── data/
 │   ├── dados_gerais.xlsx       ← planilha consolidada de seguidores e conta
 │   └── 2026/                   ← pasta do ano
@@ -27,7 +27,7 @@ dashboard-vml/
 │           └── Público.csv
 ```
 
-> A pasta `posts/` não é necessária. As imagens das publicações são carregadas via embed do Instagram.
+> A pasta `posts/` não é mais necessária. As imagens das publicações são carregadas via embed do Instagram.
 
 ---
 
@@ -61,7 +61,7 @@ dashboard-vml/
 
 > **Opção multi-mês:** nomeie como `2026-01-03.csv` (janeiro a março) e suba em `data/2026/`. O dashboard separa automaticamente por mês.
 
-### 2. Métricas diárias (opcional)
+### 2. Métricas diárias (opcional — disponível a partir de março/2026)
 
 Suba todos em `data/2026/03/` **sem renomear**:
 
@@ -103,11 +103,23 @@ A Vercel republica automaticamente em ~30 segundos após qualquer commit no repo
 
 ---
 
+## Adaptar para outro cliente
+
+No `index.html`, edite as duas linhas no topo do script:
+
+```javascript
+const CLIENT_NAME = 'vml company';
+const ACCOUNT     = 'vmlcompany';
+```
+
+Substitua também `logo.png` e `favicon.png`.
+
+---
+
 ## Observações técnicas
 
-- **Anos e meses:** apenas períodos com dados aparecem no menu e na home. Sem arquivo → sem entrada.
 - **Fuso horário:** o Meta exporta horários em UTC-8 (Pacífico). O dashboard aplica +5h automaticamente para converter para BRT (UTC-3).
 - **Imagens:** todos os posts são exibidos via embed do Instagram. Os carrosseis são navegáveis diretamente no card. Há um link discreto "↗ Abrir no Instagram" em cada card.
-- **Gráficos diários e público:** ficam ocultos automaticamente em meses sem os arquivos correspondentes.
+- **Meses anteriores a março/2026:** sem arquivos de métricas, as seções de gráficos diários e público ficam ocultas automaticamente.
 - **Eixo Y dos gráficos:** sempre 40% acima do valor máximo do período.
-- **Sidebar:** bolinha azul-violeta = mês atual. Bolinha roxa = melhor mês. Cinza = demais meses.
+- **Sidebar:** bolinha azul = mês atual. Bolinha roxa mais clara = outros meses do ano corrente. Cinza = anos anteriores.
