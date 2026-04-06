@@ -971,7 +971,11 @@ function showView(vid){
   results.sort((a,b)=>a.key.localeCompare(b.key));
 
   if(!results.length){
-    document.getElementById('app-loading').innerHTML=`<div class="empty-wrap"><div class="et">Nenhum dado encontrado</div><p>Suba os arquivos em <code>data/${currYear}/${currMo}/${currKey}.csv</code></p></div>`;return;
+    document.getElementById('app-loading').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.getElementById('mainContent').innerHTML='<div class="empty-wrap" style="min-height:70vh"><div class="et">Nenhum dado encontrado</div><p>Nenhum arquivo de publicações encontrado para '+currYear+' ou '+(currYear-1)+'.</p><p style="margin-top:.75rem">Suba o CSV em <code>data/'+currYear+'/'+currMo+'/'+currKey+'.csv</code></p><p style="margin-top:.75rem;font-size:12px;max-width:360px">Meses sem dados são ignorados automaticamente — só aparecem no menu os meses que têm arquivo.</p></div>';
+    document.getElementById('hamburger').addEventListener('click',()=>{document.getElementById('layout').classList.toggle('collapsed');setTimeout(()=>window.dispatchEvent(new Event('resize')),280);});
+    return;
   }
 
   const years=[...new Set(results.map(m=>m.year))].sort();
