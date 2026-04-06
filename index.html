@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Set Up</title>
+<title>VML Company</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script>const CLIENT_NAME='SetUp English School';const ACCOUNT='setup.english';</script>
+<script>const CLIENT_NAME='VML Company';const ACCOUNT='vmlcompany';</script>
 <style>
 :root{
   --bg:#080a2e;--surface:#12155a;--surface2:#181c6a;--border:rgba(255,255,255,0.09);
@@ -310,9 +310,9 @@ code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px;font-siz
       </div>
       <div class="sidebar-footer">
         <div class="temeron-badge">
-          <img class="temeron-logo" src="temeron-logo.png" alt="Temeron" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="temeron-t">T</div>
-          <div><div class="temeron-name">Temeron<sup style="font-size:8px">®</sup></div><div class="temeron-rights">© 2026 Todos os direitos reservados.</div></div>
+          <img class="temeron-logo" src="temeron-logo.png" alt="VML Company" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="temeron-t">V</div>
+          <div><div class="temeron-name">VML Company</div><div class="temeron-rights">© 2026 Todos os direitos reservados.</div></div>
         </div>
       </div>
     </aside>
@@ -346,7 +346,14 @@ function bColor(t){return{c:'#a038f2',r:'#3939bc',i:'rgba(247,178,79,.8)',s:'#a0
 function ePill(p){if(p>=5)return`<span class="eng-pill eng-h">${p.toFixed(1)}%</span>`;if(p>=2)return`<span class="eng-pill eng-m">${p.toFixed(1)}%</span>`;return`<span class="eng-l">${p.toFixed(1)}%</span>`}
 function sc(url){if(!url)return null;const m=url.match(/\/(?:p|reel)\/([A-Za-z0-9_-]+)/);return m?m[1]:null}
 function sum(arr,k){return arr.reduce((a,r)=>a+(parseInt(r[k],10)||0),0)}
-function parsePosts(rows){return rows.filter(r=>(r['Data']||'').trim()==='Total')}
+function parsePosts(rows){
+  // Tenta primeiro o formato antigo: linha com Data==='Total' (resumo agregado)
+  const totals=rows.filter(r=>(r['Data']||'').trim()==='Total');
+  if(totals.length)return totals;
+  // Formato novo do Meta: sem linha 'Total', cada linha é uma publicação individual
+  // Retorna linhas que tenham ao menos URL ou Visualizações preenchido
+  return rows.filter(r=>(r['Url do conteúdo']||r['URL do conteúdo']||r['Link do conteúdo']||'').trim()||parseInt(r['Visualizações'],10)>0);
+}
 function pillLabel(k,n){return{c:n===1?'Carrossel':'Carrosseis',r:'Reels',i:n===1?'Post':'Posts',s:n===1?'Story':'Stories'}[k]}
 
 /* ── Charts ── */
