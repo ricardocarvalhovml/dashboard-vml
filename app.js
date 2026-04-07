@@ -1,6 +1,6 @@
 /* ─────────────────────────────────────────────
-   Dashboard vml company — App Logic
-   Temeron © 2026
+   Dashboard vml company · App Logic
+   Temeron / Vieira Melo & Lionello
 ───────────────────────────────────────────── */
 
 /* ── Constants ── */
