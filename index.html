@@ -45,8 +45,10 @@
           <button class="hamburger" id="hamburger" title="Menu">
             <span></span><span></span><span></span>
           </button>
-          <button class="theme-toggle" onclick="toggleTheme()" title="Alternar tema"><span id="theme-icon">🌙</span></button>
-          <img class="sidebar-logo" src="logo.png" alt="vml company"
+          <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" title="alternar tema">
+            <span id="theme-icon"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+          </button>
+          <img class="sidebar-logo" id="sidebar-logo" src="logo-escuro.png" alt="vml company"
                onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
           <span class="logo-fallback" style="display:none">vml company</span>
         </div>

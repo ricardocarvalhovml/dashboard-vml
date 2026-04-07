@@ -1,6 +1,6 @@
 /* ─────────────────────────────────────────────
    Dashboard SetUp English School — Styles
-   Temeron © 2026
+   vml company · 2026
 ───────────────────────────────────────────── */
 
 /* ── IBrand (título) — adicione ibrand.woff2 na raiz do projeto ── */
@@ -14,52 +14,21 @@
 }
 
 /* ── Tokens ── */
-/* ── Modo claro (padrão) ── */
+/* ── Modo escuro (padrão) ── */
 :root {
-  --bg:       #efecef;
-  --surface:  #ffffff;
-  --surface2: #e8e5eb;
-  --border:   rgba(18, 21, 90, 0.10);
-
-  --orange:  #391bce;
-  --blue:    #a038f2;
-  --green:   #5c9e00;   /* verde escuro para legibilidade no claro */
-  --yellow:  #7a5fd4;
-  --purple:  #6b5fd4;
-  --beige:   #12155a;   /* texto escuro no modo claro */
-  --muted:   #5a5070;
-  --dimmed:  rgba(18, 21, 90, 0.45);
-
-  --chart-bg:     #ffffff;
-  --chart-border: rgba(0,0,0,.08);
-  --chart-title:  #12155a;
-  --chart-body:   #5a5070;
-  --chart-grid:   rgba(18,21,90,.06);
-  --chart-tick:   #5a5070;
-
-  --radius:  12px;
-  --font:        'Poppins', sans-serif;
-  --font-title:  'IBrand', 'Poppins', sans-serif;
-
-  --sidebar-open:   224px;
-  --sidebar-closed:  46px;
-}
-
-/* ── Modo escuro ── */
-[data-theme="dark"] {
   --bg:       #07091a;
   --surface:  #0d1030;
   --surface2: #131640;
   --border:   rgba(255, 255, 255, 0.08);
 
-  --orange:  #391bce;
-  --blue:    #a038f2;
-  --green:   #a2e259;
-  --yellow:  #c9b8f8;
-  --purple:  #6b5fd4;
-  --beige:   #efecef;
-  --muted:   #8b86a8;
-  --dimmed:  rgba(239, 236, 239, 0.5);
+  --orange: #391bce;
+  --blue:   #a038f2;
+  --green:  #a2e259;
+  --yellow: #c9b8f8;
+  --purple: #6b5fd4;
+  --beige:  #efecef;
+  --muted:  #8b86a8;
+  --dimmed: rgba(239, 236, 239, 0.5);
 
   --chart-bg:     #0d1030;
   --chart-border: rgba(255,255,255,.1);
@@ -67,6 +36,36 @@
   --chart-body:   #8b86a8;
   --chart-grid:   rgba(255,255,255,.04);
   --chart-tick:   #8b86a8;
+
+  --radius:     12px;
+  --font:       'Poppins', sans-serif;
+  --font-title: 'IBrand', 'Poppins', sans-serif;
+  --sidebar-open:   224px;
+  --sidebar-closed:  46px;
+}
+
+/* ── Modo claro ── */
+[data-theme="light"] {
+  --bg:       #efecef;
+  --surface:  #ffffff;
+  --surface2: #e4e1e8;
+  --border:   rgba(18, 21, 90, 0.10);
+
+  --orange: #391bce;
+  --blue:   #7b28d4;
+  --green:  #5c9e00;
+  --yellow: #6b5fd4;
+  --purple: #6b5fd4;
+  --beige:  #12155a;
+  --muted:  #5a5070;
+  --dimmed: rgba(18, 21, 90, 0.45);
+
+  --chart-bg:     #ffffff;
+  --chart-border: rgba(0,0,0,.08);
+  --chart-title:  #12155a;
+  --chart-body:   #5a5070;
+  --chart-grid:   rgba(18,21,90,.06);
+  --chart-tick:   #5a5070;
 }
 
 /* ── Reset ── */
@@ -76,10 +75,7 @@
   padding: 0;
 }
 
-/* ── Transição de tema ── */
-html {
-  transition: background-color .3s ease, color .3s ease;
-}
+html { transition: background-color .25s, color .25s; }
 
 body {
   background:   var(--bg);
@@ -121,7 +117,7 @@ body {
 #app { display: none; }
 
 
-/* ── Theme toggle ── */
+/* ── Theme toggle button ── */
 .theme-toggle {
   background:    none;
   border:        1px solid var(--border);
@@ -133,13 +129,13 @@ body {
   align-items:   center;
   justify-content: center;
   flex-shrink:   0;
-  transition:    background .15s;
-  font-size:     15px;
-  color:         var(--muted);
   margin-left:   auto;
+  transition:    background .15s, border-color .15s;
+  color:         var(--muted);
+  padding:       0;
 }
-
-.theme-toggle:hover { background: rgba(57, 27, 206, .08); }
+.theme-toggle:hover { background: rgba(57,27,206,.08); border-color: var(--orange); }
+.theme-toggle svg   { width: 16px; height: 16px; stroke: var(--muted); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ─────────────────────────────────────────────
    Layout
@@ -246,7 +242,6 @@ body {
 .sidebar-section {
   font-size:      10px;
   font-weight:    700;
-  text-transform: none;
   color:          var(--muted);
   padding:        5px 10px;
   margin:         12px 8px 3px;
@@ -361,7 +356,6 @@ body {
 .page-eyebrow {
   font-size:      11px;
   font-weight:    700;
-  text-transform: none;
   color:          var(--green);
   margin-bottom:  5px;
 }
@@ -469,7 +463,6 @@ body {
 
 .kpi-label {
   font-size:      10px;
-  text-transform: none;
   color:          var(--muted);
   margin-bottom:  6px;
   font-weight:    700;
@@ -506,7 +499,6 @@ body {
 
 .acct-label {
   font-size:      10px;
-  text-transform: none;
   color:          var(--muted);
   margin-bottom:  5px;
   font-weight:    700;
@@ -566,7 +558,6 @@ body {
 .card-title {
   font-size:      11px;
   font-weight:    700;
-  text-transform: none;
   color:          var(--muted);
 }
 
@@ -658,7 +649,6 @@ body {
   font-weight:    800;
   color:          var(--muted);
   margin-bottom:  8px;
-  text-transform: none;
 }
 
 .weekday-card.wd-best .weekday-name { color: var(--blue); }
@@ -666,7 +656,6 @@ body {
 .wd-metric-label {
   font-size:      10px;
   color:          var(--muted);
-  text-transform: none;
   margin-top:     8px;
   margin-bottom:  2px;
   font-weight:    700;
@@ -711,7 +700,7 @@ body {
 .post-card-v2 {
   background:      var(--surface);
   border:          1px solid var(--border);
-  border-radius:   16px;
+  border-radius:   20px;
   overflow:        hidden;
   text-decoration: none;
   display:         flex;
@@ -739,6 +728,14 @@ body {
   border-radius: 10px;
   align-self:    stretch;
 }
+.post-card-v2-img img {
+  position: absolute;
+  inset:    0;
+  width:    100%;
+  height:   100%;
+  object-fit: cover;
+  display:  block;
+}
 
 .post-card-v2-body {
   padding:        0;
@@ -752,18 +749,17 @@ body {
 .post-card-rank {
   font-size:      11px;
   font-weight:    700;
-  text-transform: none;
   margin-bottom:  6px;
   color:          var(--blue);
 }
 
 .post-card-v2-desc {
-  font-size:          13px;
+  font-size:          12px;
   font-weight:        700;
   color:              var(--beige);
   line-height:        1.3;
   display:            -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow:           hidden;
   margin-bottom:      8px;
@@ -773,27 +769,25 @@ body {
   font-size:     11px;
   color:         var(--muted);
   font-weight:   600;
-  margin-bottom: 6px;
+  margin-bottom: 12px;
   display:       flex;
   align-items:   center;
   flex-wrap:     wrap;
   gap:           6px;
 }
 
-.post-card-v2-metrics { display: flex; flex-direction: column; gap: 4px; flex: 1; }
 
 .pcm-row {
   display:         flex;
   justify-content: space-between;
   align-items:     center;
-  padding:         4px 10px;
-  background:      transparent;
-  border:          1px solid rgba(255, 255, 255, .1);
-  border-radius:   99px;
+  padding:         4px 2px;
+  border-bottom:   1px solid var(--border);
 }
+.pcm-row:last-child { border-bottom: none; }
 
-.pcm-lbl { font-size: 11px; color: var(--muted); font-weight: 600; }
-.pcm-val { font-size: 13px; font-weight: 800; color: var(--beige); }
+.pcm-lbl { font-size: 10px; color: var(--muted); font-weight: 500; }
+.pcm-val { font-size: 11px; font-weight: 700; color: var(--beige); }
 
 /* ─────────────────────────────────────────────
    Gallery (format sections)
@@ -855,7 +849,6 @@ th {
   text-align:     left;
   padding:        8px 10px;
   font-size:      10px;
-  text-transform: none;
   color:          var(--muted);
   font-weight:    700;
   border-bottom:  1px solid var(--border);
@@ -1000,7 +993,7 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
 }
 
 .ms-name    { font-size: 13px; font-weight: 700; color: var(--beige); margin-bottom: 4px; }
-.ms-views   { font-size: 20px; font-weight: 800; font-family: var(--font-title); letter-spacing: .03em;
+.ms-views   { font-size: 20px; font-weight: 800; font-family: var(--font-title);
   letter-spacing: .03em; color: var(--beige); }
 .ms-label   { font-size: 10px; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
 .ms-row     { display: flex; gap: 8px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
@@ -1036,7 +1029,6 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
 .home-hero-eyebrow {
   font-size:      11px;
   font-weight:    700;
-  text-transform: none;
   color:          var(--green);
   margin-bottom:  8px;
 }
@@ -1074,7 +1066,6 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
   color:          var(--muted);
   margin-top:     3px;
   font-weight:    700;
-  text-transform: none;
 }
 
 /* Year boxes grid */
@@ -1135,9 +1126,8 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
   font-weight:    700;
   padding:        4px 9px;
   border-radius:  99px;
-  background:     rgba(162, 226, 89, .15);
-  color:          var(--green);
-  text-transform: none;
+  background: rgba(162,226,89,.18);
+  color: var(--green);
   align-self:     flex-start;
   margin-top:     4px;
 }
@@ -1170,7 +1160,6 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
   font-size:      10px;
   color:          var(--muted);
   font-weight:    600;
-  text-transform: none;
   margin-top:     3px;
 }
 
@@ -1189,7 +1178,7 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
 .year-box-cta {
   font-size:   12px;
   font-weight: 700;
-  color:       var(--green);
+  color: var(--green);
   display:     flex;
   align-items: center;
   gap:         4px;
@@ -1274,7 +1263,8 @@ code {
   .annual-grid            { grid-template-columns: repeat(2, 1fr); }
   .acct-row               { grid-template-columns: repeat(3, 1fr); }
   .post-card-v2           { flex-direction: column; }
-  .post-card-v2-img       { width: 100% !important; height: auto !important; }
+  .post-card-v2           { flex-direction: column; }
+  .post-card-v2-img       { width: 100% !important; aspect-ratio: 4/5; height: auto !important; }
 }
 
 @media (max-width: 600px) {
