@@ -15,7 +15,7 @@ const YEAR_RANGE = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
    Helpers
 ───────────────────────────────────────────── */
 
-const fmt = n => (isNaN(n) || n == null) ? '—' : Number(n).toLocaleString('pt-BR');
+const fmt = n => (isNaN(n) || n == null) ? '-' : Number(n).toLocaleString('pt-BR');
 
 function parsePostDate(s) {
   if (!s) return null;
@@ -37,13 +37,13 @@ function postDateLine(s) {
 
 function fmtD(s) {
   const r = parsePostDate(s);
-  if (!r) return '—';
+  if (!r) return '-';
   return `${String(r.date.getDate()).padStart(2,'0')}/${String(r.date.getMonth()+1).padStart(2,'0')}/${String(r.date.getFullYear()).slice(-2)} às ${r.time}`;
 }
 
 function sDate(s) {
   const r = parsePostDate(s);
-  if (!r) return '—';
+  if (!r) return '-';
   return `${String(r.date.getDate()).padStart(2,'0')} ${MS[r.date.getMonth()]}`;
 }
 
@@ -102,18 +102,18 @@ const cOpts = () => ({
       borderWidth: 1,
       titleColor: '#efecef',
       bodyColor: '#8b86a8',
-      titleFont: { family: "'Bricolage Grotesque',sans-serif", weight: '700' },
-      bodyFont:  { family: "'Bricolage Grotesque',sans-serif", size: 12 }
+      titleFont: { family: "'Poppins',sans-serif", weight: '700' },
+      bodyFont:  { family: "'Poppins',sans-serif", size: 12 }
     }
   },
   scales: {
     x: {
       grid: { display: false },
-      ticks: { color: '#8b86a8', font: { size: 11, family: "'Bricolage Grotesque',sans-serif" }, maxTicksLimit: 12 }
+      ticks: { color: '#8b86a8', font: { size: 11, family: "'Poppins',sans-serif" }, maxTicksLimit: 12 }
     },
     y: {
       grid: { color: 'rgba(255,255,255,.04)' },
-      ticks: { color: '#8b86a8', font: { size: 11, family: "'Bricolage Grotesque',sans-serif" }, callback: v => v >= 1000 ? (v/1000).toFixed(1)+'k' : v }
+      ticks: { color: '#8b86a8', font: { size: 11, family: "'Poppins',sans-serif" }, callback: v => v >= 1000 ? (v/1000).toFixed(1)+'k' : v }
     }
   }
 });
@@ -157,11 +157,21 @@ function postCard(p, rank, rankColor) {
   const s = (w / 326).toFixed(4);
   const hp = Math.round(65 * s);
 
-  const imgHtml = url !== '#'
-    ? `<div class="post-card-v2-img" style="height:${h}px">
-        <iframe src="${em}" style="position:absolute;top:-${hp}px;left:0;width:326px;height:800px;transform:scale(${s});transform-origin:top left;border:none;pointer-events:auto" frameborder="0" scrolling="no" allowtransparency="true" loading="lazy"></iframe>
-      </div>`
-    : `<div class="post-card-v2-img" style="height:${h}px;display:flex;align-items:center;justify-content:center;font-size:28px;opacity:.2">📷</div>`;
+  const code2 = sc(url);
+  let imgHtml;
+  if (url === '#' || !code2) {
+    imgHtml = `<div class="post-card-v2-img" style="height:${h}px;display:flex;align-items:center;justify-content:center;font-size:28px;opacity:.2">📷</div>`;
+  } else {
+    imgHtml = `<div class="post-card-v2-img" style="height:${h}px;position:relative;overflow:hidden">
+      <img src="posts/${code2}.jpg"
+        style="width:100%;height:100%;object-fit:cover;display:block;border-radius:0"
+        onerror="if(this.src.endsWith('.jpg')){this.src='posts/${code2}.png';}else{this.style.display='none';this.nextElementSibling.style.display='block';}"
+        alt="">
+      <iframe src="${em}"
+        style="display:none;position:absolute;top:-${hp}px;left:0;width:326px;height:800px;transform:scale(${s});transform-origin:top left;border:none;pointer-events:auto"
+        frameborder="0" scrolling="no" allowtransparency="true" loading="lazy"></iframe>
+    </div>`;
+  }
 
   return `<div class="post-card-v2">
     ${imgHtml}
@@ -202,16 +212,24 @@ function postsByFormat(posts) {
 
     const gW = 143, gH = 179;
     const galleryItems = fp.map(p => {
-      const url = p['Link permanente'] || '#';
-      const v   = parseInt(p['Visualizações'], 10) || 0;
-      const em  = url.replace(/\/?$/, '/') + 'embed/';
-      const s   = gW / 326;
-      const hp  = Math.round(65 * s);
+      const url  = p['Link permanente'] || '#';
+      const v    = parseInt(p['Visualizações'], 10) || 0;
+      const em   = url.replace(/\/?$/, '/') + 'embed/';
+      const code = sc(url);
+      const s    = gW / 326;
+      const hp   = Math.round(65 * s);
+      const inner = code
+        ? `<img src="posts/${code}.jpg"
+            style="width:100%;height:100%;object-fit:cover;display:block"
+            onerror="if(this.src.endsWith('.jpg')){this.src='posts/${code}.png';}else{this.style.display='none';this.nextElementSibling.style.display='block';}"
+            alt="">
+           <iframe src="${em}" style="display:none;position:absolute;top:-${hp}px;left:0;width:326px;height:600px;transform:scale(${s.toFixed(4)});transform-origin:top left;border:none;pointer-events:none" frameborder="0" scrolling="no" allowtransparency="true" loading="lazy"></iframe>`
+        : `<span style="font-size:20px;opacity:.2">📷</span>`;
       return `<a class="gallery-item" href="${url}" target="_blank" rel="noopener"
           title="${(p['Descrição'] || '').split('\n')[0].trim()}"
           style="width:${gW}px;height:${gH}px">
-          <div style="position:absolute;inset:0;overflow:hidden">
-            <iframe src="${em}" style="position:absolute;top:-${hp}px;left:0;width:326px;height:600px;transform:scale(${s.toFixed(4)});transform-origin:top left;border:none;pointer-events:none" frameborder="0" scrolling="no" allowtransparency="true" loading="lazy"></iframe>
+          <div style="position:absolute;inset:0;overflow:hidden;display:flex;align-items:center;justify-content:center">
+            ${inner}
           </div>
           <div class="gallery-rank">${fmt(v)}</div>
         </a>`;
@@ -267,7 +285,7 @@ function tableHtml(sorted, best) {
 
 function renderAcct(acct) {
   if (!acct) return '';
-  const g   = v => acct[v] != null && acct[v] !== '' ? acct[v] : '—';
+  const g   = v => acct[v] != null && acct[v] !== '' ? acct[v] : '-';
   const n   = k => parseFloat(acct[k]) || 0;
   const tot = n('Total seguidores');
   const gan = n('Seguidores ganhos');
@@ -595,7 +613,7 @@ function buildAnnual(yearMonths, year, acctMap) {
 
     return `<div class="ms-card" style="${isBest ? 'border-color:rgba(57,27,206,.4)' : ''}" onclick="showView('view-${m.key}')">
       <div class="ms-name" style="${isBest ? 'color:var(--orange)' : ''}">${MO[i]}${isBest ? ' ★' : ''}</div>
-      <div class="ms-views">${mv > 0 ? fmt(mv) : '—'}</div>
+      <div class="ms-views">${mv > 0 ? fmt(mv) : '-'}</div>
       <div class="ms-label">visualizações · ${m.posts.length} publicações</div>
       <div class="ms-row"><span><span class="ms-val">${fmt(ml)}</span> curtidas</span><span><span class="ms-val">${fmt(ms2)}</span> comp.</span><span><span class="ms-val">${fmt(ma)}</span> alcance</span></div>
     </div>`;
@@ -634,7 +652,7 @@ function buildAnnual(yearMonths, year, acctMap) {
     <div class="post-section-grid">${worst3.map((p, i) => postCard(p, ['1º Menor','2º Menor','3º Menor'][i], 'var(--muted)')).join('')}</div>
   </div>
   <div class="card section-gap">
-    <div class="card-header"><div class="card-title">Desempenho por dia da semana — ${year}</div><div style="font-size:12px;color:var(--muted)">média de views por dia, todos os meses</div></div>
+    <div class="card-header"><div class="card-title">Desempenho por dia da semana · ${year}</div><div style="font-size:12px;color:var(--muted)">média de views por dia, todos os meses</div></div>
     <div id="annual-wd-${year}"></div>
   </div>
   <div>
@@ -753,7 +771,7 @@ function renderWdCharts(key, posts) {
       options: {
         responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false }, tooltip: { enabled: true, callbacks: { label: ctx => ` ${fmt(ctx.parsed.y)} views` } } },
-        scales: { x: { display: true, ticks: { color: '#8b86a8', font: { size: 8, family: "'Bricolage Grotesque',sans-serif" }, maxRotation: 0 }, grid: { display: false } }, y: { display: false, min: 0, max: maxV * 1.15 } }
+        scales: { x: { display: true, ticks: { color: '#8b86a8', font: { size: 8, family: "'Poppins',sans-serif" }, maxRotation: 0 }, grid: { display: false } }, y: { display: false, min: 0, max: maxV * 1.15 } }
       }
     });
   });
@@ -1160,7 +1178,7 @@ function showView(vid) {
       options: {
         responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0d1030', borderColor: 'rgba(255,255,255,.1)', borderWidth: 1, titleColor: '#efecef', bodyColor: '#8b86a8', callbacks: { label: ctx => ctx.parsed.y === null ? 'sem dados' : ` ${fmt(ctx.parsed.y)} views` } } },
-        scales: { x: { grid: { display: false }, ticks: { color: '#8b86a8', font: { size: 9, family: "'Bricolage Grotesque',sans-serif" } } }, y: { display: false } }
+        scales: { x: { grid: { display: false }, ticks: { color: '#8b86a8', font: { size: 9, family: "'Poppins',sans-serif" } } }, y: { display: false } }
       }
     });
   });
@@ -1177,7 +1195,7 @@ function showView(vid) {
     mkChart('home-ch-compare', {
       type: 'bar',
       data: { labels: MO.map(m => m.slice(0, 3)), datasets },
-      options: { ...cOpts(), plugins: { ...cOpts().plugins, legend: { display: true, labels: { color: '#8b86a8', font: { family: "'Bricolage Grotesque',sans-serif", size: 11 }, boxWidth: 10, boxHeight: 10 } } }, scales: { ...cOpts().scales, x: { ...cOpts().scales.x, ticks: { ...cOpts().scales.x.ticks, maxTicksLimit: 12 } }, y: { ...cOpts().scales.y, max: yMax(allViewVals) } } }
+      options: { ...cOpts(), plugins: { ...cOpts().plugins, legend: { display: true, labels: { color: '#8b86a8', font: { family: "'Poppins',sans-serif", size: 11 }, boxWidth: 10, boxHeight: 10 } } }, scales: { ...cOpts().scales, x: { ...cOpts().scales.x, ticks: { ...cOpts().scales.x.ticks, maxTicksLimit: 12 } }, y: { ...cOpts().scales.y, max: yMax(allViewVals) } } }
     });
   }
 
