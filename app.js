@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────
-   Dashboard VML Company — App Logic
+   Dashboard vml company — App Logic
    Temeron © 2026
 ───────────────────────────────────────────── */
 
