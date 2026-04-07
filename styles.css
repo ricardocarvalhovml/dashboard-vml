@@ -188,8 +188,7 @@ body {
 .sidebar-section {
   font-size:      10px;
   font-weight:    700;
-  text-transform: uppercase;
-  letter-spacing: .12em;
+  text-transform: none;
   color:          var(--muted);
   padding:        5px 10px;
   margin:         12px 8px 3px;
@@ -260,8 +259,8 @@ body {
 }
 
 .nav-dot {
-  width:         6px;
-  height:        6px;
+  width:         4px;
+  height:        4px;
   border-radius: 50%;
   flex-shrink:   0;
 }
@@ -304,8 +303,7 @@ body {
 .page-eyebrow {
   font-size:      11px;
   font-weight:    700;
-  letter-spacing: .15em;
-  text-transform: uppercase;
+  text-transform: none;
   color:          var(--green);
   margin-bottom:  5px;
 }
@@ -314,8 +312,8 @@ body {
   font-size:      28px;
   font-weight:    800;
   font-family:    var(--font-title);
+  letter-spacing: .03em;
   color:          var(--beige);
-  letter-spacing: -.03em;
   line-height:    1;
 }
 
@@ -413,8 +411,7 @@ body {
 
 .kpi-label {
   font-size:      10px;
-  text-transform: uppercase;
-  letter-spacing: .1em;
+  text-transform: none;
   color:          var(--muted);
   margin-bottom:  6px;
   font-weight:    700;
@@ -424,8 +421,8 @@ body {
   font-size:      24px;
   font-weight:    800;
   font-family:    var(--font-title);
+  letter-spacing: .03em;
   color:          var(--beige);
-  letter-spacing: -.03em;
   line-height:    1;
 }
 
@@ -451,8 +448,7 @@ body {
 
 .acct-label {
   font-size:      10px;
-  text-transform: uppercase;
-  letter-spacing: .1em;
+  text-transform: none;
   color:          var(--muted);
   margin-bottom:  5px;
   font-weight:    700;
@@ -462,8 +458,8 @@ body {
   font-size:      20px;
   font-weight:    800;
   font-family:    var(--font-title);
+  letter-spacing: .03em;
   color:          var(--beige);
-  letter-spacing: -.03em;
   line-height:    1;
 }
 
@@ -512,8 +508,7 @@ body {
 .card-title {
   font-size:      11px;
   font-weight:    700;
-  text-transform: uppercase;
-  letter-spacing: .12em;
+  text-transform: none;
   color:          var(--muted);
 }
 
@@ -605,8 +600,7 @@ body {
   font-weight:    800;
   color:          var(--muted);
   margin-bottom:  8px;
-  text-transform: uppercase;
-  letter-spacing: .04em;
+  text-transform: none;
 }
 
 .weekday-card.wd-best .weekday-name { color: var(--blue); }
@@ -614,8 +608,7 @@ body {
 .wd-metric-label {
   font-size:      10px;
   color:          var(--muted);
-  text-transform: uppercase;
-  letter-spacing: .06em;
+  text-transform: none;
   margin-top:     8px;
   margin-bottom:  2px;
   font-weight:    700;
@@ -625,7 +618,6 @@ body {
   font-size:      16px;
   font-weight:    800;
   color:          var(--beige);
-  letter-spacing: -.02em;
   line-height:    1;
 }
 
@@ -654,14 +646,14 @@ body {
   margin-bottom: .75rem;
 }
 
-.bw-section-title        { font-size: 15px; font-weight: 800; letter-spacing: -.01em; }
+.bw-section-title        { font-size: 15px; font-weight: 800; }
 .bw-section-title-best   { color: var(--blue); }
 .bw-section-title-worst  { color: var(--muted); }
 
 .post-card-v2 {
   background:      var(--surface);
   border:          1px solid var(--border);
-  border-radius:   20px;
+  border-radius:   16px;
   overflow:        hidden;
   text-decoration: none;
   display:         flex;
@@ -670,8 +662,8 @@ body {
   transition:      border-color .2s, transform .15s, box-shadow .2s;
   min-width:       0;
   position:        relative;
-  padding:         16px;
-  gap:             16px;
+  padding:         12px;
+  gap:             12px;
 }
 
 .post-card-v2:hover {
@@ -682,7 +674,7 @@ body {
 
 .post-card-v2-img {
   flex-shrink:   0;
-  width:         175px;
+  width:         140px;
   position:      relative;
   overflow:      hidden;
   background:    var(--surface2);
@@ -702,8 +694,7 @@ body {
 .post-card-rank {
   font-size:      11px;
   font-weight:    700;
-  text-transform: uppercase;
-  letter-spacing: .1em;
+  text-transform: none;
   margin-bottom:  6px;
   color:          var(--blue);
 }
@@ -714,7 +705,7 @@ body {
   color:              var(--beige);
   line-height:        1.3;
   display:            -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow:           hidden;
   margin-bottom:      8px;
@@ -724,20 +715,20 @@ body {
   font-size:     11px;
   color:         var(--muted);
   font-weight:   600;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   display:       flex;
   align-items:   center;
   flex-wrap:     wrap;
   gap:           6px;
 }
 
-.post-card-v2-metrics { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.post-card-v2-metrics { display: flex; flex-direction: column; gap: 4px; flex: 1; }
 
 .pcm-row {
   display:         flex;
   justify-content: space-between;
   align-items:     center;
-  padding:         6px 12px;
+  padding:         4px 10px;
   background:      transparent;
   border:          1px solid rgba(255, 255, 255, .1);
   border-radius:   99px;
@@ -792,7 +783,7 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-.format-title { font-size: 15px; font-weight: 800; letter-spacing: -.01em; }
+.format-title { font-size: 15px; font-weight: 800; }
 .format-count { font-size: 12px; color: var(--muted); }
 
 /* ─────────────────────────────────────────────
@@ -806,8 +797,7 @@ th {
   text-align:     left;
   padding:        8px 10px;
   font-size:      10px;
-  text-transform: uppercase;
-  letter-spacing: .1em;
+  text-transform: none;
   color:          var(--muted);
   font-weight:    700;
   border-bottom:  1px solid var(--border);
@@ -952,7 +942,8 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
 }
 
 .ms-name    { font-size: 13px; font-weight: 700; color: var(--beige); margin-bottom: 4px; }
-.ms-views   { font-size: 20px; font-weight: 800; font-family: var(--font-title); color: var(--beige); letter-spacing: -.03em; }
+.ms-views   { font-size: 20px; font-weight: 800; font-family: var(--font-title); letter-spacing: .03em;
+  letter-spacing: .03em; color: var(--beige); }
 .ms-label   { font-size: 10px; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
 .ms-row     { display: flex; gap: 8px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
 .ms-val     { font-weight: 700; color: var(--beige); }
@@ -987,8 +978,7 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
 .home-hero-eyebrow {
   font-size:      11px;
   font-weight:    700;
-  letter-spacing: .18em;
-  text-transform: uppercase;
+  text-transform: none;
   color:          var(--green);
   margin-bottom:  8px;
 }
@@ -997,7 +987,7 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
   font-size:      34px;
   font-weight:    800;
   font-family:    var(--font-title);
-  letter-spacing: -.04em;
+  letter-spacing: .03em;
   color:          var(--beige);
   line-height:    1.1;
   margin-bottom:  6px;
@@ -1016,8 +1006,8 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
   font-size:      26px;
   font-weight:    800;
   font-family:    var(--font-title);
+  letter-spacing: .03em;
   color:          var(--beige);
-  letter-spacing: -.03em;
   line-height:    1;
 }
 
@@ -1026,8 +1016,7 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
   color:          var(--muted);
   margin-top:     3px;
   font-weight:    700;
-  text-transform: uppercase;
-  letter-spacing: .1em;
+  text-transform: none;
 }
 
 /* Year boxes grid */
@@ -1078,7 +1067,7 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
   font-size:      32px;
   font-weight:    800;
   font-family:    var(--font-title);
-  letter-spacing: -.04em;
+  letter-spacing: .03em;
   color:          var(--beige);
   line-height:    1;
 }
@@ -1088,10 +1077,9 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
   font-weight:    700;
   padding:        4px 9px;
   border-radius:  99px;
-  background:     rgba(240, 89, 36, .12);
-  color:          var(--orange);
-  letter-spacing: .06em;
-  text-transform: uppercase;
+  background:     rgba(162, 226, 89, .15);
+  color:          var(--green);
+  text-transform: none;
   align-self:     flex-start;
   margin-top:     4px;
 }
@@ -1115,7 +1103,7 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
   font-size:      18px;
   font-weight:    800;
   font-family:    var(--font-title);
-  letter-spacing: -.02em;
+  letter-spacing: .03em;
   color:          var(--beige);
   line-height:    1;
 }
@@ -1124,8 +1112,7 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
   font-size:      10px;
   color:          var(--muted);
   font-weight:    600;
-  text-transform: uppercase;
-  letter-spacing: .06em;
+  text-transform: none;
   margin-top:     3px;
 }
 
@@ -1144,7 +1131,7 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
 .year-box-cta {
   font-size:   12px;
   font-weight: 700;
-  color:       var(--orange);
+  color:       var(--green);
   display:     flex;
   align-items: center;
   gap:         4px;

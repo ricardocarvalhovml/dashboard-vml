@@ -439,7 +439,7 @@ function buildHome(years, byYear, acctMap) {
 
   return `<div class="view" id="view-home">
   <div class="home-hero">
-    <div class="home-hero-eyebrow">Dashboard Instagram</div>
+    <div class="home-hero-eyebrow">dashboard instagram</div>
     <div class="home-hero-title">${CLIENT_NAME}</div>
     <div class="home-hero-sub">@${ACCOUNT} · visão geral de todos os períodos</div>
     <div class="home-hero-stats">
@@ -514,7 +514,7 @@ function buildMonth(mi, posts, key, year, multiYear, acct, hasMetrics) {
     <div class="pills-row">${pillsHtml}</div>
   </div>
   <div class="month-tabs">
-    <button class="mtab active" onclick="showTab('${key}','geral')">Visão Geral</button>
+    <button class="mtab active" onclick="showTab('${key}','geral')">visão geral</button>
     <button class="mtab" onclick="showTab('${key}','posts')">Posts</button>
     ${publicoTab}
   </div>
@@ -557,11 +557,11 @@ function buildMonth(mi, posts, key, year, multiYear, acct, hasMetrics) {
   <div class="tab-content" id="tab-${key}-posts">
     <div class="best-worst-section">
       <div class="bw-section-header"><div class="bw-section-title bw-section-title-best">★ Melhores publicações</div><div style="font-size:12px;color:var(--muted)">por views</div></div>
-      <div class="post-section-grid">${top3.map((p, i) => postCard(p, ['1º MAIOR','2º MAIOR','3º MAIOR'][i], 'var(--blue)')).join('')}</div>
+      <div class="post-section-grid">${top3.map((p, i) => postCard(p, ['1º maior','2º maior','3º maior'][i], 'var(--blue)')).join('')}</div>
     </div>
     <div class="best-worst-section">
       <div class="bw-section-header"><div class="bw-section-title bw-section-title-worst">▼ Menores performances</div><div style="font-size:12px;color:var(--muted)">por views</div></div>
-      <div class="post-section-grid">${worst3.map((p, i) => postCard(p, ['1º Menor','2º Menor','3º Menor'][i], 'var(--muted)')).join('')}</div>
+      <div class="post-section-grid">${worst3.map((p, i) => postCard(p, ['1º menor','2º menor','3º menor'][i], 'var(--muted)')).join('')}</div>
     </div>
     <div class="card section-gap"><div class="card-header"><div class="card-title">Por formato</div></div>${postsByFormat(posts)}</div>
     <div class="card">
@@ -645,11 +645,11 @@ function buildAnnual(yearMonths, year, acctMap) {
   </div>
   <div class="best-worst-section section-gap">
     <div class="bw-section-header"><div class="bw-section-title bw-section-title-best">★ Top publicações do ano</div><div style="font-size:12px;color:var(--muted)">clique para abrir</div></div>
-    <div class="post-section-grid">${top3.map((p, i) => postCard(p, ['1º MAIOR','2º MAIOR','3º MAIOR'][i], 'var(--blue)')).join('')}</div>
+    <div class="post-section-grid">${top3.map((p, i) => postCard(p, ['1º maior','2º maior','3º maior'][i], 'var(--blue)')).join('')}</div>
   </div>
   <div class="best-worst-section section-gap">
     <div class="bw-section-header"><div class="bw-section-title bw-section-title-worst">▼ Menores do ano</div><div style="font-size:12px;color:var(--muted)">menor alcance</div></div>
-    <div class="post-section-grid">${worst3.map((p, i) => postCard(p, ['1º Menor','2º Menor','3º Menor'][i], 'var(--muted)')).join('')}</div>
+    <div class="post-section-grid">${worst3.map((p, i) => postCard(p, ['1º menor','2º menor','3º menor'][i], 'var(--muted)')).join('')}</div>
   </div>
   <div class="card section-gap">
     <div class="card-header"><div class="card-title">Desempenho por dia da semana · ${year}</div><div style="font-size:12px;color:var(--muted)">média de views por dia, todos os meses</div></div>
@@ -1127,7 +1127,7 @@ function showView(vid) {
   });
 
   const divider   = document.createElement('div');   divider.className = 'sidebar-divider';
-  const geralDiv  = document.createElement('div');   geralDiv.className = 'sidebar-section'; geralDiv.style.cursor = 'default'; geralDiv.textContent = 'ANUAL';
+  const geralDiv  = document.createElement('div');   geralDiv.className = 'sidebar-section'; geralDiv.style.cursor = 'default'; geralDiv.textContent = 'anual';
   document.querySelector('.sidebar-body').appendChild(divider);
   document.querySelector('.sidebar-body').appendChild(geralDiv);
 
