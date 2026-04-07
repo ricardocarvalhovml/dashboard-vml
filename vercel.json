@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/",      "destination": "/index.html" },
+    { "source": "/home",  "destination": "/index.html" },
+    { "source": "/2025",  "destination": "/2025.html"  },
+    { "source": "/2026",  "destination": "/2026.html"  }
+  ]
+}

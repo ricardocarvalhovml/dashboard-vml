@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Set Up — Home</title>
+  <title>Set Up — 2026</title>
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png">
@@ -27,7 +27,8 @@
   </script>
 </head>
 
-<body data-initial-view="view-home">
+<!-- data-initial-view faz o app.js abrir a visão anual de 2026 automaticamente -->
+<body data-initial-view="view-annual-2026">
 
   <!-- Loading screen -->
   <div id="app-loading">
@@ -51,10 +52,9 @@
         </div>
 
         <div class="sidebar-body">
-          <button class="nav-home active" id="btn-home" onclick="showView('view-home')">⌂ Home</button>
+          <button class="nav-home" id="btn-home" onclick="showView('view-home')">⌂ Home</button>
           <div class="sidebar-section" style="cursor:default">Mensal</div>
           <div id="monthNav"></div>
-          <!-- btn-annual is hidden via JS after nav is built -->
           <button class="nav-tab" id="btn-annual" style="display:none"></button>
         </div>
 
