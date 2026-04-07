@@ -14,20 +14,28 @@
 }
 
 /* ── Tokens ── */
+/* ── Modo claro (padrão) ── */
 :root {
-  --bg:             #07091a;
-  --surface:        #0d1030;
-  --surface2:       #131640;
-  --border:         rgba(255, 255, 255, 0.08);
+  --bg:       #efecef;
+  --surface:  #ffffff;
+  --surface2: #e8e5eb;
+  --border:   rgba(18, 21, 90, 0.10);
 
-  --orange:  #391bce;   /* tecnologia  — accent principal */
-  --blue:    #a038f2;   /* inteligência — secondary       */
-  --green:   #a2e259;   /* eficiência                    */
-  --yellow:  #c9b8f8;   /* lilás claro — terciário       */
-  --purple:  #6b5fd4;   /* roxo médio                    */
-  --beige:   #efecef;   /* clareza — texto principal     */
-  --muted:   #8b86a8;   /* texto secundário              */
-  --dimmed:  rgba(239, 236, 239, 0.5);
+  --orange:  #391bce;
+  --blue:    #a038f2;
+  --green:   #5c9e00;   /* verde escuro para legibilidade no claro */
+  --yellow:  #7a5fd4;
+  --purple:  #6b5fd4;
+  --beige:   #12155a;   /* texto escuro no modo claro */
+  --muted:   #5a5070;
+  --dimmed:  rgba(18, 21, 90, 0.45);
+
+  --chart-bg:     #ffffff;
+  --chart-border: rgba(0,0,0,.08);
+  --chart-title:  #12155a;
+  --chart-body:   #5a5070;
+  --chart-grid:   rgba(18,21,90,.06);
+  --chart-tick:   #5a5070;
 
   --radius:  12px;
   --font:        'Poppins', sans-serif;
@@ -37,11 +45,40 @@
   --sidebar-closed:  46px;
 }
 
+/* ── Modo escuro ── */
+[data-theme="dark"] {
+  --bg:       #07091a;
+  --surface:  #0d1030;
+  --surface2: #131640;
+  --border:   rgba(255, 255, 255, 0.08);
+
+  --orange:  #391bce;
+  --blue:    #a038f2;
+  --green:   #a2e259;
+  --yellow:  #c9b8f8;
+  --purple:  #6b5fd4;
+  --beige:   #efecef;
+  --muted:   #8b86a8;
+  --dimmed:  rgba(239, 236, 239, 0.5);
+
+  --chart-bg:     #0d1030;
+  --chart-border: rgba(255,255,255,.1);
+  --chart-title:  #efecef;
+  --chart-body:   #8b86a8;
+  --chart-grid:   rgba(255,255,255,.04);
+  --chart-tick:   #8b86a8;
+}
+
 /* ── Reset ── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+/* ── Transição de tema ── */
+html {
+  transition: background-color .3s ease, color .3s ease;
 }
 
 body {
@@ -82,6 +119,27 @@ body {
 }
 
 #app { display: none; }
+
+
+/* ── Theme toggle ── */
+.theme-toggle {
+  background:    none;
+  border:        1px solid var(--border);
+  border-radius: 7px;
+  width:         30px;
+  height:        30px;
+  cursor:        pointer;
+  display:       flex;
+  align-items:   center;
+  justify-content: center;
+  flex-shrink:   0;
+  transition:    background .15s;
+  font-size:     15px;
+  color:         var(--muted);
+  margin-left:   auto;
+}
+
+.theme-toggle:hover { background: rgba(57, 27, 206, .08); }
 
 /* ─────────────────────────────────────────────
    Layout
@@ -673,13 +731,13 @@ body {
 }
 
 .post-card-v2-img {
-  flex-shrink:   0;
-  width:         140px;
+  flex:          0 0 42%;
+  aspect-ratio:  4 / 5;
   position:      relative;
   overflow:      hidden;
   background:    var(--surface2);
-  border-radius: 12px;
-  align-self:    flex-start;
+  border-radius: 10px;
+  align-self:    stretch;
 }
 
 .post-card-v2-body {
@@ -705,7 +763,7 @@ body {
   color:              var(--beige);
   line-height:        1.3;
   display:            -webkit-box;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow:           hidden;
   margin-bottom:      8px;

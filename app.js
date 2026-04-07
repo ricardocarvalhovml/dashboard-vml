@@ -73,10 +73,10 @@ function sc(url) {
 
 function sum(arr, k) { return arr.reduce((a, r) => a + (parseInt(r[k], 10) || 0), 0); }
 
-function parsePosts(rows) { return rows.filter(r => (r['Data'] || '').trim() === 'Total'); }
+function parseposts(rows) { return rows.filter(r => (r['Data'] || '').trim() === 'Total'); }
 
 function pillLabel(k, n) {
-  return { c: n === 1 ? 'Carrossel' : 'Carrosseis', r: 'Reels', i: n === 1 ? 'Post' : 'Posts', s: n === 1 ? 'Story' : 'Stories' }[k];
+  return { c: n === 1 ? 'Carrossel' : 'Carrosseis', r: 'Reels', i: n === 1 ? 'Post' : 'posts', s: n === 1 ? 'Story' : 'Stories' }[k];
 }
 
 /* ─────────────────────────────────────────────
@@ -91,32 +91,44 @@ function mkChart(id, cfg) {
   if (el) charts[id] = new Chart(el, cfg);
 }
 
-const cOpts = () => ({
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: { display: false },
-    tooltip: {
-      backgroundColor: '#0d1030',
-      borderColor: 'rgba(255,255,255,.1)',
-      borderWidth: 1,
-      titleColor: '#efecef',
-      bodyColor: '#8b86a8',
-      titleFont: { family: "'Poppins',sans-serif", weight: '700' },
-      bodyFont:  { family: "'Poppins',sans-serif", size: 12 }
-    }
-  },
-  scales: {
-    x: {
-      grid: { display: false },
-      ticks: { color: '#8b86a8', font: { size: 11, family: "'Poppins',sans-serif" }, maxTicksLimit: 12 }
+function themeVar(v) {
+  return getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+}
+
+const cOpts = () => {
+  const bg     = themeVar('--chart-bg')     || '#0d1030';
+  const border = themeVar('--chart-border') || 'rgba(255,255,255,.1)';
+  const title  = themeVar('--chart-title')  || '#efecef';
+  const body   = themeVar('--chart-body')   || '#8b86a8';
+  const grid   = themeVar('--chart-grid')   || 'rgba(255,255,255,.04)';
+  const tick   = themeVar('--chart-tick')   || '#8b86a8';
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: bg,
+        borderColor: border,
+        borderWidth: 1,
+        titleColor: title,
+        bodyColor: body,
+        titleFont: { family: "'Poppins',sans-serif", weight: '700' },
+        bodyFont:  { family: "'Poppins',sans-serif", size: 12 }
+      }
     },
-    y: {
-      grid: { color: 'rgba(255,255,255,.04)' },
-      ticks: { color: '#8b86a8', font: { size: 11, family: "'Poppins',sans-serif" }, callback: v => v >= 1000 ? (v/1000).toFixed(1)+'k' : v }
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { color: tick, font: { size: 11, family: "'Poppins',sans-serif" }, maxTicksLimit: 12 }
+      },
+      y: {
+        grid: { color: grid },
+        ticks: { color: tick, font: { size: 11, family: "'Poppins',sans-serif" }, callback: v => v >= 1000 ? (v/1000).toFixed(1)+'k' : v }
+      }
     }
-  }
-});
+  };
+};
 
 function yMax(vals) {
   const m = Math.max(...vals.filter(v => v != null && !isNaN(v)), 0);
@@ -140,21 +152,20 @@ function thumbBlock(code, url) {
 
 function postCard(p, rank, rankColor) {
   const url   = p['Link permanente'] || '#';
-  const v     = parseInt(p['Visualizações'], 10) || 0;
-  const l     = parseInt(p['Curtidas'], 10) || 0;
-  const sh    = parseInt(p['Compartilhamentos'], 10) || 0;
-  const co    = parseInt(p['Comentários'], 10) || 0;
-  const sv    = parseInt(p['Salvamentos'], 10) || 0;
+  const v     = parseInt(p['visualizações'], 10) || 0;
+  const l     = parseInt(p['curtidas'], 10) || 0;
+  const sh    = parseInt(p['compartilhamentos'], 10) || 0;
+  const co    = parseInt(p['comentários'], 10) || 0;
+  const sv    = parseInt(p['salvamentos'], 10) || 0;
   const eng   = v > 0 ? (l + sh + co + sv) / v * 100 : 0;
   const desc  = (p['Descrição'] || '').split('\n')[0].trim();
   const color = rankColor || 'var(--orange)';
   const em    = url !== '#' ? url.replace(/\/?$/, '/') + 'embed/' : '';
 
-  const isReel = tKey(p['Tipo de post']) === 'r';
-  const ratio  = isReel ? 16/9 : 5/4;
-  const w = 175;
-  const h = Math.round(w * ratio);
-  const s = (w / 326).toFixed(4);
+  /* Sempre 4:5 — CSS gerencia via aspect-ratio, w é referência para iframe */
+  const w  = 160;
+  const h  = Math.round(w * 5/4);  /* 200px */
+  const s  = (w / 326).toFixed(4);
   const hp = Math.round(65 * s);
 
   const code2 = sc(url);
@@ -164,7 +175,7 @@ function postCard(p, rank, rankColor) {
   } else {
     imgHtml = `<div class="post-card-v2-img" style="height:${h}px;position:relative;overflow:hidden">
       <img src="posts/${code2}.jpg"
-        style="width:100%;height:100%;object-fit:cover;display:block;border-radius:0"
+        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block"
         onerror="if(this.src.endsWith('.jpg')){this.src='posts/${code2}.png';}else{this.style.display='none';this.nextElementSibling.style.display='block';}"
         alt="">
       <iframe src="${em}"
@@ -181,39 +192,39 @@ function postCard(p, rank, rankColor) {
       <div class="post-card-v2-meta">${postDateLine(p['Horário de publicação'])} <span class="badge ${bCls(p['Tipo de post'])}" style="margin-left:4px">${sTipo(p['Tipo de post'])}</span></div>
       <div class="post-card-v2-metrics">
         <div class="pcm-row"><span class="pcm-lbl">Views</span><span class="pcm-val">${fmt(v)}</span></div>
-        <div class="pcm-row"><span class="pcm-lbl">Curtidas</span><span class="pcm-val">${fmt(l)}</span></div>
+        <div class="pcm-row"><span class="pcm-lbl">curtidas</span><span class="pcm-val">${fmt(l)}</span></div>
         <div class="pcm-row"><span class="pcm-lbl">Comp.</span><span class="pcm-val">${fmt(sh)}</span></div>
         <div class="pcm-row"><span class="pcm-lbl">Salv.</span><span class="pcm-val">${fmt(sv)}</span></div>
         <div class="pcm-row"><span class="pcm-lbl">Eng.</span><span class="pcm-val">${eng.toFixed(1)}%</span></div>
       </div>
-      ${url !== '#' ? `<a href="${url}" target="_blank" rel="noopener" style="margin-top:8px;font-size:11px;color:var(--blue);font-weight:600;text-decoration:none;opacity:.7" onclick="event.stopPropagation()">↗ Abrir no Instagram</a>` : ''}
+      ${url !== '#' ? `<a href="${url}" target="_blank" rel="noopener" style="margin-top:8px;font-size:11px;color:var(--blue);font-weight:600;text-decoration:none;opacity:.7" onclick="event.stopPropagation()">↗ abrir no instagram</a>` : ''}
     </div>
   </div>`;
 }
 
 /* ─────────────────────────────────────────────
-   Posts by Format (Gallery)
+   posts by Format (Gallery)
 ───────────────────────────────────────────── */
 
 function postsByFormat(posts) {
   const formats = [
     { key: 'c', label: 'Carrosseis', color: '#a038f2' },
     { key: 'r', label: 'Reels',      color: '#391bce' },
-    { key: 'i', label: 'Posts',      color: '#c9b8f8' },
+    { key: 'i', label: 'posts',      color: '#c9b8f8' },
     { key: 's', label: 'Stories',    color: '#6b5fd4' },
   ];
 
   return formats.map(f => {
     const fp = [...posts]
       .filter(p => tKey(p['Tipo de post']) === f.key)
-      .sort((a, b) => (parseInt(b['Visualizações'], 10) || 0) - (parseInt(a['Visualizações'], 10) || 0));
+      .sort((a, b) => (parseInt(b['visualizações'], 10) || 0) - (parseInt(a['visualizações'], 10) || 0));
 
     if (!fp.length) return '';
 
     const gW = 143, gH = 179;
     const galleryItems = fp.map(p => {
       const url  = p['Link permanente'] || '#';
-      const v    = parseInt(p['Visualizações'], 10) || 0;
+      const v    = parseInt(p['visualizações'], 10) || 0;
       const em   = url.replace(/\/?$/, '/') + 'embed/';
       const code = sc(url);
       const s    = gW / 326;
@@ -253,11 +264,11 @@ function tableHtml(sorted, best) {
   return sorted.map(p => {
     const code = sc(p['Link permanente'] || '');
     const url  = p['Link permanente'] || '';
-    const v    = parseInt(p['Visualizações'], 10) || 0;
-    const l    = parseInt(p['Curtidas'], 10) || 0;
-    const sh   = parseInt(p['Compartilhamentos'], 10) || 0;
-    const co   = parseInt(p['Comentários'], 10) || 0;
-    const sv   = parseInt(p['Salvamentos'], 10) || 0;
+    const v    = parseInt(p['visualizações'], 10) || 0;
+    const l    = parseInt(p['curtidas'], 10) || 0;
+    const sh   = parseInt(p['compartilhamentos'], 10) || 0;
+    const co   = parseInt(p['comentários'], 10) || 0;
+    const sv   = parseInt(p['salvamentos'], 10) || 0;
     const eng  = v > 0 ? (l + sh + co + sv) / v * 100 : 0;
     const isBest = p === best;
     const desc = (p['Descrição'] || '').split('\n')[0].trim();
@@ -268,7 +279,7 @@ function tableHtml(sorted, best) {
       <td class="desc-cell" title="${desc.replace(/"/g,'&quot;')}">${isBest ? '<span class="star">★</span>' : ''}${desc}</td>
       <td><span class="badge ${bCls(p['Tipo de post'])}">${sTipo(p['Tipo de post'])}</span></td>
       <td class="num" style="font-weight:700">${fmt(v)}</td>
-      <td class="num">${fmt(parseInt(p['Alcance'], 10) || 0)}</td>
+      <td class="num">${fmt(parseInt(p['alcance'], 10) || 0)}</td>
       <td class="num">${fmt(l)}</td>
       <td class="num">${fmt(sh)}</td>
       <td class="num">${fmt(co)}</td>
@@ -316,11 +327,11 @@ function weekdayHtml(posts, key) {
     const r = parsePostDate(p['Horário de publicação']);
     if (!r) return;
     const d = r.date.getDay();
-    stats[d].views    += (parseInt(p['Visualizações'], 10) || 0);
-    stats[d].likes    += (parseInt(p['Curtidas'], 10) || 0);
-    stats[d].shares   += (parseInt(p['Compartilhamentos'], 10) || 0);
-    stats[d].comments += (parseInt(p['Comentários'], 10) || 0);
-    stats[d].saves    += (parseInt(p['Salvamentos'], 10) || 0);
+    stats[d].views    += (parseInt(p['visualizações'], 10) || 0);
+    stats[d].likes    += (parseInt(p['curtidas'], 10) || 0);
+    stats[d].shares   += (parseInt(p['compartilhamentos'], 10) || 0);
+    stats[d].comments += (parseInt(p['comentários'], 10) || 0);
+    stats[d].saves    += (parseInt(p['salvamentos'], 10) || 0);
     stats[d].count++;
   });
 
@@ -340,7 +351,7 @@ function weekdayHtml(posts, key) {
       <div class="weekday-name">${name}</div>
       <div class="wd-metric-label">Média views</div>
       <div class="wd-metric-val primary">${fmt(avg)}</div>
-      <div class="wd-metric-label">Publicações</div>
+      <div class="wd-metric-label">publicações</div>
       <div class="wd-metric-val">${s.count}</div>
       <div class="wd-metric-label">Engajamento</div>
       <div class="wd-metric-val">${eng.toFixed(1)}%</div>
@@ -387,11 +398,11 @@ function renderPublico(pub) {
 
   return `<div class="three-col">
     <div class="card">
-      <div class="card-header"><div class="card-title">Faixa etária</div><div style="display:flex;gap:10px;font-size:12px;font-weight:700"><span style="color:var(--orange)">■ Mulheres</span><span style="color:var(--blue)">■ Homens</span></div></div>
+      <div class="card-header"><div class="card-title">faixa etária</div><div style="display:flex;gap:10px;font-size:12px;font-weight:700"><span style="color:var(--orange)">■ Mulheres</span><span style="color:var(--blue)">■ Homens</span></div></div>
       ${ageHtml}
     </div>
-    <div class="card"><div class="card-header"><div class="card-title">Top países</div></div><div class="rank-list">${countHtml}</div></div>
-    <div class="card"><div class="card-header"><div class="card-title">Top cidades</div></div><div class="rank-list">${cityHtml}</div></div>
+    <div class="card"><div class="card-header"><div class="card-title">top países</div></div><div class="rank-list">${countHtml}</div></div>
+    <div class="card"><div class="card-header"><div class="card-title">top cidades</div></div><div class="rank-list">${cityHtml}</div></div>
   </div>`;
 }
 
@@ -400,17 +411,17 @@ function renderPublico(pub) {
 ───────────────────────────────────────────── */
 
 function buildHome(years, byYear, acctMap) {
-  const allPosts    = Object.values(byYear).flat().flatMap(m => m.posts);
-  const totalViews  = sum(allPosts, 'Visualizações');
-  const totalPosts  = allPosts.length;
+  const allposts    = Object.values(byYear).flat().flatMap(m => m.posts);
+  const totalViews  = sum(allposts, 'visualizações');
+  const totalposts  = allposts.length;
   const totalMonths = Object.values(byYear).flat().length;
 
   const yBoxes = years.map((y, yi) => {
     const yM     = byYear[y] || [];
-    const yPosts = yM.flatMap(m => m.posts);
-    const yViews = sum(yPosts, 'Visualizações');
-    const yAlc   = sum(yPosts, 'Alcance');
-    const yLikes = sum(yPosts, 'Curtidas');
+    const yposts = yM.flatMap(m => m.posts);
+    const yViews = sum(yposts, 'visualizações');
+    const yAlc   = sum(yposts, 'alcance');
+    const yLikes = sum(yposts, 'curtidas');
     const accents = ['#391bce', '#a038f2', '#a2e259', '#c9b8f8'];
     const accent  = accents[yi % accents.length];
     const isLatest = yi === years.length - 1;
@@ -421,13 +432,13 @@ function buildHome(years, byYear, acctMap) {
         ${isLatest ? `<div class="year-box-badge">Atual</div>` : ''}
       </div>
       <div class="year-box-metrics">
-        <div class="year-box-metric"><div class="year-box-metric-val">${fmt(yViews)}</div><div class="year-box-metric-lbl">Visualizações</div></div>
-        <div class="year-box-metric"><div class="year-box-metric-val">${fmt(yAlc)}</div><div class="year-box-metric-lbl">Alcance</div></div>
-        <div class="year-box-metric"><div class="year-box-metric-val">${fmt(yLikes)}</div><div class="year-box-metric-lbl">Curtidas</div></div>
+        <div class="year-box-metric"><div class="year-box-metric-val">${fmt(yViews)}</div><div class="year-box-metric-lbl">visualizações</div></div>
+        <div class="year-box-metric"><div class="year-box-metric-val">${fmt(yAlc)}</div><div class="year-box-metric-lbl">alcance</div></div>
+        <div class="year-box-metric"><div class="year-box-metric-val">${fmt(yLikes)}</div><div class="year-box-metric-lbl">curtidas</div></div>
       </div>
       <div class="year-box-chart"><canvas id="home-ch-${y}"></canvas></div>
       <div class="year-box-footer">
-        <div class="year-box-months">${yM.length} ${yM.length === 1 ? 'mês' : 'meses'} · ${yPosts.length} publicações</div>
+        <div class="year-box-months">${yM.length} ${yM.length === 1 ? 'mês' : 'meses'} · ${yposts.length} publicações</div>
         <div class="year-box-cta">Abrir ${y} →</div>
       </div>
     </div>`;
@@ -443,18 +454,18 @@ function buildHome(years, byYear, acctMap) {
     <div class="home-hero-title">${CLIENT_NAME}</div>
     <div class="home-hero-sub">@${ACCOUNT} · visão geral de todos os períodos</div>
     <div class="home-hero-stats">
-      <div><div class="home-hero-stat-val">${fmt(totalViews)}</div><div class="home-hero-stat-lbl">Visualizações totais</div></div>
-      <div><div class="home-hero-stat-val">${totalPosts}</div><div class="home-hero-stat-lbl">Publicações</div></div>
+      <div><div class="home-hero-stat-val">${fmt(totalViews)}</div><div class="home-hero-stat-lbl">visualizações totais</div></div>
+      <div><div class="home-hero-stat-val">${totalposts}</div><div class="home-hero-stat-lbl">publicações</div></div>
       <div><div class="home-hero-stat-val">${totalMonths}</div><div class="home-hero-stat-lbl">${totalMonths === 1 ? 'Mês' : 'Meses'} de dados</div></div>
     </div>
   </div>
   <div class="year-boxes">${yBoxes}</div>
   ${showComparison ? `<div class="card section-gap">
-    <div class="card-header"><div class="card-title">Comparativo entre anos</div><div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#391bce"></span>Views</div><div class="legend-item"><span class="legend-dot" style="background:#a038f2"></span>Alcance</div></div></div>
+    <div class="card-header"><div class="card-title">comparativo entre anos</div><div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#391bce"></span>Views</div><div class="legend-item"><span class="legend-dot" style="background:#a038f2"></span>alcance</div></div></div>
     <div style="position:relative;height:200px"><canvas id="home-ch-compare"></canvas></div>
   </div>` : ''}
   ${hasFollData ? `<div class="card">
-    <div class="card-header"><div class="card-title">Evolução de seguidores</div><div style="font-size:12px;color:var(--muted)">todos os períodos</div></div>
+    <div class="card-header"><div class="card-title">evolução de seguidores</div><div style="font-size:12px;color:var(--muted)">todos os períodos</div></div>
     <div style="position:relative;height:180px"><canvas id="home-ch-foll"></canvas></div>
   </div>` : ''}
 </div>`;
@@ -467,18 +478,18 @@ function buildHome(years, byYear, acctMap) {
 function buildMonth(mi, posts, key, year, multiYear, acct, hasMetrics) {
   const sorted = [...posts].sort((a, b) => new Date(b['Horário de publicação'] || 0) - new Date(a['Horário de publicação'] || 0));
   const chrono  = [...posts].sort((a, b) => new Date(a['Horário de publicação'] || 0) - new Date(b['Horário de publicação'] || 0));
-  const byV     = [...posts].sort((a, b) => (parseInt(b['Visualizações'], 10) || 0) - (parseInt(a['Visualizações'], 10) || 0));
+  const byV     = [...posts].sort((a, b) => (parseInt(b['visualizações'], 10) || 0) - (parseInt(a['visualizações'], 10) || 0));
 
   const top3   = byV.slice(0, 3);
   const worst3 = byV.slice(-Math.min(3, byV.length)).reverse();
   const best   = top3[0];
 
-  const views    = sum(posts, 'Visualizações');
-  const alc      = sum(posts, 'Alcance');
-  const likes    = sum(posts, 'Curtidas');
-  const shares   = sum(posts, 'Compartilhamentos');
-  const comments = sum(posts, 'Comentários');
-  const saves    = sum(posts, 'Salvamentos');
+  const views    = sum(posts, 'visualizações');
+  const alc      = sum(posts, 'alcance');
+  const likes    = sum(posts, 'curtidas');
+  const shares   = sum(posts, 'compartilhamentos');
+  const comments = sum(posts, 'comentários');
+  const saves    = sum(posts, 'salvamentos');
 
   const datas   = posts.map(p => p['Horário de publicação']).filter(Boolean);
   const earliest = datas.reduce((a, b) => a < b ? a : b, datas[0] || '');
@@ -499,14 +510,14 @@ function buildMonth(mi, posts, key, year, multiYear, acct, hasMetrics) {
 
   const maxE   = Math.max(likes, shares, comments, saves, 1);
   const engHtml = [
-    { l: 'Curtidas',    v: likes,    c: '#391bce' },
+    { l: 'curtidas',    v: likes,    c: '#391bce' },
     { l: 'Compartilh.', v: shares,   c: '#a038f2' },
-    { l: 'Comentários', v: comments, c: 'rgba(239,236,239,.6)' },
-    { l: 'Salvamentos', v: saves,    c: '#6b5fd4' }
+    { l: 'comentários', v: comments, c: 'rgba(239,236,239,.6)' },
+    { l: 'salvamentos', v: saves,    c: '#6b5fd4' }
   ].map(e => `<div class="eng-row"><div class="eng-name">${e.l}</div><div class="eng-bar-bg"><div class="eng-bar" style="width:${(e.v/maxE*100).toFixed(1)}%;background:${e.c}"></div></div><div class="eng-num">${fmt(e.v)}</div></div>`).join('');
 
   const label     = multiYear ? `${MO[mi]} ${year}` : MO[mi];
-  const publicoTab = hasMetrics ? `<button class="mtab" onclick="showTab('${key}','publico')">Público</button>` : '';
+  const publicoTab = hasMetrics ? `<button class="mtab" onclick="showTab('${key}','publico')">público</button>` : '';
 
   return { chrono, html: `<div class="view" id="view-${key}">
   <div class="page-header">
@@ -515,41 +526,41 @@ function buildMonth(mi, posts, key, year, multiYear, acct, hasMetrics) {
   </div>
   <div class="month-tabs">
     <button class="mtab active" onclick="showTab('${key}','geral')">visão geral</button>
-    <button class="mtab" onclick="showTab('${key}','posts')">Posts</button>
+    <button class="mtab" onclick="showTab('${key}','posts')">posts</button>
     ${publicoTab}
   </div>
 
   <div class="tab-content active" id="tab-${key}-geral">
     <div class="kpi-row">
-      <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">Visualizações</div><div class="kpi-val">${fmt(views)}</div><div class="kpi-sub">total do período</div></div>
-      <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">Alcance</div><div class="kpi-val">${fmt(alc)}</div><div class="kpi-sub">contas únicas</div></div>
-      <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">Curtidas</div><div class="kpi-val">${fmt(likes)}</div><div class="kpi-sub">reações</div></div>
-      <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">Compartilhamentos</div><div class="kpi-val">${fmt(shares)}</div><div class="kpi-sub">envios</div></div>
-      <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">Comentários</div><div class="kpi-val">${fmt(comments)}</div><div class="kpi-sub">interações</div></div>
-      <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">Salvamentos</div><div class="kpi-val">${fmt(saves)}</div><div class="kpi-sub">saves</div></div>
+      <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">visualizações</div><div class="kpi-val">${fmt(views)}</div><div class="kpi-sub">total do período</div></div>
+      <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">alcance</div><div class="kpi-val">${fmt(alc)}</div><div class="kpi-sub">contas únicas</div></div>
+      <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">curtidas</div><div class="kpi-val">${fmt(likes)}</div><div class="kpi-sub">reações</div></div>
+      <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">compartilhamentos</div><div class="kpi-val">${fmt(shares)}</div><div class="kpi-sub">envios</div></div>
+      <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">comentários</div><div class="kpi-val">${fmt(comments)}</div><div class="kpi-sub">interações</div></div>
+      <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">salvamentos</div><div class="kpi-val">${fmt(saves)}</div><div class="kpi-sub">saves</div></div>
     </div>
     ${renderAcct(acct)}
     ${hasMetrics ? `
     <div class="card section-gap">
-      <div class="card-header"><div class="card-title">Visualizações diárias</div></div>
+      <div class="card-header"><div class="card-title">visualizações diárias</div></div>
       <div style="position:relative;height:160px"><canvas id="ch-dv-${key}"></canvas></div>
     </div>
     <div class="two-col section-gap">
-      <div class="card"><div class="card-header"><div class="card-title">Alcance diário</div></div><div style="position:relative;height:130px"><canvas id="ch-dr-${key}"></canvas></div></div>
-      <div class="card"><div class="card-header"><div class="card-title">Seguidores ganhos por dia</div></div><div style="position:relative;height:130px"><canvas id="ch-df-${key}"></canvas></div></div>
+      <div class="card"><div class="card-header"><div class="card-title">alcance diário</div></div><div style="position:relative;height:130px"><canvas id="ch-dr-${key}"></canvas></div></div>
+      <div class="card"><div class="card-header"><div class="card-title">seguidores ganhos por dia</div></div><div style="position:relative;height:130px"><canvas id="ch-df-${key}"></canvas></div></div>
     </div>` : ''}
     <div class="charts-row">
       <div class="card">
-        <div class="card-header"><div class="card-title">Views por publicação</div><div class="legend">${legendHtml}</div></div>
+        <div class="card-header"><div class="card-title">views por publicação</div><div class="legend">${legendHtml}</div></div>
         <div style="position:relative;height:200px"><canvas id="ch-${key}"></canvas></div>
       </div>
       <div class="card">
-        <div class="card-title" style="margin-bottom:12px">Engajamento total</div>
+        <div class="card-title" style="margin-bottom:12px">engajamento total</div>
         <div class="eng-list" style="flex:1;justify-content:space-between">${engHtml}</div>
       </div>
     </div>
     <div class="card section-gap">
-      <div class="card-header"><div class="card-title">Desempenho por dia da semana</div></div>
+      <div class="card-header"><div class="card-title">desempenho por dia da semana</div></div>
       ${weekdayHtml(posts, key)}
     </div>
   </div>
@@ -563,11 +574,11 @@ function buildMonth(mi, posts, key, year, multiYear, acct, hasMetrics) {
       <div class="bw-section-header"><div class="bw-section-title bw-section-title-worst">▼ Menores performances</div><div style="font-size:12px;color:var(--muted)">por views</div></div>
       <div class="post-section-grid">${worst3.map((p, i) => postCard(p, ['1º menor','2º menor','3º menor'][i], 'var(--muted)')).join('')}</div>
     </div>
-    <div class="card section-gap"><div class="card-header"><div class="card-title">Por formato</div></div>${postsByFormat(posts)}</div>
+    <div class="card section-gap"><div class="card-header"><div class="card-title">por formato</div></div>${postsByFormat(posts)}</div>
     <div class="card">
-      <div class="card-header"><div class="card-title">Todas as publicações</div><div style="font-size:12px;color:var(--muted);font-weight:600">${posts.length} publicações</div></div>
+      <div class="card-header"><div class="card-title">todas as publicações</div><div style="font-size:12px;color:var(--muted);font-weight:600">${posts.length} publicações</div></div>
       <div class="table-wrap"><table>
-        <thead><tr><th>Capa</th><th>Data</th><th>Descrição</th><th>Tipo</th><th class="num">Views</th><th class="num">Alcance</th><th class="num">Curtidas</th><th class="num">Comp.</th><th class="num">Coment.</th><th class="num">Salv.</th><th class="num">Eng.%</th><th>Link</th></tr></thead>
+        <thead><tr><th>Capa</th><th>Data</th><th>Descrição</th><th>Tipo</th><th class="num">Views</th><th class="num">alcance</th><th class="num">curtidas</th><th class="num">Comp.</th><th class="num">Coment.</th><th class="num">Salv.</th><th class="num">Eng.%</th><th>Link</th></tr></thead>
         <tbody>${tableHtml(sorted, best)}</tbody>
       </table></div>
     </div>
@@ -582,22 +593,22 @@ function buildMonth(mi, posts, key, year, multiYear, acct, hasMetrics) {
 ───────────────────────────────────────────── */
 
 function buildAnnual(yearMonths, year, acctMap) {
-  const allPosts  = yearMonths.flatMap(m => m.posts);
-  const views     = sum(allPosts, 'Visualizações');
-  const alc       = sum(allPosts, 'Alcance');
-  const likes     = sum(allPosts, 'Curtidas');
-  const shares    = sum(allPosts, 'Compartilhamentos');
-  const comments  = sum(allPosts, 'Comentários');
-  const saves     = sum(allPosts, 'Salvamentos');
+  const allposts  = yearMonths.flatMap(m => m.posts);
+  const views     = sum(allposts, 'visualizações');
+  const alc       = sum(allposts, 'alcance');
+  const likes     = sum(allposts, 'curtidas');
+  const shares    = sum(allposts, 'compartilhamentos');
+  const comments  = sum(allposts, 'comentários');
+  const saves     = sum(allposts, 'salvamentos');
 
-  const bestMonth = yearMonths.reduce((a, b) => sum(b.posts, 'Visualizações') > sum(a.posts, 'Visualizações') ? b : a, yearMonths[0]);
-  const bmV   = sum(bestMonth.posts, 'Visualizações');
-  const bmL   = sum(bestMonth.posts, 'Curtidas');
-  const bmS   = sum(bestMonth.posts, 'Compartilhamentos');
-  const bmC   = sum(bestMonth.posts, 'Comentários');
+  const bestMonth = yearMonths.reduce((a, b) => sum(b.posts, 'visualizações') > sum(a.posts, 'visualizações') ? b : a, yearMonths[0]);
+  const bmV   = sum(bestMonth.posts, 'visualizações');
+  const bmL   = sum(bestMonth.posts, 'curtidas');
+  const bmS   = sum(bestMonth.posts, 'compartilhamentos');
+  const bmC   = sum(bestMonth.posts, 'comentários');
   const bmEng = bmV > 0 ? ((bmL + bmS + bmC) / bmV * 100) : 0;
 
-  const byV    = [...allPosts].sort((a, b) => (parseInt(b['Visualizações'], 10) || 0) - (parseInt(a['Visualizações'], 10) || 0));
+  const byV    = [...allposts].sort((a, b) => (parseInt(b['visualizações'], 10) || 0) - (parseInt(a['visualizações'], 10) || 0));
   const top3   = byV.slice(0, 3);
   const worst3 = byV.slice(-3).reverse();
 
@@ -605,10 +616,10 @@ function buildAnnual(yearMonths, year, acctMap) {
     const m = yearMonths.find(m => m.mi === i);
     if (!m) return `<div class="ms-card no-data"><div class="ms-name">${MO[i]}</div><div class="ms-views">sem dados</div></div>`;
 
-    const mv   = sum(m.posts, 'Visualizações');
-    const ma   = sum(m.posts, 'Alcance');
-    const ml   = sum(m.posts, 'Curtidas');
-    const ms2  = sum(m.posts, 'Compartilhamentos');
+    const mv   = sum(m.posts, 'visualizações');
+    const ma   = sum(m.posts, 'alcance');
+    const ml   = sum(m.posts, 'curtidas');
+    const ms2  = sum(m.posts, 'compartilhamentos');
     const isBest = m === bestMonth;
 
     return `<div class="ms-card" style="${isBest ? 'border-color:rgba(57,27,206,.4)' : ''}" onclick="showView('view-${m.key}')">
@@ -623,23 +634,23 @@ function buildAnnual(yearMonths, year, acctMap) {
 
   return `<div class="view" id="view-annual-${year}">
   <div class="page-header">
-    <div><div class="page-eyebrow">Visão Anual</div><div class="page-title">${year}</div><div class="page-sub">@${ACCOUNT} · ${yearMonths.length} ${yearMonths.length === 1 ? 'mês' : 'meses'} · ${allPosts.length} publicações</div></div>
+    <div><div class="page-eyebrow">Visão Anual</div><div class="page-title">${year}</div><div class="page-sub">@${ACCOUNT} · ${yearMonths.length} ${yearMonths.length === 1 ? 'mês' : 'meses'} · ${allposts.length} publicações</div></div>
   </div>
   <div class="kpi-row">
-    <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">Visualizações</div><div class="kpi-val">${fmt(views)}</div><div class="kpi-sub">no ano</div></div>
-    <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">Alcance</div><div class="kpi-val">${fmt(alc)}</div><div class="kpi-sub">no ano</div></div>
-    <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">Curtidas</div><div class="kpi-val">${fmt(likes)}</div><div class="kpi-sub">no ano</div></div>
-    <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">Compartilhamentos</div><div class="kpi-val">${fmt(shares)}</div><div class="kpi-sub">no ano</div></div>
-    <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">Comentários</div><div class="kpi-val">${fmt(comments)}</div><div class="kpi-sub">no ano</div></div>
-    <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">Publicações</div><div class="kpi-val">${allPosts.length}</div><div class="kpi-sub">${yearMonths.length} meses</div></div>
+    <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">visualizações</div><div class="kpi-val">${fmt(views)}</div><div class="kpi-sub">no ano</div></div>
+    <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">alcance</div><div class="kpi-val">${fmt(alc)}</div><div class="kpi-sub">no ano</div></div>
+    <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">curtidas</div><div class="kpi-val">${fmt(likes)}</div><div class="kpi-sub">no ano</div></div>
+    <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">compartilhamentos</div><div class="kpi-val">${fmt(shares)}</div><div class="kpi-sub">no ano</div></div>
+    <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">comentários</div><div class="kpi-val">${fmt(comments)}</div><div class="kpi-sub">no ano</div></div>
+    <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">publicações</div><div class="kpi-val">${allposts.length}</div><div class="kpi-sub">${yearMonths.length} meses</div></div>
   </div>
   <div class="charts-row section-gap">
     <div class="card">
-      <div class="card-header"><div class="card-title">Views e Alcance por mês</div><div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#391bce"></span>Views</div><div class="legend-item"><span class="legend-dot" style="background:#a038f2"></span>Alcance</div></div></div>
+      <div class="card-header"><div class="card-title">views e alcance por mês</div><div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#391bce"></span>Views</div><div class="legend-item"><span class="legend-dot" style="background:#a038f2"></span>alcance</div></div></div>
       <div style="position:relative;height:200px"><canvas id="ch-annual-${year}"></canvas></div>
     </div>
     ${hasFollData ? `<div class="card">
-      <div class="card-header"><div class="card-title">Crescimento de seguidores</div><div style="font-size:12px;color:var(--muted)">linha tracejada = tendência</div></div>
+      <div class="card-header"><div class="card-title">crescimento de seguidores</div><div style="font-size:12px;color:var(--muted)">linha tracejada = tendência</div></div>
       <div style="position:relative;flex:1;min-height:120px"><canvas id="ch-annual-foll-${year}" style="position:absolute;inset:0"></canvas></div>
     </div>` : ''}
   </div>
@@ -652,11 +663,11 @@ function buildAnnual(yearMonths, year, acctMap) {
     <div class="post-section-grid">${worst3.map((p, i) => postCard(p, ['1º menor','2º menor','3º menor'][i], 'var(--muted)')).join('')}</div>
   </div>
   <div class="card section-gap">
-    <div class="card-header"><div class="card-title">Desempenho por dia da semana · ${year}</div><div style="font-size:12px;color:var(--muted)">média de views por dia, todos os meses</div></div>
+    <div class="card-header"><div class="card-title">desempenho por dia da semana · ${year}</div><div style="font-size:12px;color:var(--muted)">média de views por dia, todos os meses</div></div>
     <div id="annual-wd-${year}"></div>
   </div>
   <div>
-    <div class="card-header" style="margin-bottom:.75rem"><div class="card-title">Todos os meses de ${year}</div><div style="font-size:12px;color:var(--muted)">clique para navegar</div></div>
+    <div class="card-header" style="margin-bottom:.75rem"><div class="card-title">todos os meses de ${year}</div><div style="font-size:12px;color:var(--muted)">clique para navegar</div></div>
     <div class="annual-grid">${msCards}</div>
   </div>
 </div>`;
@@ -682,7 +693,7 @@ async function fetchMetricCsv(year, mo, name) {
 
 async function fetchPublicoCsv(year, mo) {
   try {
-    const r = await fetch(`data/${year}/${mo}/Público.csv`);
+    const r = await fetch(`data/${year}/${mo}/público.csv`);
     if (!r.ok) return null;
     const buf      = await r.arrayBuffer();
     const text     = new TextDecoder('utf-16').decode(buf);
@@ -696,7 +707,7 @@ async function fetchPublicoCsv(year, mo) {
       const line     = rawLines[i].trim();
       const stripped = line.replace(/"/g, '').trim();
 
-      if (stripped === 'Faixa etária e gênero') { mode = 'ages';      i++; continue; }
+      if (stripped === 'faixa etária e gênero') { mode = 'ages';      i++; continue; }
       if (stripped === 'Principais países')      { mode = 'countries'; i++; continue; }
       if (stripped === 'Principais cidades')     { mode = 'cities';    i++; continue; }
       if (stripped.startsWith(',') && mode === 'ages') { i++; continue; }
@@ -724,7 +735,7 @@ async function fetchPublicoCsv(year, mo) {
     }
 
     return { ages, countries, cities };
-  } catch (e) { console.error('Público parse error:', e); return null; }
+  } catch (e) { console.error('público parse error:', e); return null; }
 }
 
 /* ─────────────────────────────────────────────
@@ -756,16 +767,16 @@ function renderWdCharts(key, posts) {
   WD.forEach((_, i) => {
     const id = `wdc-${key}-${i}`;
     if (!document.getElementById(id)) return;
-    const dayPosts = posts
+    const dayposts = posts
       .filter(p => { const r = parsePostDate(p['Horário de publicação']); return r && r.date.getDay() === i; })
       .sort((a, b) => new Date(a['Horário de publicação'] || 0) - new Date(b['Horário de publicação'] || 0));
-    if (!dayPosts.length) return;
-    const vals = dayPosts.map(p => parseInt(p['Visualizações'], 10) || 0);
+    if (!dayposts.length) return;
+    const vals = dayposts.map(p => parseInt(p['visualizações'], 10) || 0);
     const maxV = Math.max(...vals, 1);
     mkChart(id, {
       type: 'bar',
       data: {
-        labels: dayPosts.map((_, wi) => `S${wi + 1}`),
+        labels: dayposts.map((_, wi) => `S${wi + 1}`),
         datasets: [{ data: vals, backgroundColor: Array(vals.length).fill(document.getElementById(id).closest('.wd-best') ? '#a038f2' : 'rgba(255,255,255,.2)'), borderRadius: 2 }]
       },
       options: {
@@ -780,7 +791,7 @@ function renderWdCharts(key, posts) {
 function renderMonthGeralCharts(key) {
   const chrono = monthChronoMap[key];
   if (!chrono) return;
-  const postVals = chrono.map(p => parseInt(p['Visualizações'], 10) || 0);
+  const postVals = chrono.map(p => parseInt(p['visualizações'], 10) || 0);
   mkChart(`ch-${key}`, {
     type: 'bar',
     data: {
@@ -816,7 +827,7 @@ async function renderPublicoTab(key) {
   if (publicoCache[key] !== undefined) {
     el.innerHTML = publicoCache[key]
       ? renderPublico(publicoCache[key])
-      : `<div class="empty-wrap"><p>Arquivo Público.csv não encontrado.</p></div>`;
+      : `<div class="empty-wrap"><p>Arquivo público.csv não encontrado.</p></div>`;
     return;
   }
   const [y, mo] = key.split('-');
@@ -824,7 +835,39 @@ async function renderPublicoTab(key) {
   publicoCache[key] = pub;
   el.innerHTML = pub
     ? renderPublico(pub)
-    : `<div class="empty-wrap"><p>Arquivo Público.csv não encontrado para este mês.</p></div>`;
+    : `<div class="empty-wrap"><p>Arquivo público.csv não encontrado para este mês.</p></div>`;
+}
+
+
+/* ─────────────────────────────────────────────
+   Theme toggle
+───────────────────────────────────────────── */
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.dataset.theme === 'dark';
+  html.dataset.theme = isDark ? '' : 'dark';
+  localStorage.setItem('dashboard-theme', html.dataset.theme);
+  document.getElementById('theme-icon').textContent = isDark ? '🌙' : '☀️';
+  /* re-renderizar charts ativos com as novas cores */
+  if (currentView) {
+    const key = currentView.replace('view-', '').replace('annual-', '');
+    setTimeout(() => {
+      if (currentView.startsWith('view-annual-')) {
+        const y = parseInt(currentView.replace('view-annual-', ''));
+        const yM = allMonths.filter(m => m.year === y);
+        if (yM.length) showView(currentView);
+      } else if (currentView !== 'view-home') {
+        renderMonthGeralCharts(key);
+      }
+    }, 50);
+  }
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('dashboard-theme') || '';
+  document.documentElement.dataset.theme = saved;
+  const icon = document.getElementById('theme-icon');
+  if (icon) icon.textContent = saved === 'dark' ? '☀️' : '🌙';
 }
 
 /* ─────────────────────────────────────────────
@@ -862,8 +905,8 @@ function showView(vid) {
     const y  = parseInt(vid.replace('view-annual-', ''));
     const yM = allMonths.filter(m => m.year === y);
     const labels12 = MO.map(m => m.slice(0, 3));
-    const views12  = labels12.map((_, i) => { const m = yM.find(m => m.mi === i); return m ? sum(m.posts, 'Visualizações') : null; });
-    const reach12  = labels12.map((_, i) => { const m = yM.find(m => m.mi === i); return m ? sum(m.posts, 'Alcance') : null; });
+    const views12  = labels12.map((_, i) => { const m = yM.find(m => m.mi === i); return m ? sum(m.posts, 'visualizações') : null; });
+    const reach12  = labels12.map((_, i) => { const m = yM.find(m => m.mi === i); return m ? sum(m.posts, 'alcance') : null; });
 
     setTimeout(() => {
       const v12 = views12.filter(v => v !== null);
@@ -873,7 +916,7 @@ function showView(vid) {
           labels: labels12,
           datasets: [
             { label: 'Views',  data: views12, backgroundColor: views12.map(v => v === null ? 'rgba(255,255,255,.05)' : '#391bce'), borderRadius: 4, borderSkipped: false },
-            { label: 'Alcance', data: reach12, backgroundColor: reach12.map(v => v === null ? 'rgba(255,255,255,.03)' : '#a038f2'), borderRadius: 3, borderSkipped: false }
+            { label: 'alcance', data: reach12, backgroundColor: reach12.map(v => v === null ? 'rgba(255,255,255,.03)' : '#a038f2'), borderRadius: 3, borderSkipped: false }
           ]
         },
         options: { ...cOpts(), plugins: { ...cOpts().plugins, legend: { display: false } }, scales: { ...cOpts().scales, x: { ...cOpts().scales.x, ticks: { ...cOpts().scales.x.ticks, maxTicksLimit: 12 } }, y: { ...cOpts().scales.y, max: yMax(v12) } } }
@@ -913,17 +956,17 @@ function showView(vid) {
 
       const wdEl = document.getElementById(`annual-wd-${y}`);
       if (wdEl) {
-        const allYPosts = yM.flatMap(m => m.posts);
+        const allYposts = yM.flatMap(m => m.posts);
         const wdStats   = Array.from({ length: 7 }, () => ({ views: 0, count: 0, likes: 0, shares: 0, comments: 0, saves: 0 }));
-        allYPosts.forEach(p => {
+        allYposts.forEach(p => {
           const r = parsePostDate(p['Horário de publicação']);
           if (!r) return;
           const d = r.date.getDay();
-          wdStats[d].views    += (parseInt(p['Visualizações'], 10) || 0);
-          wdStats[d].likes    += (parseInt(p['Curtidas'], 10) || 0);
-          wdStats[d].shares   += (parseInt(p['Compartilhamentos'], 10) || 0);
-          wdStats[d].comments += (parseInt(p['Comentários'], 10) || 0);
-          wdStats[d].saves    += (parseInt(p['Salvamentos'], 10) || 0);
+          wdStats[d].views    += (parseInt(p['visualizações'], 10) || 0);
+          wdStats[d].likes    += (parseInt(p['curtidas'], 10) || 0);
+          wdStats[d].shares   += (parseInt(p['compartilhamentos'], 10) || 0);
+          wdStats[d].comments += (parseInt(p['comentários'], 10) || 0);
+          wdStats[d].saves    += (parseInt(p['salvamentos'], 10) || 0);
           wdStats[d].count++;
         });
         const bestWd = wdStats.reduce((bi, s, i) => s.count > 0 && s.views > wdStats[bi].views ? i : bi, 0);
@@ -937,7 +980,7 @@ function showView(vid) {
             <div class="weekday-name">${name}</div>
             <div class="wd-metric-label">Média views</div>
             <div class="wd-metric-val primary">${fmt(avg)}</div>
-            <div class="wd-metric-label">Publicações</div>
+            <div class="wd-metric-label">publicações</div>
             <div class="wd-metric-val">${s.count}</div>
             <div class="wd-metric-label">Engajamento</div>
             <div class="wd-metric-val">${eng.toFixed(1)}%</div>
@@ -957,6 +1000,8 @@ function showView(vid) {
   const currYear = now.getFullYear();
   const currMo   = String(now.getMonth() + 1).padStart(2, '0');
   const currKey  = `${currYear}-${currMo}`;
+
+  initTheme();
 
   /* Read optional initial view from <body data-initial-view="..."> */
   const initialView = document.body.dataset.initialView || 'view-home';
@@ -990,7 +1035,7 @@ function showView(vid) {
       .catch(() => null)
       .then(text => {
         if (!text) return null;
-        const posts = parsePosts(Papa.parse(text, { header: true, skipEmptyLines: true }).data);
+        const posts = parseposts(Papa.parse(text, { header: true, skipEmptyLines: true }).data);
         return posts.length ? { mi, year, key, mo, posts } : null;
       })
   );
@@ -1011,7 +1056,7 @@ function showView(vid) {
       .catch(() => null)
       .then(text => {
         if (!text) return null;
-        const all = parsePosts(Papa.parse(text, { header: true, skipEmptyLines: true }).data);
+        const all = parseposts(Papa.parse(text, { header: true, skipEmptyLines: true }).data);
         return all.length ? splitByMonth(all) : null;
       })
   );
@@ -1059,12 +1104,12 @@ function showView(vid) {
   const hasMetrics = {};
   await Promise.all(results.map(async m => {
     const mo = (m.mo || m.key.split('-')[1]).padStart(2, '0');
-    const r  = await fetch(`data/${m.year}/${mo}/Visualizações.csv`).catch(() => ({ ok: false }));
+    const r  = await fetch(`data/${m.year}/${mo}/visualizações.csv`).catch(() => ({ ok: false }));
     hasMetrics[m.key] = r.ok;
     if (r.ok) {
       const [views, reach, followers] = await Promise.all([
-        fetchMetricCsv(m.year, mo, 'Visualizações'),
-        fetchMetricCsv(m.year, mo, 'Alcance'),
+        fetchMetricCsv(m.year, mo, 'visualizações'),
+        fetchMetricCsv(m.year, mo, 'alcance'),
         fetchMetricCsv(m.year, mo, 'Seguidores')
       ]);
       metricsCache[m.key] = { views, reach, followers };
@@ -1079,7 +1124,7 @@ function showView(vid) {
   years.forEach(y => {
     const yM = results.filter(m => m.year === y);
     if (yM.length) {
-      const b = yM.reduce((a, b) => sum(b.posts, 'Visualizações') > sum(a.posts, 'Visualizações') ? b : a, yM[0]);
+      const b = yM.reduce((a, b) => sum(b.posts, 'visualizações') > sum(a.posts, 'visualizações') ? b : a, yM[0]);
       bestKeyPerYear[y] = b.key;
     }
   });
@@ -1087,7 +1132,7 @@ function showView(vid) {
   let bestYearOverall = years[0];
   let maxYViews = -1;
   years.forEach(y => {
-    const v = sum(results.filter(m => m.year === y).flatMap(m => m.posts), 'Visualizações');
+    const v = sum(results.filter(m => m.year === y).flatMap(m => m.posts), 'visualizações');
     if (v > maxYViews) { maxYViews = v; bestYearOverall = y; }
   });
 
@@ -1164,7 +1209,7 @@ function showView(vid) {
   /* Home sparklines */
   years.forEach(y => {
     const yM       = byYear[y] || [];
-    const sparkData = Array.from({ length: 12 }, (_, i) => { const m = yM.find(m => m.mi === i); return m ? sum(m.posts, 'Visualizações') : null; });
+    const sparkData = Array.from({ length: 12 }, (_, i) => { const m = yM.find(m => m.mi === i); return m ? sum(m.posts, 'visualizações') : null; });
     const el       = document.getElementById(`home-ch-${y}`);
     if (!el) return;
     const accents  = ['#391bce', '#a038f2', '#a2e259', '#c9b8f8'];
@@ -1188,7 +1233,7 @@ function showView(vid) {
     const accents  = ['#391bce', '#a038f2', '#a2e259', '#c9b8f8'];
     const datasets = years.map((y, yi) => {
       const yM   = byYear[y] || [];
-      const vals = Array.from({ length: 12 }, (_, i) => { const m = yM.find(m => m.mi === i); return m ? sum(m.posts, 'Visualizações') : null; });
+      const vals = Array.from({ length: 12 }, (_, i) => { const m = yM.find(m => m.mi === i); return m ? sum(m.posts, 'visualizações') : null; });
       return { label: String(y), data: vals, backgroundColor: accents[yi % accents.length] + 'cc', borderRadius: 3, borderSkipped: false };
     });
     const allViewVals = datasets.flatMap(d => d.data).filter(v => v !== null);
