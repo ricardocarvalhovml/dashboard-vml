@@ -8,6 +8,9 @@ const MO = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agost
 const MS = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
 const WD = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 
+/* Anos suportados — esconde automaticamente os que não tiverem dados */
+const YEAR_RANGE = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
+
 /* ─────────────────────────────────────────────
    Helpers
 ───────────────────────────────────────────── */
@@ -592,7 +595,7 @@ function buildAnnual(yearMonths, year, acctMap) {
 
     return `<div class="ms-card" style="${isBest ? 'border-color:rgba(240,89,36,.4)' : ''}" onclick="showView('view-${m.key}')">
       <div class="ms-name" style="${isBest ? 'color:var(--orange)' : ''}">${MO[i]}${isBest ? ' ★' : ''}</div>
-      <div class="ms-views">${fmt(mv)}</div>
+      <div class="ms-views">${mv > 0 ? fmt(mv) : '—'}</div>
       <div class="ms-label">visualizações · ${m.posts.length} publicações</div>
       <div class="ms-row"><span><span class="ms-val">${fmt(ml)}</span> curtidas</span><span><span class="ms-val">${fmt(ms2)}</span> comp.</span><span><span class="ms-val">${fmt(ma)}</span> alcance</span></div>
     </div>`;
@@ -815,6 +818,13 @@ let allMonths   = [];
 
 function showView(vid) {
   if (currentView === vid) return;
+
+  /* Se a view solicitada não existir no DOM, cai na home */
+  if (vid !== 'view-home' && !document.getElementById(vid)) {
+    showView('view-home');
+    return;
+  }
+
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   const btnHome = document.getElementById('btn-home');
@@ -947,9 +957,9 @@ function showView(vid) {
     return Object.values(byKey);
   }
 
-  /* Build candidates for current and previous year */
+  /* Build candidates for all years in YEAR_RANGE */
   const candidates = [];
-  [currYear - 1, currYear].forEach(y => {
+  YEAR_RANGE.forEach(y => {
     for (let i = 0; i < 12; i++) {
       const mo = String(i + 1).padStart(2, '0');
       candidates.push({ year: y, mi: i, key: `${y}-${mo}`, mo });
@@ -967,6 +977,7 @@ function showView(vid) {
       })
   );
 
+  /* Multi-mês: apenas para o ano atual e anterior, para não gerar centenas de 404s */
   const multiCands = [];
   [currYear - 1, currYear].forEach(y => {
     for (let f = 1; f <= 12; f++) {
@@ -1191,7 +1202,10 @@ function showView(vid) {
   /* Done */
   document.getElementById('app-loading').style.display = 'none';
   document.getElementById('app').style.display = 'block';
-  showView(initialView);
+
+  /* Se a view inicial não existir no DOM (ex: 2026.html sem dados de 2026), cai na home */
+  const targetView = document.getElementById(initialView) ? initialView : 'view-home';
+  showView(targetView);
 })();
 
 /* ─────────────────────────────────────────────
