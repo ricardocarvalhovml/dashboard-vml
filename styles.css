@@ -5,19 +5,19 @@
 
 /* ── Tokens ── */
 :root {
-  --bg:             #0d0b0e;
-  --surface:        #161218;
-  --surface2:       #1e1820;
-  --border:         rgba(255, 255, 255, 0.07);
+  --bg:             #07091a;
+  --surface:        #0d1030;
+  --surface2:       #131640;
+  --border:         rgba(255, 255, 255, 0.08);
 
-  --orange:  #f05924;
-  --blue:    #84d1eb;
-  --green:   #34d399;
-  --yellow:  #f7b24f;
-  --purple:  #c4b0fd;
-  --beige:   #fcf6ec;
-  --muted:   #7a6e78;
-  --dimmed:  rgba(252, 246, 236, 0.5);
+  --orange:  #391bce;   /* tecnologia  — accent principal */
+  --blue:    #a038f2;   /* inteligência — secondary       */
+  --green:   #a2e259;   /* eficiência                    */
+  --yellow:  #c9b8f8;   /* lilás claro — terciário       */
+  --purple:  #6b5fd4;   /* roxo médio                    */
+  --beige:   #efecef;   /* clareza — texto principal     */
+  --muted:   #8b86a8;   /* texto secundário              */
+  --dimmed:  rgba(239, 236, 239, 0.5);
 
   --radius:  12px;
   --font:    'Bricolage Grotesque', sans-serif;
@@ -364,10 +364,10 @@ body {
 }
 
 .pill-total { border-color: rgba(255,255,255,.12); color: var(--beige);   background: rgba(255,255,255,.05); }
-.pill-c     { border-color: rgba(132,209,235,.3);  color: var(--blue);    background: rgba(132,209,235,.08); }
-.pill-r     { border-color: rgba(240,89,36,.3);    color: var(--orange);  background: rgba(240,89,36,.08); }
-.pill-i     { border-color: rgba(247,178,79,.3);   color: var(--yellow);  background: rgba(247,178,79,.08); }
-.pill-s     { border-color: rgba(196,176,253,.3);  color: var(--purple);  background: rgba(196,176,253,.08); }
+.pill-c     { border-color: rgba(160,56,242,.3);  color: var(--blue);    background: rgba(160,56,242,.08); }
+.pill-r     { border-color: rgba(57,27,206,.3);    color: var(--orange);  background: rgba(57,27,206,.08); }
+.pill-i     { border-color: rgba(201,184,248,.3);   color: var(--yellow);  background: rgba(201,184,248,.08); }
+.pill-s     { border-color: rgba(107,95,212,.3);  color: var(--purple);  background: rgba(107,95,212,.08); }
 
 /* ─────────────────────────────────────────────
    Month tabs
@@ -517,7 +517,7 @@ body {
 }
 
 .card:hover::before { opacity: .5; }
-.card:hover         { border-color: rgba(240, 89, 36, .15); }
+.card:hover         { border-color: rgba(57, 27, 206, .15); }
 
 .card-header {
   display:         flex;
@@ -692,7 +692,7 @@ body {
 }
 
 .post-card-v2:hover {
-  border-color: rgba(240, 89, 36, .4);
+  border-color: rgba(57, 27, 206, .4);
   transform:    translateY(-2px);
   box-shadow:   0 8px 28px rgba(0, 0, 0, .3);
 }
@@ -872,15 +872,15 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
   white-space:   nowrap;
 }
 
-.badge-c { background: rgba(132, 209, 235, .12); color: #84d1eb; }
+.badge-c { background: rgba(160, 56, 242, .12); color: #a038f2; }
 .badge-r { background: rgba(240, 89, 36, .12);   color: #f07a55; }
 .badge-i { background: rgba(247, 178, 79, .1);   color: var(--yellow); }
 .badge-s { background: rgba(196, 176, 253, .12); color: var(--purple); }
 
 /* Engagement pills */
 .eng-pill { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 12px; font-weight: 700; }
-.eng-h    { background: rgba(240, 89, 36, .15);  color: var(--orange); }
-.eng-m    { background: rgba(132, 209, 235, .12); color: var(--blue); }
+.eng-h    { background: rgba(57, 27, 206, .15);  color: var(--orange); }
+.eng-m    { background: rgba(160, 56, 242, .12); color: var(--blue); }
 .eng-l    { color: var(--muted); }
 
 .star      { color: var(--orange); margin-right: 3px; font-size: 11px; }
@@ -981,7 +981,7 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
    Home — Hero + Year boxes
 ───────────────────────────────────────────── */
 .home-hero {
-  background: linear-gradient(135deg, rgba(240,89,36,.1), rgba(132,209,235,.05));
+  background: linear-gradient(135deg, rgba(57,27,206,.1), rgba(160,56,242,.05));
   border:     1px solid rgba(240, 89, 36, .18);
   border-radius: var(--radius);
   padding:    2rem;
@@ -997,7 +997,7 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
   right:          -60px;
   width:          240px;
   height:         240px;
-  background:     radial-gradient(circle, rgba(240,89,36,.12), transparent 70%);
+  background:     radial-gradient(circle, rgba(57,27,206,.12), transparent 70%);
   pointer-events: none;
 }
 
@@ -1067,7 +1067,7 @@ tr.top-row td     { background: rgba(240, 89, 36, .04); }
 }
 
 .year-box:hover {
-  border-color: rgba(240, 89, 36, .4);
+  border-color: rgba(57, 27, 206, .4);
   transform:    translateY(-2px);
   box-shadow:   0 12px 40px rgba(0, 0, 0, .35);
 }

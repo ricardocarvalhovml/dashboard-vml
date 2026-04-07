@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────
-   Dashboard SetUp English School — App Logic
+   Dashboard VML Company — App Logic
    Temeron © 2026
 ───────────────────────────────────────────── */
 
@@ -57,7 +57,7 @@ function tKey(t) {
 
 function sTipo(t)   { return { c: 'Carrossel', r: 'Reel', i: 'Post', s: 'Story' }[tKey(t)]; }
 function bCls(t)    { return { c: 'badge-c',   r: 'badge-r', i: 'badge-i', s: 'badge-s' }[tKey(t)]; }
-function bColor(t)  { return { c: '#84d1eb', r: '#f05924', i: 'rgba(247,178,79,.8)', s: '#c4b0fd' }[tKey(t)]; }
+function bColor(t)  { return { c: '#a038f2', r: '#391bce', i: 'rgba(201,184,248,.8)', s: '#6b5fd4' }[tKey(t)]; }
 
 function ePill(p) {
   if (p >= 5) return `<span class="eng-pill eng-h">${p.toFixed(1)}%</span>`;
@@ -97,11 +97,11 @@ const cOpts = () => ({
   plugins: {
     legend: { display: false },
     tooltip: {
-      backgroundColor: '#1e1820',
+      backgroundColor: '#0d1030',
       borderColor: 'rgba(255,255,255,.1)',
       borderWidth: 1,
-      titleColor: '#fcf6ec',
-      bodyColor: '#7a6e78',
+      titleColor: '#efecef',
+      bodyColor: '#8b86a8',
       titleFont: { family: "'Bricolage Grotesque',sans-serif", weight: '700' },
       bodyFont:  { family: "'Bricolage Grotesque',sans-serif", size: 12 }
     }
@@ -109,11 +109,11 @@ const cOpts = () => ({
   scales: {
     x: {
       grid: { display: false },
-      ticks: { color: '#7a6e78', font: { size: 11, family: "'Bricolage Grotesque',sans-serif" }, maxTicksLimit: 12 }
+      ticks: { color: '#8b86a8', font: { size: 11, family: "'Bricolage Grotesque',sans-serif" }, maxTicksLimit: 12 }
     },
     y: {
       grid: { color: 'rgba(255,255,255,.04)' },
-      ticks: { color: '#7a6e78', font: { size: 11, family: "'Bricolage Grotesque',sans-serif" }, callback: v => v >= 1000 ? (v/1000).toFixed(1)+'k' : v }
+      ticks: { color: '#8b86a8', font: { size: 11, family: "'Bricolage Grotesque',sans-serif" }, callback: v => v >= 1000 ? (v/1000).toFixed(1)+'k' : v }
     }
   }
 });
@@ -187,10 +187,10 @@ function postCard(p, rank, rankColor) {
 
 function postsByFormat(posts) {
   const formats = [
-    { key: 'c', label: 'Carrosseis', color: '#84d1eb' },
-    { key: 'r', label: 'Reels',      color: '#f05924' },
-    { key: 'i', label: 'Posts',      color: '#f7b24f' },
-    { key: 's', label: 'Stories',    color: '#c4b0fd' },
+    { key: 'c', label: 'Carrosseis', color: '#a038f2' },
+    { key: 'r', label: 'Reels',      color: '#391bce' },
+    { key: 'i', label: 'Posts',      color: '#c9b8f8' },
+    { key: 's', label: 'Stories',    color: '#6b5fd4' },
   ];
 
   return formats.map(f => {
@@ -355,7 +355,7 @@ function renderPublico(pub) {
   const countHtml = countries.slice(0, 8).map((c, i) => `<div class="rank-row">
     <div class="rank-num">${i + 1}</div>
     <div class="rank-name">${c.name}</div>
-    <div class="rank-bar-wrap"><div class="rank-bar" style="width:${(c.pct / maxC * 100).toFixed(0)}%;background:#84d1eb"></div></div>
+    <div class="rank-bar-wrap"><div class="rank-bar" style="width:${(c.pct / maxC * 100).toFixed(0)}%;background:#a038f2"></div></div>
     <div class="rank-pct">${c.pct}%</div>
   </div>`).join('');
 
@@ -363,7 +363,7 @@ function renderPublico(pub) {
   const cityHtml = cities.slice(0, 8).map((c, i) => `<div class="rank-row">
     <div class="rank-num">${i + 1}</div>
     <div class="rank-name">${c.name}</div>
-    <div class="rank-bar-wrap"><div class="rank-bar" style="width:${(c.pct / maxCi * 100).toFixed(0)}%;background:#f7b24f"></div></div>
+    <div class="rank-bar-wrap"><div class="rank-bar" style="width:${(c.pct / maxCi * 100).toFixed(0)}%;background:#c9b8f8"></div></div>
     <div class="rank-pct">${c.pct}%</div>
   </div>`).join('');
 
@@ -393,7 +393,7 @@ function buildHome(years, byYear, acctMap) {
     const yViews = sum(yPosts, 'Visualizações');
     const yAlc   = sum(yPosts, 'Alcance');
     const yLikes = sum(yPosts, 'Curtidas');
-    const accents = ['#f05924', '#84d1eb', '#34d399', '#f7b24f'];
+    const accents = ['#391bce', '#a038f2', '#a2e259', '#c9b8f8'];
     const accent  = accents[yi % accents.length];
     const isLatest = yi === years.length - 1;
 
@@ -432,7 +432,7 @@ function buildHome(years, byYear, acctMap) {
   </div>
   <div class="year-boxes">${yBoxes}</div>
   ${showComparison ? `<div class="card section-gap">
-    <div class="card-header"><div class="card-title">Comparativo entre anos</div><div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#f05924"></span>Views</div><div class="legend-item"><span class="legend-dot" style="background:#84d1eb"></span>Alcance</div></div></div>
+    <div class="card-header"><div class="card-title">Comparativo entre anos</div><div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#391bce"></span>Views</div><div class="legend-item"><span class="legend-dot" style="background:#a038f2"></span>Alcance</div></div></div>
     <div style="position:relative;height:200px"><canvas id="home-ch-compare"></canvas></div>
   </div>` : ''}
   ${hasFollData ? `<div class="card">
@@ -470,21 +470,21 @@ function buildMonth(mi, posts, key, year, multiYear, acct, hasMetrics) {
   posts.forEach(p => counts[tKey(p['Tipo de post'])]++);
 
   const pillsHtml = `<span class="pill pill-total">${posts.length} publicações</span>` +
-    [{ k:'c', c:'pill-c', d:'#84d1eb' }, { k:'r', c:'pill-r', d:'#f05924' }, { k:'i', c:'pill-i', d:'#f7b24f' }, { k:'s', c:'pill-s', d:'#c4b0fd' }]
+    [{ k:'c', c:'pill-c', d:'#a038f2' }, { k:'r', c:'pill-r', d:'#391bce' }, { k:'i', c:'pill-i', d:'#c9b8f8' }, { k:'s', c:'pill-s', d:'#6b5fd4' }]
       .filter(x => counts[x.k])
       .map(x => `<span class="pill ${x.c}"><span class="pill-dot" style="background:${x.d}"></span>${counts[x.k]} ${pillLabel(x.k, counts[x.k])}</span>`)
       .join('');
 
   const typesP   = [...new Set(chrono.map(p => tKey(p['Tipo de post'])))];
-  const lgCfg    = { c: { l: 'Carrossel', c: '#84d1eb' }, r: { l: 'Reel', c: '#f05924' }, i: { l: 'Post', c: 'rgba(247,178,79,.8)' }, s: { l: 'Story', c: '#c4b0fd' } };
+  const lgCfg    = { c: { l: 'Carrossel', c: '#a038f2' }, r: { l: 'Reel', c: '#391bce' }, i: { l: 'Post', c: 'rgba(201,184,248,.8)' }, s: { l: 'Story', c: '#6b5fd4' } };
   const legendHtml = typesP.map(k => `<div class="legend-item"><span class="legend-dot" style="background:${lgCfg[k].c}"></span>${lgCfg[k].l}</div>`).join('');
 
   const maxE   = Math.max(likes, shares, comments, saves, 1);
   const engHtml = [
-    { l: 'Curtidas',    v: likes,    c: '#f05924' },
-    { l: 'Compartilh.', v: shares,   c: '#84d1eb' },
-    { l: 'Comentários', v: comments, c: 'rgba(252,246,236,.6)' },
-    { l: 'Salvamentos', v: saves,    c: '#c4b0fd' }
+    { l: 'Curtidas',    v: likes,    c: '#391bce' },
+    { l: 'Compartilh.', v: shares,   c: '#a038f2' },
+    { l: 'Comentários', v: comments, c: 'rgba(239,236,239,.6)' },
+    { l: 'Salvamentos', v: saves,    c: '#6b5fd4' }
   ].map(e => `<div class="eng-row"><div class="eng-name">${e.l}</div><div class="eng-bar-bg"><div class="eng-bar" style="width:${(e.v/maxE*100).toFixed(1)}%;background:${e.c}"></div></div><div class="eng-num">${fmt(e.v)}</div></div>`).join('');
 
   const label     = multiYear ? `${MO[mi]} ${year}` : MO[mi];
@@ -503,12 +503,12 @@ function buildMonth(mi, posts, key, year, multiYear, acct, hasMetrics) {
 
   <div class="tab-content active" id="tab-${key}-geral">
     <div class="kpi-row">
-      <div class="kpi" style="--kpi-line:#f05924"><div class="kpi-label">Visualizações</div><div class="kpi-val">${fmt(views)}</div><div class="kpi-sub">total do período</div></div>
-      <div class="kpi" style="--kpi-line:#84d1eb"><div class="kpi-label">Alcance</div><div class="kpi-val">${fmt(alc)}</div><div class="kpi-sub">contas únicas</div></div>
-      <div class="kpi" style="--kpi-line:#fcf6ec"><div class="kpi-label">Curtidas</div><div class="kpi-val">${fmt(likes)}</div><div class="kpi-sub">reações</div></div>
-      <div class="kpi" style="--kpi-line:#f05924"><div class="kpi-label">Compartilhamentos</div><div class="kpi-val">${fmt(shares)}</div><div class="kpi-sub">envios</div></div>
-      <div class="kpi" style="--kpi-line:#84d1eb"><div class="kpi-label">Comentários</div><div class="kpi-val">${fmt(comments)}</div><div class="kpi-sub">interações</div></div>
-      <div class="kpi" style="--kpi-line:#fcf6ec"><div class="kpi-label">Salvamentos</div><div class="kpi-val">${fmt(saves)}</div><div class="kpi-sub">saves</div></div>
+      <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">Visualizações</div><div class="kpi-val">${fmt(views)}</div><div class="kpi-sub">total do período</div></div>
+      <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">Alcance</div><div class="kpi-val">${fmt(alc)}</div><div class="kpi-sub">contas únicas</div></div>
+      <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">Curtidas</div><div class="kpi-val">${fmt(likes)}</div><div class="kpi-sub">reações</div></div>
+      <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">Compartilhamentos</div><div class="kpi-val">${fmt(shares)}</div><div class="kpi-sub">envios</div></div>
+      <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">Comentários</div><div class="kpi-val">${fmt(comments)}</div><div class="kpi-sub">interações</div></div>
+      <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">Salvamentos</div><div class="kpi-val">${fmt(saves)}</div><div class="kpi-sub">saves</div></div>
     </div>
     ${renderAcct(acct)}
     ${hasMetrics ? `
@@ -593,7 +593,7 @@ function buildAnnual(yearMonths, year, acctMap) {
     const ms2  = sum(m.posts, 'Compartilhamentos');
     const isBest = m === bestMonth;
 
-    return `<div class="ms-card" style="${isBest ? 'border-color:rgba(240,89,36,.4)' : ''}" onclick="showView('view-${m.key}')">
+    return `<div class="ms-card" style="${isBest ? 'border-color:rgba(57,27,206,.4)' : ''}" onclick="showView('view-${m.key}')">
       <div class="ms-name" style="${isBest ? 'color:var(--orange)' : ''}">${MO[i]}${isBest ? ' ★' : ''}</div>
       <div class="ms-views">${mv > 0 ? fmt(mv) : '—'}</div>
       <div class="ms-label">visualizações · ${m.posts.length} publicações</div>
@@ -608,16 +608,16 @@ function buildAnnual(yearMonths, year, acctMap) {
     <div><div class="page-eyebrow">Visão Anual</div><div class="page-title">${year}</div><div class="page-sub">@${ACCOUNT} · ${yearMonths.length} ${yearMonths.length === 1 ? 'mês' : 'meses'} · ${allPosts.length} publicações</div></div>
   </div>
   <div class="kpi-row">
-    <div class="kpi" style="--kpi-line:#f05924"><div class="kpi-label">Visualizações</div><div class="kpi-val">${fmt(views)}</div><div class="kpi-sub">no ano</div></div>
-    <div class="kpi" style="--kpi-line:#84d1eb"><div class="kpi-label">Alcance</div><div class="kpi-val">${fmt(alc)}</div><div class="kpi-sub">no ano</div></div>
-    <div class="kpi" style="--kpi-line:#fcf6ec"><div class="kpi-label">Curtidas</div><div class="kpi-val">${fmt(likes)}</div><div class="kpi-sub">no ano</div></div>
-    <div class="kpi" style="--kpi-line:#f05924"><div class="kpi-label">Compartilhamentos</div><div class="kpi-val">${fmt(shares)}</div><div class="kpi-sub">no ano</div></div>
-    <div class="kpi" style="--kpi-line:#84d1eb"><div class="kpi-label">Comentários</div><div class="kpi-val">${fmt(comments)}</div><div class="kpi-sub">no ano</div></div>
-    <div class="kpi" style="--kpi-line:#fcf6ec"><div class="kpi-label">Publicações</div><div class="kpi-val">${allPosts.length}</div><div class="kpi-sub">${yearMonths.length} meses</div></div>
+    <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">Visualizações</div><div class="kpi-val">${fmt(views)}</div><div class="kpi-sub">no ano</div></div>
+    <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">Alcance</div><div class="kpi-val">${fmt(alc)}</div><div class="kpi-sub">no ano</div></div>
+    <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">Curtidas</div><div class="kpi-val">${fmt(likes)}</div><div class="kpi-sub">no ano</div></div>
+    <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">Compartilhamentos</div><div class="kpi-val">${fmt(shares)}</div><div class="kpi-sub">no ano</div></div>
+    <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">Comentários</div><div class="kpi-val">${fmt(comments)}</div><div class="kpi-sub">no ano</div></div>
+    <div class="kpi" style="--kpi-line:#efecef"><div class="kpi-label">Publicações</div><div class="kpi-val">${allPosts.length}</div><div class="kpi-sub">${yearMonths.length} meses</div></div>
   </div>
   <div class="charts-row section-gap">
     <div class="card">
-      <div class="card-header"><div class="card-title">Views e Alcance por mês</div><div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#f05924"></span>Views</div><div class="legend-item"><span class="legend-dot" style="background:#84d1eb"></span>Alcance</div></div></div>
+      <div class="card-header"><div class="card-title">Views e Alcance por mês</div><div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#391bce"></span>Views</div><div class="legend-item"><span class="legend-dot" style="background:#a038f2"></span>Alcance</div></div></div>
       <div style="position:relative;height:200px"><canvas id="ch-annual-${year}"></canvas></div>
     </div>
     ${hasFollData ? `<div class="card">
@@ -748,12 +748,12 @@ function renderWdCharts(key, posts) {
       type: 'bar',
       data: {
         labels: dayPosts.map((_, wi) => `S${wi + 1}`),
-        datasets: [{ data: vals, backgroundColor: Array(vals.length).fill(document.getElementById(id).closest('.wd-best') ? '#84d1eb' : 'rgba(255,255,255,.2)'), borderRadius: 2 }]
+        datasets: [{ data: vals, backgroundColor: Array(vals.length).fill(document.getElementById(id).closest('.wd-best') ? '#a038f2' : 'rgba(255,255,255,.2)'), borderRadius: 2 }]
       },
       options: {
         responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false }, tooltip: { enabled: true, callbacks: { label: ctx => ` ${fmt(ctx.parsed.y)} views` } } },
-        scales: { x: { display: true, ticks: { color: '#7a6e78', font: { size: 8, family: "'Bricolage Grotesque',sans-serif" }, maxRotation: 0 }, grid: { display: false } }, y: { display: false, min: 0, max: maxV * 1.15 } }
+        scales: { x: { display: true, ticks: { color: '#8b86a8', font: { size: 8, family: "'Bricolage Grotesque',sans-serif" }, maxRotation: 0 }, grid: { display: false } }, y: { display: false, min: 0, max: maxV * 1.15 } }
       }
     });
   });
@@ -787,9 +787,9 @@ function renderMonthGeralCharts(key) {
     });
   }
 
-  dailyChart(`ch-dv-${key}`, m.views,     '#f05924');
-  dailyChart(`ch-dr-${key}`, m.reach,     '#84d1eb');
-  dailyChart(`ch-df-${key}`, m.followers, '#34d399');
+  dailyChart(`ch-dv-${key}`, m.views,     '#391bce');
+  dailyChart(`ch-dr-${key}`, m.reach,     '#a038f2');
+  dailyChart(`ch-df-${key}`, m.followers, '#a2e259');
 }
 
 async function renderPublicoTab(key) {
@@ -854,8 +854,8 @@ function showView(vid) {
         data: {
           labels: labels12,
           datasets: [
-            { label: 'Views',  data: views12, backgroundColor: views12.map(v => v === null ? 'rgba(255,255,255,.05)' : '#f05924'), borderRadius: 4, borderSkipped: false },
-            { label: 'Alcance', data: reach12, backgroundColor: reach12.map(v => v === null ? 'rgba(255,255,255,.03)' : '#84d1eb'), borderRadius: 3, borderSkipped: false }
+            { label: 'Views',  data: views12, backgroundColor: views12.map(v => v === null ? 'rgba(255,255,255,.05)' : '#391bce'), borderRadius: 4, borderSkipped: false },
+            { label: 'Alcance', data: reach12, backgroundColor: reach12.map(v => v === null ? 'rgba(255,255,255,.03)' : '#a038f2'), borderRadius: 3, borderSkipped: false }
           ]
         },
         options: { ...cOpts(), plugins: { ...cOpts().plugins, legend: { display: false } }, scales: { ...cOpts().scales, x: { ...cOpts().scales.x, ticks: { ...cOpts().scales.x.ticks, maxTicksLimit: 12 } }, y: { ...cOpts().scales.y, max: yMax(v12) } } }
@@ -885,8 +885,8 @@ function showView(vid) {
           data: {
             labels: labels12,
             datasets: [
-              { label: 'Seguidores', data: follPts.map(p => p.val), borderColor: '#34d399', backgroundColor: 'rgba(52,211,153,.08)', borderWidth: 2, fill: true, tension: .4, pointRadius: follPts.map(p => p.val !== null ? 3 : 0), spanGaps: false },
-              { label: 'Tendência',  data: trend12, borderColor: 'rgba(52,211,153,.35)', borderDash: [4, 4], borderWidth: 1.5, fill: false, tension: 0, pointRadius: 0, spanGaps: false }
+              { label: 'Seguidores', data: follPts.map(p => p.val), borderColor: '#a2e259', backgroundColor: 'rgba(162,226,89,.08)', borderWidth: 2, fill: true, tension: .4, pointRadius: follPts.map(p => p.val !== null ? 3 : 0), spanGaps: false },
+              { label: 'Tendência',  data: trend12, borderColor: 'rgba(162,226,89,.35)', borderDash: [4, 4], borderWidth: 1.5, fill: false, tension: 0, pointRadius: 0, spanGaps: false }
             ]
           },
           options: { ...cOpts(), plugins: { ...cOpts().plugins, legend: { display: false } }, scales: { ...cOpts().scales, y: { ...cOpts().scales.y, min: yMinV, max: yMaxV } } }
@@ -1149,7 +1149,7 @@ function showView(vid) {
     const sparkData = Array.from({ length: 12 }, (_, i) => { const m = yM.find(m => m.mi === i); return m ? sum(m.posts, 'Visualizações') : null; });
     const el       = document.getElementById(`home-ch-${y}`);
     if (!el) return;
-    const accents  = ['#f05924', '#84d1eb', '#34d399', '#f7b24f'];
+    const accents  = ['#391bce', '#a038f2', '#a2e259', '#c9b8f8'];
     const accent   = accents[years.indexOf(y) % accents.length];
     mkChart(`home-ch-${y}`, {
       type: 'bar',
@@ -1159,15 +1159,15 @@ function showView(vid) {
       },
       options: {
         responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1e1820', borderColor: 'rgba(255,255,255,.1)', borderWidth: 1, titleColor: '#fcf6ec', bodyColor: '#7a6e78', callbacks: { label: ctx => ctx.parsed.y === null ? 'sem dados' : ` ${fmt(ctx.parsed.y)} views` } } },
-        scales: { x: { grid: { display: false }, ticks: { color: '#7a6e78', font: { size: 9, family: "'Bricolage Grotesque',sans-serif" } } }, y: { display: false } }
+        plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0d1030', borderColor: 'rgba(255,255,255,.1)', borderWidth: 1, titleColor: '#efecef', bodyColor: '#8b86a8', callbacks: { label: ctx => ctx.parsed.y === null ? 'sem dados' : ` ${fmt(ctx.parsed.y)} views` } } },
+        scales: { x: { grid: { display: false }, ticks: { color: '#8b86a8', font: { size: 9, family: "'Bricolage Grotesque',sans-serif" } } }, y: { display: false } }
       }
     });
   });
 
   /* Comparison chart */
   if (years.length > 1 && document.getElementById('home-ch-compare')) {
-    const accents  = ['#f05924', '#84d1eb', '#34d399', '#f7b24f'];
+    const accents  = ['#391bce', '#a038f2', '#a2e259', '#c9b8f8'];
     const datasets = years.map((y, yi) => {
       const yM   = byYear[y] || [];
       const vals = Array.from({ length: 12 }, (_, i) => { const m = yM.find(m => m.mi === i); return m ? sum(m.posts, 'Visualizações') : null; });
@@ -1177,7 +1177,7 @@ function showView(vid) {
     mkChart('home-ch-compare', {
       type: 'bar',
       data: { labels: MO.map(m => m.slice(0, 3)), datasets },
-      options: { ...cOpts(), plugins: { ...cOpts().plugins, legend: { display: true, labels: { color: '#7a6e78', font: { family: "'Bricolage Grotesque',sans-serif", size: 11 }, boxWidth: 10, boxHeight: 10 } } }, scales: { ...cOpts().scales, x: { ...cOpts().scales.x, ticks: { ...cOpts().scales.x.ticks, maxTicksLimit: 12 } }, y: { ...cOpts().scales.y, max: yMax(allViewVals) } } }
+      options: { ...cOpts(), plugins: { ...cOpts().plugins, legend: { display: true, labels: { color: '#8b86a8', font: { family: "'Bricolage Grotesque',sans-serif", size: 11 }, boxWidth: 10, boxHeight: 10 } } }, scales: { ...cOpts().scales, x: { ...cOpts().scales.x, ticks: { ...cOpts().scales.x.ticks, maxTicksLimit: 12 } }, y: { ...cOpts().scales.y, max: yMax(allViewVals) } } }
     });
   }
 
@@ -1187,8 +1187,8 @@ function showView(vid) {
   if (homeFoll.some(f => f.val !== null) && document.getElementById('home-ch-foll')) {
     mkChart('home-ch-foll', {
       type: 'line',
-      data: { labels: homeFoll.map(f => f.label), datasets: [{ data: homeFoll.map(f => f.val), borderColor: '#34d399', backgroundColor: 'rgba(52,211,153,.08)', borderWidth: 2, fill: true, tension: .4, pointRadius: homeFoll.map(f => f.val !== null ? 3 : 0), spanGaps: false }] },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1e1820', borderColor: 'rgba(255,255,255,.1)', borderWidth: 1, titleColor: '#fcf6ec', bodyColor: '#7a6e78' } }, scales: { x: { grid: { display: false }, ticks: { color: '#7a6e78', font: { size: 11 } } }, y: { grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#7a6e78', font: { size: 11 }, callback: v => `${fmt(v)}` } } } }
+      data: { labels: homeFoll.map(f => f.label), datasets: [{ data: homeFoll.map(f => f.val), borderColor: '#a2e259', backgroundColor: 'rgba(162,226,89,.08)', borderWidth: 2, fill: true, tension: .4, pointRadius: homeFoll.map(f => f.val !== null ? 3 : 0), spanGaps: false }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0d1030', borderColor: 'rgba(255,255,255,.1)', borderWidth: 1, titleColor: '#efecef', bodyColor: '#8b86a8' } }, scales: { x: { grid: { display: false }, ticks: { color: '#8b86a8', font: { size: 11 } } }, y: { grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#8b86a8', font: { size: 11 }, callback: v => `${fmt(v)}` } } } }
     });
   }
 
