@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>home — vml company</title>
+  <link rel="icon" href="/assets/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+  <div class="layout" id="layout">
+  <aside class="sidebar">
+      <div class="sidebar-top">
+        <button class="hamburger" id="hamburger" title="menu"><span></span><span></span><span></span></button>
+        <button class="theme-toggle" onclick="toggleTheme()" title="alternar tema"><span id="theme-icon"></span></button>
+        <img class="sidebar-logo" id="sidebar-logo" src="/assets/img/logo-escuro.png" alt="vml company"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span class="logo-fallback" style="display:none">vml company</span>
+      </div>
+      <div class="sidebar-body">
+        <a class="nav-home active" href="/" style="text-decoration:none">&#8962; home</a>
+        <div class="sidebar-section" style="cursor:default;margin-top:.25rem">áreas</div>
+          <a class="nav-tab" href="/redes-sociais" style="text-decoration:none"><span class="nav-dot" style="background:#a038f2"></span>redes sociais</a>
+          <a class="nav-tab" href="/seo" style="text-decoration:none"><span class="nav-dot" style="background:#a2e259"></span>seo</a>
+          <a class="nav-tab" href="/crm" style="text-decoration:none"><span class="nav-dot" style="background:#391bce"></span>crm</a>
+          <a class="nav-tab" href="/midia-paga" style="text-decoration:none"><span class="nav-dot" style="background:#c9b8f8"></span>mídia paga</a>
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-section" style="cursor:default" id="nav-section-label">mensal</div>
+        <div id="monthNav"></div>
+        <button class="nav-tab" id="btn-annual" style="display:none"></button>
+        <div class="sidebar-divider"></div>
+        <a class="nav-tab" href="/upload" style="text-decoration:none"><span class="nav-dot" style="background:var(--green)"></span>enviar relatório</a>
+        <div class="sidebar-credit">
+          <img class="credit-logo" src="/assets/img/copyright-logo.png" alt="temeron" onerror="this.style.display='none'">
+          <div>
+            <div class="credit-brand">temeron<sup>®</sup></div>
+            <div class="credit-copy">© 2026 todos os direitos reservados.</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="home-hero" style="margin-bottom:1.5rem">
+        <div class="home-hero-eyebrow">analytics · vml company</div>
+        <div class="home-hero-title">dashboard central</div>
+        <div class="home-hero-sub">visão integrada de todas as áreas · selecione abaixo para filtrar</div>
+      </div>
+      <div class="area-filter" id="area-filter">
+        <button class="area-filter-btn active" data-area="all">todas as áreas</button>
+        <button class="area-filter-btn" data-area="redes-sociais">redes sociais</button>
+        <button class="area-filter-btn" data-area="seo">seo</button>
+        <button class="area-filter-btn" data-area="crm">crm</button>
+        <button class="area-filter-btn" data-area="midia-paga">mídia paga</button>
+      </div>
+      <div class="area-cards-grid" id="area-cards">
+        <a class="area-card" href="/redes-sociais" data-area="redes-sociais" style="--card-accent:#a038f2">
+          <div class="area-card-top">
+            <div class="area-card-icon" style="background:#a038f21a;color:#a038f2"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></div>
+            <div class="area-card-status" id="re-status"><div class="area-status-dot loading"></div><span>carregando</span></div>
+          </div>
+          <div class="area-card-name">redes sociais</div>
+          <div class="area-card-sub">instagram · publicações e engajamento</div>
+          <div class="area-card-metrics">
+            <div class="area-metric"><div class="area-metric-val" id="rs-views">—</div><div class="area-metric-lbl">visualizações</div></div>
+            <div class="area-metric"><div class="area-metric-val" id="rs-posts">—</div><div class="area-metric-lbl">publicações</div></div>
+            <div class="area-metric"><div class="area-metric-val" id="rs-reach">—</div><div class="area-metric-lbl">alcance</div></div>
+          </div>
+          <div class="area-card-cta">acessar área →</div>
+        </a>
+        <a class="area-card" href="/seo" data-area="seo" style="--card-accent:#a2e259">
+          <div class="area-card-top">
+            <div class="area-card-icon" style="background:#a2e2591a;color:#a2e259"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+            <div class="area-card-status" id="se-status"><div class="area-status-dot loading"></div><span>carregando</span></div>
+          </div>
+          <div class="area-card-name">seo</div>
+          <div class="area-card-sub">busca orgânica · google search console</div>
+          <div class="area-card-metrics">
+            <div class="area-metric"><div class="area-metric-val" id="seo-sessoes">—</div><div class="area-metric-lbl">sessões orgânicas</div></div>
+            <div class="area-metric"><div class="area-metric-val" id="seo-cliques">—</div><div class="area-metric-lbl">cliques</div></div>
+            <div class="area-metric"><div class="area-metric-val" id="seo-posicao">—</div><div class="area-metric-lbl">posição média</div></div>
+          </div>
+          <div class="area-card-cta">acessar área →</div>
+        </a>
+        <a class="area-card" href="/crm" data-area="crm" style="--card-accent:#391bce">
+          <div class="area-card-top">
+            <div class="area-card-icon" style="background:#391bce1a;color:#391bce"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div class="area-card-status" id="cr-status"><div class="area-status-dot loading"></div><span>carregando</span></div>
+          </div>
+          <div class="area-card-name">crm</div>
+          <div class="area-card-sub">leads · funil de vendas · receita</div>
+          <div class="area-card-metrics">
+            <div class="area-metric"><div class="area-metric-val" id="crm-leads">—</div><div class="area-metric-lbl">novos leads</div></div>
+            <div class="area-metric"><div class="area-metric-val" id="crm-fechados">—</div><div class="area-metric-lbl">fechados</div></div>
+            <div class="area-metric"><div class="area-metric-val" id="crm-conversao">—</div><div class="area-metric-lbl">conversão</div></div>
+          </div>
+          <div class="area-card-cta">acessar área →</div>
+        </a>
+        <a class="area-card" href="/midia-paga" data-area="midia-paga" style="--card-accent:#c9b8f8">
+          <div class="area-card-top">
+            <div class="area-card-icon" style="background:#c9b8f81a;color:#c9b8f8"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+            <div class="area-card-status" id="mi-status"><div class="area-status-dot loading"></div><span>carregando</span></div>
+          </div>
+          <div class="area-card-name">mídia paga</div>
+          <div class="area-card-sub">campanhas pagas · meta · google ads</div>
+          <div class="area-card-metrics">
+            <div class="area-metric"><div class="area-metric-val" id="mp-invest">—</div><div class="area-metric-lbl">investimento</div></div>
+            <div class="area-metric"><div class="area-metric-val" id="mp-cliques">—</div><div class="area-metric-lbl">cliques</div></div>
+            <div class="area-metric"><div class="area-metric-val" id="mp-roas">—</div><div class="area-metric-lbl">roas</div></div>
+          </div>
+          <div class="area-card-cta">acessar área →</div>
+        </a>
+      </div>
+    </main>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script>
+  (function(){const s=localStorage.getItem('dashboard-theme')||'';document.documentElement.dataset.theme=s;_ul(s==='light');})();
+  function _ul(l){const i=document.getElementById('sidebar-logo');if(i)i.src=l?'/assets/img/logo-escuro.png':'/assets/img/logo.png';const ic=document.getElementById('theme-icon');if(!ic)return;ic.innerHTML=l?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>':'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';}
+  function toggleTheme(){const h=document.documentElement;const l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);_ul(h.dataset.theme==='light');}
+  document.getElementById('hamburger').addEventListener('click',()=>{document.getElementById('layout').classList.toggle('collapsed');});
+  document.getElementById('area-filter').addEventListener('click',e=>{const b=e.target.closest('.area-filter-btn');if(!b)return;const a=b.dataset.area;document.querySelectorAll('.area-filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');const g=document.getElementById('area-cards');document.querySelectorAll('.area-card').forEach(c=>{c.style.display=(a==='all'||c.dataset.area===a)?'':'none';});g.style.gridTemplateColumns=a==='all'?'':'minmax(0,560px)';});
+  const _f=n=>(n==null||n===''||isNaN(+n))?'—':(+n).toLocaleString('pt-BR');
+  const _fp=n=>(n==null||n===''||isNaN(+n))?'—':(+n).toFixed(1)+'%';
+  const _fb=n=>(n==null||n===''||isNaN(+n))?'—':'R$ '+(+n).toLocaleString('pt-BR');
+  function ss(a,ok){const e=document.getElementById(`${a}-status`);if(!e)return;e.innerHTML=ok?'<div class="area-status-dot ok"></div><span>com dados</span>':'<div class="area-status-dot empty"></div><span>sem dados</span>';}
+  async function fl(file){const now=new Date();for(let i=0;i<8;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1);const y=d.getFullYear();const mo=String(d.getMonth()+1).padStart(2,'0');try{const r=await fetch(`/assets/data/${y}/${mo}/${file}`);if(!r.ok)continue;const t=await r.text();if(!t.trim())continue;const p=Papa.parse(t.trim(),{header:true,skipEmptyLines:true});if(p.data.length)return p.data[0];}catch{}}return null;}
+  async function flrs(){const now=new Date();for(let i=0;i<8;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1);const y=d.getFullYear();const mo=String(d.getMonth()+1).padStart(2,'0');try{const r=await fetch(`/assets/data/${y}/${mo}/${y}-${mo}.csv`);if(!r.ok)continue;const t=await r.text();const rows=Papa.parse(t,{header:true,skipEmptyLines:true}).data;const posts=rows.filter(r=>(r['Data']||'').trim()==='Total');if(posts.length)return posts.reduce((a,p)=>{a.views=(a.views||0)+(parseInt(p['Visualizações'],10)||0);a.reach=(a.reach||0)+(parseInt(p['Alcance'],10)||0);a.posts=(a.posts||0)+1;return a;},{});}catch{}}return null;}
+  (async function(){
+    const rs=await flrs();ss('rs',!!rs);
+    if(rs){document.getElementById('rs-views').textContent=_f(rs.views);document.getElementById('rs-posts').textContent=_f(rs.posts);document.getElementById('rs-reach').textContent=_f(rs.reach);}
+    const seo=await fl('seo.csv');ss('seo',!!seo);
+    if(seo){document.getElementById('seo-sessoes').textContent=_f(seo['Sessões Orgânicas']);document.getElementById('seo-cliques').textContent=_f(seo['Cliques']);document.getElementById('seo-posicao').textContent=seo['Posição Média']?(+seo['Posição Média']).toFixed(1):'—';}
+    const crm=await fl('crm.csv');ss('crm',!!crm);
+    if(crm){document.getElementById('crm-leads').textContent=_f(crm['Novos Leads']);document.getElementById('crm-fechados').textContent=_f(crm['Negócios Fechados']);document.getElementById('crm-conversao').textContent=_fp(crm['Taxa de Conversão']);}
+    const mp=await fl('midia-paga.csv');ss('mp',!!mp);
+    if(mp){document.getElementById('mp-invest').textContent=_fb(mp['Investimento']);document.getElementById('mp-cliques').textContent=_f(mp['Cliques']);document.getElementById('mp-roas').textContent=mp['ROAS']?(+mp['ROAS']).toFixed(1)+'x':'—';}
+  })();</script>
+</body>
+</html>
