@@ -1272,3 +1272,32 @@ code {
   .main         { padding: 1rem; }
   .weekday-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ─────────────────────────────────────────────
+   Sidebar credit (Temeron)
+───────────────────────────────────────────── */
+.sidebar-credit {
+  display:         flex;
+  align-items:     center;
+  gap:             7px;
+  padding:         10px 14px;
+  border-top:      1px solid var(--border);
+  flex-shrink:     0;
+  opacity:         .45;
+  transition:      opacity .2s;
+  white-space:     nowrap;
+  overflow:        hidden;
+}
+.sidebar-credit:hover { opacity: .8; }
+.sidebar-credit span {
+  font-size:   10px;
+  color:       var(--muted);
+  font-weight: 600;
+}
+.sidebar-credit img {
+  height:     16px;
+  width:      auto;
+  display:    block;
+  flex-shrink: 0;
+}
+.layout.collapsed .sidebar-credit { opacity: 0; pointer-events: none; }

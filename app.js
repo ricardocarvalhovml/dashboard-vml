@@ -817,26 +817,26 @@ async function renderPublicoTab(key) {
 
 
 /* ── Theme toggle ── */
-function updateLogo(isDark){
+function updateLogo(isLight){
   const l=document.getElementById('sidebar-logo');
-  if(l)l.src=isDark?'logo.png':'logo-escuro.png';
+  if(l)l.src=isLight?'logo-escuro.png':'logo.png';
   const icon=document.getElementById('theme-icon');
-  if(icon)icon.innerHTML=isDark
+  if(icon)icon.innerHTML=isLight
     ?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
     :'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d=\"M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z\"/></svg>';
 }
 function toggleTheme(){
   const h=document.documentElement;
-  const dark=h.dataset.theme==='dark';
-  h.dataset.theme=dark?'':'dark';
+  const isLight=h.dataset.theme==='light';
+  h.dataset.theme=isLight?'':'light';
   localStorage.setItem('dashboard-theme',h.dataset.theme);
-  updateLogo(h.dataset.theme==='dark');
+  updateLogo(h.dataset.theme==='light');
   setTimeout(()=>{ if(currentView&&currentView!=='view-home')showView(currentView); },50);
 }
 function initTheme(){
   const s=localStorage.getItem('dashboard-theme')||'';
   document.documentElement.dataset.theme=s;
-  updateLogo(s==='dark');
+  updateLogo(s==='light');
 }
 
 let currentView = null;
@@ -1154,6 +1154,17 @@ function showView(vid) {
   });
 
   document.getElementById('btn-annual').style.display = 'none';
+
+  /* Upload button at bottom of sidebar */
+  const uploadDivider = document.createElement('div');
+  uploadDivider.className = 'sidebar-divider';
+  const uploadBtn = document.createElement('a');
+  uploadBtn.href = '/upload';
+  uploadBtn.className = 'nav-tab';
+  uploadBtn.style.cssText = 'text-decoration:none;margin-top:auto;';
+  uploadBtn.innerHTML = '<span style="width:4px;height:4px;border-radius:50%;background:var(--green);flex-shrink:0"></span>enviar relatório';
+  document.querySelector('.sidebar-body').appendChild(uploadDivider);
+  document.querySelector('.sidebar-body').appendChild(uploadBtn);
 
   /* Render all views into DOM */
   const byYear = {};
