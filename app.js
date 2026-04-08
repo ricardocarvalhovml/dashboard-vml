@@ -1155,16 +1155,6 @@ function showView(vid) {
 
   document.getElementById('btn-annual').style.display = 'none';
 
-  /* Upload button at bottom of sidebar */
-  const uploadDivider = document.createElement('div');
-  uploadDivider.className = 'sidebar-divider';
-  const uploadBtn = document.createElement('a');
-  uploadBtn.href = '/upload';
-  uploadBtn.className = 'nav-tab';
-  uploadBtn.style.cssText = 'text-decoration:none;margin-top:auto;';
-  uploadBtn.innerHTML = '<span style="width:4px;height:4px;border-radius:50%;background:var(--green);flex-shrink:0"></span>enviar relatório';
-  document.querySelector('.sidebar-body').appendChild(uploadDivider);
-  document.querySelector('.sidebar-body').appendChild(uploadBtn);
 
   /* Render all views into DOM */
   const byYear = {};

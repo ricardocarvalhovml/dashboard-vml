@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vml company · Home</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- External libs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+
+  <!-- Client config -->
+  <script>
+    const CLIENT_NAME = 'vml company';
+    const ACCOUNT     = 'vmlcompany';
+  </script>
+</head>
+
+<body data-initial-view="view-home">
+
+  <!-- Loading screen -->
+  <div id="app-loading">
+    <div class="spinner"></div>
+    <p>carregando dados...</p>
+  </div>
+
+  <!-- App shell -->
+  <div id="app">
+    <div class="layout" id="layout">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <button class="hamburger" id="hamburger" title="Menu">
+            <span></span><span></span><span></span>
+          </button>
+          <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" title="alternar tema">
+            <span id="theme-icon"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+          </button>
+          <img class="sidebar-logo" id="sidebar-logo" src="logo-escuro.png" alt="vml company"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <span class="logo-fallback" style="display:none">vml company</span>
+        </div>
+
+        <div class="sidebar-body">
+          <a class="nav-home" href="/" style="text-decoration:none">⌂ Home</a>
+          <div class="sidebar-section" style="cursor:default;margin-top:.25rem">áreas</div>
+          <a class="nav-tab active" href="/redes-sociais" style="text-decoration:none"><span class="nav-dot" style="background:#a038f2"></span>Redes Sociais</a>
+          <a class="nav-tab" href="/seo" style="text-decoration:none"><span class="nav-dot" style="background:#a2e259"></span>SEO</a>
+          <a class="nav-tab" href="/crm" style="text-decoration:none"><span class="nav-dot" style="background:#391bce"></span>CRM</a>
+          <a class="nav-tab" href="/midia-paga" style="text-decoration:none"><span class="nav-dot" style="background:#c9b8f8"></span>Mídia Paga</a>
+          <div class="sidebar-divider"></div>
+          <div class="sidebar-section" style="cursor:default">mensal</div>
+          <div id="monthNav"></div>
+          <!-- btn-annual is hidden via JS after nav is built -->
+          <button class="nav-tab" id="btn-annual" style="display:none"></button>
+          <div class="sidebar-divider"></div>
+          <a class="nav-tab" href="/upload" style="text-decoration:none"><span class="nav-dot" style="background:var(--green)"></span>enviar relatório</a>
+          <!-- Copyright credit -->
+          <div class="sidebar-credit">
+            <span>desenvolvido por</span>
+            <img src="copyright-logo.png" alt="Temeron" onerror="this.style.display='none'">
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main content (rendered by app.js) -->
+      <main class="main" id="mainContent"></main>
+
+    </div>
+  </div>
+
+  <!-- App logic -->
+  <script src="app.js"></script>
+
+</body>
+</html>
