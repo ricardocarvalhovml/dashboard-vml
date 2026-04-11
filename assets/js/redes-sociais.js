@@ -115,8 +115,8 @@ function yMax(vals) {
 
 function thumbBlock(code, url) {
   if (!code) return `<div class="th-ph">📷</div>`;
-  return `<img src="/assets/posts/${code}.jpg"
-    onerror="this.src='/assets/posts/${code}.png';this.onerror=function(){this.outerHTML='<div class=th-ph>📷</div>'}"
+  return `<img src="/assets/img/posts/${code}.jpg"
+    onerror="this.src='/assets/img/posts/${code}.png';this.onerror=function(){this.outerHTML='<div class=th-ph>📷</div>'}"
     alt="" style="width:40px;height:40px;object-fit:cover;border-radius:6px;display:block">`;
 }
 
@@ -147,9 +147,9 @@ function postCard(p, rank, rankColor) {
     imgHtml = `<div class="post-card-v2-img" style="height:${h}px;display:flex;align-items:center;justify-content:center;font-size:28px;opacity:.2">📷</div>`;
   } else {
     imgHtml = `<div class="post-card-v2-img" style="height:${h}px;position:relative;overflow:hidden">
-      <img src="/assets/posts/${code2}.jpg"
+      <img src="/assets/img/posts/${code2}.jpg"
         style="width:100%;height:100%;object-fit:cover;display:block;border-radius:0"
-        onerror="if(this.src.endsWith('.jpg')){this.src='/assets/posts/${code2}.png';}else{this.style.display='none';this.nextElementSibling.style.display='block';}"
+        onerror="if(this.src.endsWith('.jpg')){this.src='/assets/img/posts/${code2}.png';}else{this.style.display='none';this.nextElementSibling.style.display='block';}"
         alt="">
       <iframe src="${em}"
         style="display:none;position:absolute;top:-${hp}px;left:0;width:326px;height:800px;transform:scale(${s});transform-origin:top left;border:none;pointer-events:auto"
@@ -203,9 +203,9 @@ function postsByFormat(posts) {
       const s    = gW / 326;
       const hp   = Math.round(65 * s);
       const inner = code
-        ? `<img src="/assets/posts/${code}.jpg"
+        ? `<img src="/assets/img/posts/${code}.jpg"
             style="width:100%;height:100%;object-fit:cover;display:block"
-            onerror="if(this.src.endsWith('.jpg')){this.src='/assets/posts/${code}.png';}else{this.style.display='none';this.nextElementSibling.style.display='block';}"
+            onerror="if(this.src.endsWith('.jpg')){this.src='/assets/img/posts/${code}.png';}else{this.style.display='none';this.nextElementSibling.style.display='block';}"
             alt="">
            <iframe src="${em}" style="display:none;position:absolute;top:-${hp}px;left:0;width:326px;height:600px;transform:scale(${s.toFixed(4)});transform-origin:top left;border:none;pointer-events:none" frameborder="0" scrolling="no" allowtransparency="true" loading="lazy"></iframe>`
         : `<span style="font-size:20px;opacity:.2">📷</span>`;

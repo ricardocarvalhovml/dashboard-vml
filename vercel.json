@@ -1,4 +1,11 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/crm",         "destination": "/pages/crm/index.html" },
+    { "source": "/seo",         "destination": "/pages/seo/index.html" },
+    { "source": "/midia-paga",  "destination": "/pages/midia-paga/index.html" },
+    { "source": "/redes-sociais", "destination": "/pages/redes-sociais/index.html" },
+    { "source": "/upload",      "destination": "/pages/upload/index.html" }
+  ]
 }
