@@ -1,1 +1,59 @@
+name: Atualizar Dados do Dashboard
 
+on:
+  schedule:
+    # 08:00 BRT = 11:00 UTC
+    - cron: '0 11 * * *'
+    # 16:00 BRT = 19:00 UTC
+    - cron: '0 19 * * *'
+  # Permite rodar manualmente pelo GitHub Actions
+  workflow_dispatch:
+
+jobs:
+  fetch-and-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependências
+        run: pip install -r scripts/requirements.txt
+
+      - name: Buscar dados da RD Station (CRM)
+        env:
+          RD_TOKEN: ${{ secrets.RD_TOKEN }}
+        run: python scripts/fetch_rdstation.py
+
+      - name: Buscar dados do Meta Ads + Google Ads (Mídia Paga)
+        env:
+          META_ACCESS_TOKEN:   ${{ secrets.META_ACCESS_TOKEN }}
+          META_AD_ACCOUNT_ID:  ${{ secrets.META_AD_ACCOUNT_ID }}
+          GOOGLE_ADS_DEVELOPER_TOKEN: ${{ secrets.GOOGLE_ADS_DEVELOPER_TOKEN }}
+          GOOGLE_ADS_CLIENT_ID:       ${{ secrets.GOOGLE_ADS_CLIENT_ID }}
+          GOOGLE_ADS_CLIENT_SECRET:   ${{ secrets.GOOGLE_ADS_CLIENT_SECRET }}
+          GOOGLE_ADS_REFRESH_TOKEN:   ${{ secrets.GOOGLE_ADS_REFRESH_TOKEN }}
+          GOOGLE_ADS_CUSTOMER_ID:     ${{ secrets.GOOGLE_ADS_CUSTOMER_ID }}
+        run: python scripts/fetch_midia_paga.py
+
+      - name: Buscar dados de SEO (Google Search Console + GA4)
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GSC_SITE_URL:  ${{ secrets.GSC_SITE_URL }}
+          GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+        run: python scripts/fetch_seo.py
+
+      - name: Commit e push dos dados atualizados
+        run: |
+          git config user.name  "dashboard-bot"
+          git config user.email "bot@vmlcomp.com.br"
+          git add assets/data/
+          git diff --cached --quiet || git commit -m "dados: atualização automática $(TZ=America/Sao_Paulo date +'%d/%m/%Y %H:%M BRT')"
+          git push
