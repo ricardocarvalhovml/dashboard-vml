@@ -243,6 +243,38 @@ function updateHeader(m) {
   const sub     = document.getElementById('page-sub');
   if (eyebrow) eyebrow.textContent = `${AREA_CONFIG.name} · ${_MO[m.mi]} ${m.year}`;
   if (sub)     sub.textContent     = AREA_CONFIG.subtitle;
+  _renderSourceBadge();
+}
+
+/* ─────────────────────────────────────────────
+   Badge de fonte dos dados (API ou arquivo)
+─────────────────────────────────────────────── */
+function _renderSourceBadge() {
+  const el = document.getElementById('data-source-badge');
+  if (!el || !window._apiStatus) return;
+  const status  = window._apiStatus;
+  const area    = AREA_CONFIG.file.replace('.csv', '').replace('.xlsx', '');
+  const areaOk  = status.areas?.[area]?.ok;
+
+  if (!areaOk) {
+    el.innerHTML = `<span style="
+      display:inline-flex;align-items:center;gap:5px;
+      font-size:11px;font-weight:600;opacity:.5;
+      color:var(--muted);padding:3px 10px;
+      border:1px solid currentColor;border-radius:20px">
+      📄 via arquivo
+    </span>`;
+    return;
+  }
+
+  el.innerHTML = `<span title="Dados atualizados automaticamente via API" style="
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:11px;font-weight:700;
+    color:#a2e259;padding:3px 10px;
+    border:1px solid #a2e25944;border-radius:20px;
+    background:#a2e25910">
+    ⚡ via api · ${status.fetched_at_display}
+  </span>`;
 }
 
 /* ─────────────────────────────────────────────
@@ -332,6 +364,15 @@ async function _fetchMonthFile(year, mo, csvFilename) {
 
   /* [FIX 4] try-catch global — loading spinner nunca fica preso */
   try {
+    /* Buscar api-status.json do mês atual para exibir badge de fonte */
+    const _now = new Date();
+    const _y   = _now.getFullYear();
+    const _mo  = String(_now.getMonth() + 1).padStart(2, '0');
+    try {
+      const _sr = await fetch(`/assets/data/${_y}/${_mo}/api-status.json`);
+      if (_sr.ok) window._apiStatus = await _sr.json();
+    } catch (_) {}
+
     /* Montar lista de candidatos por mês */
     const candidates = [];
     _YEARS.forEach(y => {
