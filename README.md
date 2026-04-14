@@ -1,6 +1,6 @@
 # dashboard analytics · vml company
 
-desenvolvido por temeron
+desenvolvido por vml company
 
 ---
 
