@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>mídia paga — vml company</title>
+  <title>seo — vml company</title>
   <link rel="icon" href="/assets/img/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-  <script>const AREA_CONFIG = {"name": "mídia paga", "subtitle": "campanhas pagas · meta · google ads", "file": "midia-paga.csv", "color": "#c9b8f8", "kpis": [{"key": "Investimento", "label": "investimento", "sub": "verba total", "color": "#391bce", "currency": true}, {"key": "Impressões", "label": "impressões", "sub": "exibições", "color": "#a038f2"}, {"key": "Cliques", "label": "cliques", "sub": "cliques totais", "color": "#c9b8f8"}, {"key": "CTR", "label": "ctr", "sub": "taxa de cliques", "color": "#6b5fd4", "pct": true}, {"key": "CPC", "label": "cpc", "sub": "custo por clique", "color": "#c9b8f8", "currency": true}, {"key": "ROAS", "label": "roas", "sub": "retorno do anúncio", "color": "#a2e259", "decimal": true}], "charts": [{"id": "chart-investimento", "key": "Investimento", "type": "bar", "color": "#391bce", "label": "investimento mensal"}, {"id": "chart-cliques", "key": "Cliques", "type": "bar", "color": "#c9b8f8", "label": "cliques por mês"}, {"id": "chart-ctr", "key": "CTR", "type": "line", "color": "#6b5fd4", "label": "ctr — evolução"}, {"id": "chart-roas", "key": "ROAS", "type": "line", "color": "#a2e259", "label": "roas — evolução"}]};</script>
+  <script>const AREA_CONFIG = {"name": "seo", "subtitle": "busca orgânica · google search console", "file": "seo.csv", "color": "#a2e259", "kpis": [{"key": "Sessões Orgânicas", "label": "sessões orgânicas", "sub": "tráfego orgânico", "color": "#a2e259"}, {"key": "Impressões", "label": "impressões", "sub": "no google", "color": "#a038f2"}, {"key": "Cliques", "label": "cliques", "sub": "nos resultados", "color": "#391bce"}, {"key": "CTR", "label": "ctr", "sub": "taxa de cliques", "color": "#c9b8f8", "pct": true}, {"key": "Posição Média", "label": "posição média", "sub": "ranking médio", "color": "#6b5fd4", "decimal": true, "invertDelta": true}, {"key": "Keywords Top 10", "label": "keywords top 10", "sub": "palavras-chave", "color": "#a2e259"}], "charts": [{"id": "chart-sessoes", "key": "Sessões Orgânicas", "type": "line", "color": "#a2e259", "label": "sessões orgânicas"}, {"id": "chart-impressoes", "key": "Impressões", "type": "line", "color": "#a038f2", "label": "impressões no google"}, {"id": "chart-cliques", "key": "Cliques", "type": "bar", "color": "#391bce", "label": "cliques por mês"}, {"id": "chart-posicao", "key": "Posição Média", "type": "line", "color": "#6b5fd4", "label": "posição média", "reverseY": true}]};</script>
 </head>
 <body>
   <div id="app-loading"><div class="spinner"></div><p>carregando dados...</p></div>
@@ -28,9 +29,9 @@
         <a class="nav-home" href="/" style="text-decoration:none">&#8962; home</a>
         <div class="sidebar-section" style="cursor:default;margin-top:.25rem">áreas</div>
           <a class="nav-tab" href="/redes-sociais" style="text-decoration:none"><span class="nav-dot" style="background:#a038f2"></span>redes sociais</a>
-          <a class="nav-tab" href="/seo" style="text-decoration:none"><span class="nav-dot" style="background:#a2e259"></span>seo</a>
+          <a class="nav-tab active" href="/seo" style="text-decoration:none"><span class="nav-dot" style="background:#a2e259"></span>seo</a>
           <a class="nav-tab" href="/crm" style="text-decoration:none"><span class="nav-dot" style="background:#391bce"></span>crm</a>
-          <a class="nav-tab active" href="/midia-paga" style="text-decoration:none"><span class="nav-dot" style="background:#c9b8f8"></span>mídia paga</a>
+          <a class="nav-tab" href="/midia-paga" style="text-decoration:none"><span class="nav-dot" style="background:#c9b8f8"></span>mídia paga</a>
         <div class="sidebar-divider"></div>
 
         <a class="nav-tab" href="/upload" style="text-decoration:none"><span class="nav-dot" style="background:var(--green)"></span>enviar relatório</a>
@@ -46,27 +47,28 @@
       <main class="main">
         <div class="page-header">
           <div>
-            <div class="page-eyebrow" id="page-eyebrow">mídia paga</div>
-            <div class="page-title">mídia paga</div>
-            <div class="page-sub" id="page-sub">campanhas pagas · meta · google ads</div>
+            <div class="page-eyebrow" id="page-eyebrow">seo</div>
+            <div class="page-title">seo</div>
+            <div class="page-sub" id="page-sub">busca orgânica · google search console</div>
+          <div id="data-source-badge" style="margin-top:8px"></div>
           </div>
         </div>
-        <div id="no-data-banner" class="card section-gap" style="display:none;border-color:#c9b8f833;background:#c9b8f808">
+        <div id="no-data-banner" class="card section-gap" style="display:none;border-color:#a2e25933;background:#a2e25908">
           <div style="display:flex;align-items:center;gap:12px">
             <div style="font-size:24px">📂</div>
             <div>
               <div style="font-weight:700;margin-bottom:4px;text-transform:lowercase">nenhum dado encontrado</div>
-              <div style="font-size:13px;color:var(--muted)">faça upload de <code>midia-paga.csv</code> em <code>assets/data/YYYY/MM/</code> para começar.</div>
-              <div style="font-size:12px;color:var(--muted);margin-top:8px">formato esperado:<br><code>Investimento,Impressões,Cliques,CTR,CPC,Conversões,ROAS</code></div>
+              <div style="font-size:13px;color:var(--muted)">faça upload de <code>seo.csv</code> em <code>assets/data/YYYY/MM/</code> para começar.</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:8px">formato esperado:<br><code>Sessões Orgânicas,Impressões,Cliques,CTR,Posição Média,Keywords Top 10</code></div>
             </div>
             <a href="/upload" style="margin-left:auto;flex-shrink:0;padding:10px 18px;background:var(--blue);color:white;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap">↑ enviar arquivo</a>
           </div>
         </div>
         <div class="kpi-row" id="kpi-row"></div>
-<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">investimento mensal</div></div><div style="position:relative;height:175px"><canvas id="chart-investimento"></canvas></div></div>
-          <div class="card"><div class="card-header"><div class="card-title">cliques por mês</div></div><div style="position:relative;height:175px"><canvas id="chart-cliques"></canvas></div></div></div>
-<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">ctr — evolução</div></div><div style="position:relative;height:150px"><canvas id="chart-ctr"></canvas></div></div>
-          <div class="card"><div class="card-header"><div class="card-title">roas — evolução</div></div><div style="position:relative;height:150px"><canvas id="chart-roas"></canvas></div></div></div>
+<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">sessões orgânicas</div></div><div style="position:relative;height:175px"><canvas id="chart-sessoes"></canvas></div></div>
+          <div class="card"><div class="card-header"><div class="card-title">impressões no google</div></div><div style="position:relative;height:175px"><canvas id="chart-impressoes"></canvas></div></div></div>
+<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">cliques por mês</div></div><div style="position:relative;height:150px"><canvas id="chart-cliques"></canvas></div></div>
+          <div class="card"><div class="card-header"><div class="card-title">posição média</div></div><div style="position:relative;height:150px"><canvas id="chart-posicao"></canvas></div></div></div>
         <div class="card" id="data-table"></div>
       </main>
     </div>

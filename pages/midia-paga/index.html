@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>crm — vml company</title>
+  <title>mídia paga — vml company</title>
   <link rel="icon" href="/assets/img/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-  <script>const AREA_CONFIG = {"name": "crm", "subtitle": "leads · funil de vendas · receita", "file": "crm.csv", "color": "#391bce", "kpis": [{"key": "Novos Leads", "label": "novos leads", "sub": "entradas no funil", "color": "#391bce"}, {"key": "Leads Qualificados", "label": "leads qualificados", "sub": "com potencial", "color": "#a038f2"}, {"key": "Oportunidades", "label": "oportunidades", "sub": "em negociação", "color": "#c9b8f8"}, {"key": "Negócios Fechados", "label": "negócios fechados", "sub": "convertidos", "color": "#a2e259"}, {"key": "Taxa de Conversão", "label": "conversão", "sub": "leads → clientes", "color": "#6b5fd4", "pct": true}, {"key": "Receita", "label": "receita", "sub": "gerada no mês", "color": "#a2e259", "currency": true}], "charts": [{"id": "chart-leads", "key": "Novos Leads", "type": "bar", "color": "#391bce", "label": "novos leads por mês"}, {"id": "chart-fechados", "key": "Negócios Fechados", "type": "bar", "color": "#a2e259", "label": "negócios fechados"}, {"id": "chart-conversao", "key": "Taxa de Conversão", "type": "line", "color": "#6b5fd4", "label": "taxa de conversão"}, {"id": "chart-receita", "key": "Receita", "type": "line", "color": "#a2e259", "label": "receita gerada"}]};</script>
+  <script>const AREA_CONFIG = {"name": "mídia paga", "subtitle": "campanhas pagas · meta · google ads", "file": "midia-paga.csv", "color": "#c9b8f8", "kpis": [{"key": "Investimento", "label": "investimento", "sub": "verba total", "color": "#391bce", "currency": true}, {"key": "Impressões", "label": "impressões", "sub": "exibições", "color": "#a038f2"}, {"key": "Cliques", "label": "cliques", "sub": "cliques totais", "color": "#c9b8f8"}, {"key": "CTR", "label": "ctr", "sub": "taxa de cliques", "color": "#6b5fd4", "pct": true}, {"key": "CPC", "label": "cpc", "sub": "custo por clique", "color": "#c9b8f8", "currency": true}, {"key": "ROAS", "label": "roas", "sub": "retorno do anúncio", "color": "#a2e259", "decimal": true}], "charts": [{"id": "chart-investimento", "key": "Investimento", "type": "bar", "color": "#391bce", "label": "investimento mensal"}, {"id": "chart-cliques", "key": "Cliques", "type": "bar", "color": "#c9b8f8", "label": "cliques por mês"}, {"id": "chart-ctr", "key": "CTR", "type": "line", "color": "#6b5fd4", "label": "ctr — evolução"}, {"id": "chart-roas", "key": "ROAS", "type": "line", "color": "#a2e259", "label": "roas — evolução"}]};</script>
 </head>
 <body>
   <div id="app-loading"><div class="spinner"></div><p>carregando dados...</p></div>
@@ -29,8 +30,8 @@
         <div class="sidebar-section" style="cursor:default;margin-top:.25rem">áreas</div>
           <a class="nav-tab" href="/redes-sociais" style="text-decoration:none"><span class="nav-dot" style="background:#a038f2"></span>redes sociais</a>
           <a class="nav-tab" href="/seo" style="text-decoration:none"><span class="nav-dot" style="background:#a2e259"></span>seo</a>
-          <a class="nav-tab active" href="/crm" style="text-decoration:none"><span class="nav-dot" style="background:#391bce"></span>crm</a>
-          <a class="nav-tab" href="/midia-paga" style="text-decoration:none"><span class="nav-dot" style="background:#c9b8f8"></span>mídia paga</a>
+          <a class="nav-tab" href="/crm" style="text-decoration:none"><span class="nav-dot" style="background:#391bce"></span>crm</a>
+          <a class="nav-tab active" href="/midia-paga" style="text-decoration:none"><span class="nav-dot" style="background:#c9b8f8"></span>mídia paga</a>
         <div class="sidebar-divider"></div>
 
         <a class="nav-tab" href="/upload" style="text-decoration:none"><span class="nav-dot" style="background:var(--green)"></span>enviar relatório</a>
@@ -46,27 +47,28 @@
       <main class="main">
         <div class="page-header">
           <div>
-            <div class="page-eyebrow" id="page-eyebrow">crm</div>
-            <div class="page-title">crm</div>
-            <div class="page-sub" id="page-sub">leads · funil de vendas · receita</div>
+            <div class="page-eyebrow" id="page-eyebrow">mídia paga</div>
+            <div class="page-title">mídia paga</div>
+            <div class="page-sub" id="page-sub">campanhas pagas · meta · google ads</div>
+          <div id="data-source-badge" style="margin-top:8px"></div>
           </div>
         </div>
-        <div id="no-data-banner" class="card section-gap" style="display:none;border-color:#391bce33;background:#391bce08">
+        <div id="no-data-banner" class="card section-gap" style="display:none;border-color:#c9b8f833;background:#c9b8f808">
           <div style="display:flex;align-items:center;gap:12px">
             <div style="font-size:24px">📂</div>
             <div>
               <div style="font-weight:700;margin-bottom:4px;text-transform:lowercase">nenhum dado encontrado</div>
-              <div style="font-size:13px;color:var(--muted)">faça upload de <code>crm.csv</code> em <code>assets/data/YYYY/MM/</code> para começar.</div>
-              <div style="font-size:12px;color:var(--muted);margin-top:8px">formato esperado:<br><code>Novos Leads,Leads Qualificados,Oportunidades,Negócios Fechados,Taxa de Conversão,Receita</code></div>
+              <div style="font-size:13px;color:var(--muted)">faça upload de <code>midia-paga.csv</code> em <code>assets/data/YYYY/MM/</code> para começar.</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:8px">formato esperado:<br><code>Investimento,Impressões,Cliques,CTR,CPC,Conversões,ROAS</code></div>
             </div>
             <a href="/upload" style="margin-left:auto;flex-shrink:0;padding:10px 18px;background:var(--blue);color:white;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap">↑ enviar arquivo</a>
           </div>
         </div>
         <div class="kpi-row" id="kpi-row"></div>
-<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">novos leads por mês</div></div><div style="position:relative;height:175px"><canvas id="chart-leads"></canvas></div></div>
-          <div class="card"><div class="card-header"><div class="card-title">negócios fechados</div></div><div style="position:relative;height:175px"><canvas id="chart-fechados"></canvas></div></div></div>
-<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">taxa de conversão</div></div><div style="position:relative;height:150px"><canvas id="chart-conversao"></canvas></div></div>
-          <div class="card"><div class="card-header"><div class="card-title">receita gerada</div></div><div style="position:relative;height:150px"><canvas id="chart-receita"></canvas></div></div></div>
+<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">investimento mensal</div></div><div style="position:relative;height:175px"><canvas id="chart-investimento"></canvas></div></div>
+          <div class="card"><div class="card-header"><div class="card-title">cliques por mês</div></div><div style="position:relative;height:175px"><canvas id="chart-cliques"></canvas></div></div></div>
+<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">ctr — evolução</div></div><div style="position:relative;height:150px"><canvas id="chart-ctr"></canvas></div></div>
+          <div class="card"><div class="card-header"><div class="card-title">roas — evolução</div></div><div style="position:relative;height:150px"><canvas id="chart-roas"></canvas></div></div></div>
         <div class="card" id="data-table"></div>
       </main>
     </div>
