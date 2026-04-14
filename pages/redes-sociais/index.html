@@ -6,7 +6,8 @@
   <title>redes sociais — vml company</title>
   <link rel="icon" href="/assets/img/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -29,22 +30,28 @@
         <span class="logo-fallback" style="display:none">vml company</span>
       </div>
       <div class="sidebar-body">
-        <a class="nav-home" href="/" style="text-decoration:none">&#8962; home</a>
-        <div class="sidebar-section" style="cursor:default;margin-top:.25rem">áreas</div>
-          <a class="nav-tab active" href="/redes-sociais" style="text-decoration:none"><span class="nav-dot" style="background:#a038f2"></span>redes sociais</a>
-          <a class="nav-tab" href="/seo" style="text-decoration:none"><span class="nav-dot" style="background:#a2e259"></span>seo</a>
-          <a class="nav-tab" href="/crm" style="text-decoration:none"><span class="nav-dot" style="background:#391bce"></span>crm</a>
-          <a class="nav-tab" href="/midia-paga" style="text-decoration:none"><span class="nav-dot" style="background:#c9b8f8"></span>mídia paga</a>
-        <div class="sidebar-divider"></div>
+        <div class="sidebar-nav-top">
+          <a class="nav-home" href="/" style="text-decoration:none">&#8962; home</a>
+          <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer">áreas <span class="chev">▾</span></div>
+          <div id="areas-list">
+            <a class="nav-tab active" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-dot" style="background:#a038f2"></span>redes sociais</a>
+            <a class="nav-tab" href="/pages/seo" style="text-decoration:none"><span class="nav-dot" style="background:#a2e259"></span>seo</a>
+            <a class="nav-tab" href="/pages/crm" style="text-decoration:none"><span class="nav-dot" style="background:#391bce"></span>crm</a>
+            <a class="nav-tab" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-dot" style="background:#c9b8f8"></span>mídia paga</a>
+          </div>
+          <div class="sidebar-divider"></div>
           <div class="sidebar-section" style="cursor:default" id="nav-section-label">mensal</div>
           <div id="monthNav"></div>
           <button class="nav-tab" id="btn-annual" style="display:none"></button>
-        <a class="nav-tab" href="/upload" style="text-decoration:none"><span class="nav-dot" style="background:var(--green)"></span>enviar relatório</a>
-        <div class="sidebar-credit">
-          <img class="credit-logo" src="/assets/img/copyright-logo.png" alt="temeron" onerror="this.style.display='none'">
-          <div>
-            <div class="credit-brand">temeron<sup>®</sup></div>
-            <div class="credit-copy">© 2026 todos os direitos reservados.</div>
+          <div class="sidebar-divider"></div>
+        </div>
+        <div class="sidebar-nav-bottom">
+          <a class="nav-upload" href="/pages/upload">↑ enviar relatório</a>
+          <div class="sidebar-credit">
+            <div>
+              <div class="credit-brand">vml company</div>
+              <div class="credit-copy">© 2026 todos os direitos<br>reservados.</div>
+            </div>
           </div>
         </div>
       </div>
@@ -61,6 +68,13 @@
   <script>
   (function(){const s=localStorage.getItem('dashboard-theme')||'';document.documentElement.dataset.theme=s;_ul(s==='light');})();
   function _ul(l){const i=document.getElementById('sidebar-logo');if(i)i.src=l?'/assets/img/logo-escuro.png':'/assets/img/logo.png';const ic=document.getElementById('theme-icon');if(!ic)return;ic.innerHTML=l?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>':'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';}
+
+  function toggleAreas(){
+    var el=document.getElementById('areas-list');
+    el.classList.toggle('coll');
+    var chev=document.querySelector('#areas-toggle .chev');
+    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
+  }
   function toggleTheme(){const h=document.documentElement;const l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);_ul(h.dataset.theme==='light');}</script>
   <script src="/assets/js/redes-sociais.js"></script>
 </body>

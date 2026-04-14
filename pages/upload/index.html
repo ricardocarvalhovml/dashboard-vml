@@ -6,7 +6,8 @@
   <title>Upload de Dados — Dashboard VML</title>
   <link rel="icon" href="favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap">
   <style>
     :root {
       --bg:      #07091a;
@@ -431,5 +432,12 @@ function setProgress(pct) {
   bar.style.width = pct + '%';
 }
 </script>
+
+  function toggleAreas(){
+    var el=document.getElementById('areas-list');
+    el.classList.toggle('coll');
+    var chev=document.querySelector('#areas-toggle .chev');
+    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
+  }
 </body>
 </html>
