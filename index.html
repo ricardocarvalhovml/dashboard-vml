@@ -22,19 +22,34 @@
       </div>
       <div class="sidebar-body">
         <div class="sidebar-nav-top">
-          <a class="nav-home active" href="/" style="text-decoration:none">&#8962; home</a>
-          <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer">áreas <span class="chev">▾</span></div>
-          <div id="areas-list">
-            <a class="nav-tab" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-icon" style="background:#a038f2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>redes sociais</a>
-            <a class="nav-tab" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
-            <a class="nav-tab" href="/pages/crm" style="text-decoration:none"><span class="nav-icon" style="background:#391bce"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>crm</a>
-            <a class="nav-tab" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
+
+          <!-- home -->
+          <a class="nav-home active" href="/" style="text-decoration:none;display:flex;align-items:center;gap:8px">
+            <span class="nav-icon" style="background:rgba(160,56,242,.18);color:#a038f2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span>home
+          </a>
+
+          <!-- áreas -->
+          <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+            áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
           </div>
+          <div id="areas-list">
+            <a class="nav-tab" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-icon" style="background:#a038f2"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>redes sociais</a>
+            <a class="nav-tab" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
+            <a class="nav-tab" href="/pages/crm" style="text-decoration:none"><span class="nav-icon" style="background:#391bce"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>crm</a>
+            <a class="nav-tab" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
+          </div>
+
           <div class="sidebar-divider"></div>
-          <div class="sidebar-section" style="cursor:default" id="nav-section-label">mensal</div>
-          <div id="monthNav"></div>
-          <button class="nav-tab" id="btn-annual" style="display:none"></button>
-          <div class="sidebar-divider"></div>
+
+          <!-- período -->
+          <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+            período <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
+          </div>
+          <div id="periodo-list">
+            <div id="monthNav"></div>
+            <button class="nav-tab" id="btn-annual" style="display:none"></button>
+          </div>
+
         </div>
         <div class="sidebar-nav-bottom">
           <a class="nav-upload" href="/pages/upload">↑ enviar relatório</a>
@@ -75,7 +90,7 @@
           </div>
           <div class="area-card-cta">acessar área →</div>
         </a>
-        <a class="area-card" href="/pages/seo" data-area="seo" style="--card-accent:#a2e259">
+        <a class="area-card" href="/pages/seo" data-area="seo" style="--card-accent:#a2e259;--cta-color:#07091a">
           <div class="area-card-top">
             <div class="area-card-icon" style="background:#a2e259"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
             <div class="area-card-status" id="se-status"><div class="area-status-dot loading"></div><span>carregando</span></div>
@@ -103,7 +118,7 @@
           </div>
           <div class="area-card-cta">acessar área →</div>
         </a>
-        <a class="area-card" href="/pages/midia-paga" data-area="midia-paga" style="--card-accent:#c9b8f8">
+        <a class="area-card" href="/pages/midia-paga" data-area="midia-paga" style="--card-accent:#c9b8f8;--cta-color:#07091a">
           <div class="area-card-top">
             <div class="area-card-icon" style="background:#c9b8f8"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
             <div class="area-card-status" id="mi-status"><div class="area-status-dot loading"></div><span>carregando</span></div>
@@ -129,6 +144,19 @@
     var el=document.getElementById('areas-list');
     el.classList.toggle('coll');
     var chev=document.querySelector('#areas-toggle .chev');
+    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
+  }
+
+  function toggleAreas(){
+    var el=document.getElementById('areas-list');
+    el.classList.toggle('coll');
+    var chev=document.querySelector('#areas-toggle .chev');
+    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
+  }
+  function togglePeriodo(){
+    var el=document.getElementById('periodo-list');
+    el.classList.toggle('coll');
+    var chev=document.querySelector('#periodo-toggle .chev');
     if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
   }
   function toggleTheme(){const h=document.documentElement;const l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);_ul(h.dataset.theme==='light');}

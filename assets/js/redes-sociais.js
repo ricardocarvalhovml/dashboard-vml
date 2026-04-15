@@ -1134,10 +1134,11 @@ function showView(vid) {
     });
   });
 
+  const periodoList = document.getElementById('periodo-list') || document.querySelector('.sidebar-nav-top');
   const divider   = document.createElement('div');   divider.className = 'sidebar-divider';
   const geralDiv  = document.createElement('div');   geralDiv.className = 'sidebar-section'; geralDiv.style.cursor = 'default'; geralDiv.textContent = 'anual';
-  document.querySelector('.sidebar-body').appendChild(divider);
-  document.querySelector('.sidebar-body').appendChild(geralDiv);
+  periodoList.appendChild(divider);
+  periodoList.appendChild(geralDiv);
 
   years.forEach(y => {
     const btn         = document.createElement('button');
@@ -1150,7 +1151,7 @@ function showView(vid) {
     else if (isCurrYear) yDotColor = 'var(--orange)';
     btn.innerHTML = `<span class="nav-dot" style="background:${yDotColor}"></span>${y}`;
     btn.onclick   = () => showView(`view-annual-${y}`);
-    document.querySelector('.sidebar-body').appendChild(btn);
+    periodoList.appendChild(btn);
   });
 
   document.getElementById('btn-annual').style.display = 'none';
