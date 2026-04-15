@@ -34,18 +34,18 @@
           </div>
           <div id="areas-list">
             <a class="nav-tab" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-icon" style="background:#a038f2"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>redes sociais</a>
-            <a class="nav-tab" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
+            <a class="nav-tab" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
             <a class="nav-tab" href="/pages/crm" style="text-decoration:none"><span class="nav-icon" style="background:#391bce"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>crm</a>
-            <a class="nav-tab" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
+            <a class="nav-tab" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
           </div>
 
           <div class="sidebar-divider"></div>
 
           <!-- período -->
-          <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+          <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="display:none;cursor:pointer;align-items:center;justify-content:space-between">
             período <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
           </div>
-          <div id="periodo-list">
+          <div id="periodo-list" style="display:none">
             <div id="monthNav"></div>
             <button class="nav-tab" id="btn-annual" style="display:none"></button>
           </div>
@@ -92,7 +92,7 @@
         </a>
         <a class="area-card" href="/pages/seo" data-area="seo" style="--card-accent:#a2e259;--cta-color:#07091a">
           <div class="area-card-top">
-            <div class="area-card-icon" style="background:#a2e259"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+            <div class="area-card-icon" style="background:#a2e259"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
             <div class="area-card-status" id="se-status"><div class="area-status-dot loading"></div><span>carregando</span></div>
           </div>
           <div class="area-card-name">seo</div>
@@ -120,7 +120,7 @@
         </a>
         <a class="area-card" href="/pages/midia-paga" data-area="midia-paga" style="--card-accent:#c9b8f8;--cta-color:#07091a">
           <div class="area-card-top">
-            <div class="area-card-icon" style="background:#c9b8f8"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+            <div class="area-card-icon" style="background:#c9b8f8"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
             <div class="area-card-status" id="mi-status"><div class="area-status-dot loading"></div><span>carregando</span></div>
           </div>
           <div class="area-card-name">mídia paga</div>
@@ -139,13 +139,6 @@
   <script>
   (function(){const s=localStorage.getItem('dashboard-theme')||'';document.documentElement.dataset.theme=s;_ul(s==='light');})();
   function _ul(l){const i=document.getElementById('sidebar-logo');if(i)i.src=l?'/assets/img/logo-escuro.png':'/assets/img/logo.png';const ic=document.getElementById('theme-icon');if(!ic)return;ic.innerHTML=l?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>':'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';}
-
-  function toggleAreas(){
-    var el=document.getElementById('areas-list');
-    el.classList.toggle('coll');
-    var chev=document.querySelector('#areas-toggle .chev');
-    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
-  }
 
   function toggleAreas(){
     var el=document.getElementById('areas-list');

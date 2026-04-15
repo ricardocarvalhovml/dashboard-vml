@@ -1110,11 +1110,26 @@ function showView(vid) {
 
   const nav = document.getElementById('monthNav');
   years.forEach(y => {
+    // ── Year row: label (click = annual view) + chevron (click = toggle months) ──
     const yDiv = document.createElement('div');
-    yDiv.className = (y === 2025 || y === 2026) ? 'sidebar-section year-header' : 'sidebar-section';
-    yDiv.innerHTML = `${y} <span class="chev">▼</span>`;
+    yDiv.className = 'sidebar-section year-header';
+    yDiv.style.cssText = 'cursor:default;display:flex;align-items:center;justify-content:space-between;gap:4px';
+
+    const yLabel = document.createElement('span');
+    yLabel.textContent = y;
+    yLabel.title = `visão anual ${y}`;
+    yLabel.style.cssText = 'flex:1;cursor:pointer;padding:2px 0';
+
+    const yChev = document.createElement('span');
+    yChev.className = 'chev';
+    yChev.textContent = '▾';
+    yChev.style.cssText = 'font-size:8px;opacity:.5;transition:transform .2s;cursor:pointer;padding:2px 4px';
+
+    yDiv.appendChild(yLabel);
+    yDiv.appendChild(yChev);
     nav.appendChild(yDiv);
 
+    // ── Month buttons group ──
     const group = document.createElement('div');
     group.className = 'year-group';
     results.filter(m => m.year === y).forEach(m => {
@@ -1127,31 +1142,17 @@ function showView(vid) {
     });
     nav.appendChild(group);
     requestAnimationFrame(() => { group.style.maxHeight = group.scrollHeight + 'px'; });
-    yDiv.addEventListener('click', () => {
+
+    // Year label click → annual view
+    yLabel.addEventListener('click', () => showView(`view-annual-${y}`));
+
+    // Chevron click → toggle month list
+    yChev.addEventListener('click', () => {
       const c = group.classList.toggle('coll');
       yDiv.classList.toggle('coll', c);
-      if (!c) { group.style.maxHeight = group.scrollHeight + 'px'; } else { group.style.maxHeight = '0'; }
+      group.style.maxHeight = c ? '0' : group.scrollHeight + 'px';
+      yChev.style.transform = c ? 'rotate(-90deg)' : '';
     });
-  });
-
-  const periodoList = document.getElementById('periodo-list') || document.querySelector('.sidebar-nav-top');
-  const divider   = document.createElement('div');   divider.className = 'sidebar-divider';
-  const geralDiv  = document.createElement('div');   geralDiv.className = 'sidebar-section'; geralDiv.style.cursor = 'default'; geralDiv.textContent = 'anual';
-  periodoList.appendChild(divider);
-  periodoList.appendChild(geralDiv);
-
-  years.forEach(y => {
-    const btn         = document.createElement('button');
-    btn.className     = 'nav-tab';
-    btn.dataset.view  = `view-annual-${y}`;
-    const isCurrYear  = y === currYear;
-    const isBestYear  = y === bestYearOverall;
-    let yDotColor     = 'rgba(255,255,255,.18)';
-    if (isBestYear) yDotColor = 'var(--blue)';
-    else if (isCurrYear) yDotColor = 'var(--orange)';
-    btn.innerHTML = `<span class="nav-dot" style="background:${yDotColor}"></span>${y}`;
-    btn.onclick   = () => showView(`view-annual-${y}`);
-    periodoList.appendChild(btn);
   });
 
   document.getElementById('btn-annual').style.display = 'none';
