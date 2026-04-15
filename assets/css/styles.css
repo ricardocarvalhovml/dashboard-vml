@@ -309,6 +309,27 @@ body {
   flex-shrink:   0;
 }
 
+/* ── Sidebar nav icon box ── */
+.nav-icon {
+  width:           28px;
+  height:          28px;
+  border-radius:   7px;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  flex-shrink:     0;
+  color:           #ffffff;
+}
+.nav-icon svg {
+  width:  14px;
+  height: 14px;
+  stroke: #ffffff;
+  fill:   none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .year-group {
   overflow:   hidden;
   transition: max-height .25s ease;
@@ -1407,6 +1428,8 @@ a.nav-tab.active::before {
   display:         flex;
   align-items:     center;
   justify-content: center;
+  color:           #ffffff;
+  flex-shrink:     0;
 }
 .area-card-status {
   display:     flex;
@@ -1465,11 +1488,18 @@ a.nav-tab.active::before {
   margin-top: 3px;
 }
 .area-card-cta {
-  font-size:   12px;
-  font-weight: 600;
-  color:       var(--card-accent, var(--green));
-  padding-top: .75rem;
-  border-top:  1px solid var(--border);
+  display:         inline-block;
+  margin-top:      1.25rem;
+  padding:         8px 16px;
+  background:      var(--card-accent, var(--orange));
+  color:           #ffffff;
+  border-radius:   20px;
+  font-size:       12px;
+  font-weight:     600;
+  transition:      opacity .15s;
+}
+.area-card:hover .area-card-cta {
+  opacity: .85;
 }
 
 @media (max-width: 900px) {
@@ -1576,7 +1606,7 @@ label {
   justify-content: center;
   margin:          10px 14px;
   padding:         9px 14px;
-  background:      #a2e259;
+  background:      #22a050;
   color:           #ffffff !important;
   border-radius:   8px;
   font-size:       13px;
@@ -1588,4 +1618,4 @@ label {
   white-space:     nowrap;
   text-align:      center;
 }
-.nav-upload:hover { background: #1a8a42; opacity: 1; }
+.nav-upload:hover { background: #1b8a42; opacity: 1; }
