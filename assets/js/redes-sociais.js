@@ -146,10 +146,12 @@ function postCard(p, rank, rankColor) {
   if (url === '#' || !code2) {
     imgHtml = `<div class="post-card-v2-img" style="height:${h}px;display:flex;align-items:center;justify-content:center;font-size:28px;opacity:.2">📷</div>`;
   } else {
+    const iframeSrc = em;
+    const iframeHtml = `<iframe src="${iframeSrc}" style="position:absolute;top:-${hp}px;left:0;width:326px;height:800px;transform:scale(${s});transform-origin:top left;border:none;pointer-events:auto" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>`;
     imgHtml = `<div class="post-card-v2-img" style="height:${h}px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#f0eef8">
       <img src="/assets/img/posts/${code2}.png"
-        onerror="this.src='/assets/img/posts/${code2}.jpg';this.onerror=function(){this.outerHTML='<div style=\'display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:28px;opacity:.2\'>📷</div>'}"
-        alt="" style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none">
+        onerror="this.src='/assets/img/posts/${code2}.jpg';this.onerror=function(){this.outerHTML='${iframeHtml.replace(/'/g, "\\'").replace(/"/g, '&quot;')}'}"
+        alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none">
     </div>`;
   }
 
@@ -198,9 +200,12 @@ function postsByFormat(posts) {
       const code = sc(url);
       const s    = gW / 326;
       const hp   = Math.round(65 * s);
+      const iframeSrcG = em;
+      const sStr = s.toFixed(4);
+      const iframeG = `<iframe src="${iframeSrcG}" style="position:absolute;top:-${hp}px;left:0;width:326px;height:600px;transform:scale(${sStr});transform-origin:top left;border:none;pointer-events:none" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>`;
       const inner = code
         ? `<img src="/assets/img/posts/${code}.png"
-            onerror="this.src='/assets/img/posts/${code}.jpg';this.onerror=function(){this.outerHTML='<span style=\\'font-size:20px;opacity:.2\\'>📷</span>'}"
+            onerror="this.src='/assets/img/posts/${code}.jpg';this.onerror=function(){this.outerHTML='${iframeG.replace(/'/g, "\\'").replace(/"/g, '&quot;')}'}"
             alt="" style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none">`
         : `<span style="font-size:20px;opacity:.2">📷</span>`;
       return `<a class="gallery-item" href="${url}" target="_blank" rel="noopener"
