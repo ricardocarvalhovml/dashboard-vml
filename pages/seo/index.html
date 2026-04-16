@@ -7,120 +7,90 @@
   <link rel="icon" href="/assets/img/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;700;800&display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-  <script>const AREA_CONFIG = {"name": "seo", "subtitle": "busca orgânica · google search console", "file": "seo.csv", "color": "#a2e259", "kpis": [{"key": "Sessões Orgânicas", "label": "sessões orgânicas", "sub": "tráfego orgânico", "color": "#a2e259"}, {"key": "Impressões", "label": "impressões", "sub": "no google", "color": "#a038f2"}, {"key": "Cliques", "label": "cliques", "sub": "nos resultados", "color": "#391bce"}, {"key": "CTR", "label": "ctr", "sub": "taxa de cliques", "color": "#c9b8f8", "pct": true}, {"key": "Posição Média", "label": "posição média", "sub": "ranking médio", "color": "#6b5fd4", "decimal": true, "invertDelta": true}, {"key": "Keywords Top 10", "label": "keywords top 10", "sub": "palavras-chave", "color": "#a2e259"}], "charts": [{"id": "chart-sessoes", "key": "Sessões Orgânicas", "type": "line", "color": "#a2e259", "label": "sessões orgânicas"}, {"id": "chart-impressoes", "key": "Impressões", "type": "line", "color": "#a038f2", "label": "impressões no google"}, {"id": "chart-cliques", "key": "Cliques", "type": "bar", "color": "#391bce", "label": "cliques por mês"}, {"id": "chart-posicao", "key": "Posição Média", "type": "line", "color": "#6b5fd4", "label": "posição média", "reverseY": true}]};</script>
 </head>
 <body>
   <div id="app-loading"><div class="spinner"></div><p>carregando dados...</p></div>
   <div id="app" style="display:none">
     <div class="layout" id="layout">
-  <aside class="sidebar">
-      <div class="sidebar-top">
-        <button class="hamburger" id="hamburger" title="menu"><span></span><span></span><span></span></button>
-        <button class="theme-toggle" onclick="toggleTheme()" title="alternar tema"><span id="theme-icon"></span></button>
-        <img class="sidebar-logo" id="sidebar-logo" src="/assets/img/logo-escuro.png" alt="vml company"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <span class="logo-fallback" style="display:none">vml company</span>
-      </div>
-      <div class="sidebar-body">
-        <div class="sidebar-nav-top">
 
-          <!-- home -->
-          <a class="nav-home" href="/" style="text-decoration:none;display:flex;align-items:center;gap:8px">
-            <span class="nav-icon" style="background:rgba(160,56,242,.18);color:#a038f2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span>home
-          </a>
-
-          <!-- áreas -->
-          <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
-            áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
-          </div>
-          <div id="areas-list">
-            <a class="nav-tab" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-icon" style="background:#a038f2"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>redes sociais</a>
-            <a class="nav-tab active" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
-            <a class="nav-tab" href="/pages/crm" style="text-decoration:none"><span class="nav-icon" style="background:#391bce"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>crm</a>
-            <a class="nav-tab" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
-          </div>
-
-          <div class="sidebar-divider"></div>
-
-          <!-- período -->
-          <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
-            período <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
-          </div>
-          <div id="periodo-list">
-            <div id="monthNav"></div>
-            <button class="nav-tab" id="btn-annual" style="display:none"></button>
-          </div>
-
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <button class="hamburger" id="hamburger" title="menu"><span></span><span></span><span></span></button>
+          <button class="theme-toggle" onclick="toggleTheme()" title="alternar tema"><span id="theme-icon"></span></button>
+          <img class="sidebar-logo" id="sidebar-logo" src="/assets/img/logo-escuro.png" alt="vml company"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <span class="logo-fallback" style="display:none">vml company</span>
         </div>
-        <div class="sidebar-nav-bottom">
-          <a class="nav-upload" href="/pages/upload">↑ enviar relatório</a>
-          <div class="sidebar-credit">
-            <div>
-              <div class="credit-brand">vml company</div>
-              <div class="credit-copy">© 2026 todos os direitos<br>reservados.</div>
+        <div class="sidebar-body">
+          <div class="sidebar-nav-top">
+            <a class="nav-home" href="/" style="text-decoration:none;display:flex;align-items:center;gap:8px">
+              <span class="nav-icon" style="background:rgba(160,56,242,.18);color:#a038f2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span>home
+            </a>
+            <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+              áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
+            </div>
+            <div id="areas-list">
+              <a class="nav-tab" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-icon" style="background:#a038f2"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>redes sociais</a>
+              <a class="nav-tab" href="/pages/crm" style="text-decoration:none"><span class="nav-icon" style="background:#391bce"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>email marketing</a>
+              <a class="nav-tab" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
+              <a class="nav-tab active" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
+            </div>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+              período <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
+            </div>
+            <div id="periodo-list"><div id="monthNav"></div></div>
+          </div>
+          <div class="sidebar-nav-bottom">
+            <a class="nav-upload" href="/pages/upload">↑ enviar relatório</a>
+            <div class="sidebar-credit">
+              <div><div class="credit-brand">vml company</div><div class="credit-copy">© 2026 todos os direitos<br>reservados.</div></div>
             </div>
           </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+
       <main class="main">
-        <div class="page-header">
-          <div>
-            <div class="page-eyebrow" id="page-eyebrow">seo</div>
-            <div class="page-title">seo</div>
-            <div class="page-sub" id="page-sub">busca orgânica · google search console</div>
-          <div id="data-source-badge" style="margin-top:8px"></div>
-          </div>
+        <div style="padding:20px 0 0 0">
+          <div class="page-eyebrow" id="page-eyebrow">seo</div>
+          <h1 style="font-size:22px;font-weight:800;margin:2px 0 4px;text-transform:lowercase">seo</h1>
+          <p style="font-size:13px;color:var(--muted);margin:0 0 20px">busca orgânica · google search console</p>
         </div>
-        <div id="no-data-banner" class="card section-gap" style="display:none;border-color:#a2e25933;background:#a2e25908">
-          <div style="display:flex;align-items:center;gap:12px">
-            <div style="font-size:24px">📂</div>
-            <div>
-              <div style="font-weight:700;margin-bottom:4px;text-transform:lowercase">nenhum dado encontrado</div>
-              <div style="font-size:13px;color:var(--muted)">faça upload de <code>seo.csv</code> em <code>assets/data/YYYY/MM/</code> para começar.</div>
-              <div style="font-size:12px;color:var(--muted);margin-top:8px">formato esperado:<br><code>Sessões Orgânicas,Impressões,Cliques,CTR,Posição Média,Keywords Top 10</code></div>
-            </div>
-            <a href="/pages/upload" style="margin-left:auto;flex-shrink:0;padding:10px 18px;background:var(--blue);color:white;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap">↑ enviar arquivo</a>
-          </div>
+
+        <div class="no-data-banner" id="no-data-banner">
+          <span style="font-size:24px">🔍</span>
+          <span>dados de seo serão disponibilizados em breve. <a href="/pages/upload" style="color:var(--accent)">enviar relatório</a></span>
         </div>
+
         <div class="kpi-row" id="kpi-row"></div>
-<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">sessões orgânicas</div></div><div style="position:relative;height:175px"><canvas id="chart-sessoes"></canvas></div></div>
-          <div class="card"><div class="card-header"><div class="card-title">impressões no google</div></div><div style="position:relative;height:175px"><canvas id="chart-impressoes"></canvas></div></div></div>
-<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">cliques por mês</div></div><div style="position:relative;height:150px"><canvas id="chart-cliques"></canvas></div></div>
-          <div class="card"><div class="card-header"><div class="card-title">posição média</div></div><div style="position:relative;height:150px"><canvas id="chart-posicao"></canvas></div></div></div>
-        <div class="card" id="data-table"></div>
+        <div class="card section-gap" id="data-table"></div>
       </main>
+
     </div>
   </div>
-  <script>
-  (function(){const s=localStorage.getItem('dashboard-theme')||'';document.documentElement.dataset.theme=s;const l=document.getElementById('sidebar-logo');if(l)l.src=s==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';const ic=document.getElementById('theme-icon');if(ic)ic.innerHTML=s==='light'?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>':'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';})();
 
-  function toggleAreas(){
-    var el=document.getElementById('areas-list');
-    el.classList.toggle('coll');
-    var chev=document.querySelector('#areas-toggle .chev');
-    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
-  }
-
-  function toggleAreas(){
-    var el=document.getElementById('areas-list');
-    el.classList.toggle('coll');
-    var chev=document.querySelector('#areas-toggle .chev');
-    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
-  }
-  function togglePeriodo(){
-    var el=document.getElementById('periodo-list');
-    el.classList.toggle('coll');
-    var chev=document.querySelector('#periodo-toggle .chev');
-    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
-  }
-  function toggleTheme(){const h=document.documentElement;const l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);const i=document.getElementById('sidebar-logo');if(i)i.src=h.dataset.theme==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';if(window._areaState)renderMonth(window._areaState.current,window._areaState.all);}
-  </script>
   <script src="/assets/js/area.js"></script>
+  <script>
+    window.AREA_COLOR = '#a2e259';
+    (async function init() {
+      initTheme(); initHamburger();
+      const months = await discoverMonths('seo');
+      showApp();
+      if (!months.length) {
+        document.getElementById('no-data-banner').style.display = 'flex';
+        return;
+      }
+      const latest = months[months.length-1];
+      buildSidebarNav(months, latest.key, m => {
+        document.getElementById('page-eyebrow').textContent = `seo · ${_MO[m.mi]} ${m.year}`;
+      });
+      document.getElementById('page-eyebrow').textContent = `seo · ${_MO[latest.mi]} ${latest.year}`;
+    })();
+  </script>
 </body>
 </html>

@@ -3,173 +3,327 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>home — vml company</title>
+  <title>dashboard — vml company</title>
   <link rel="icon" href="/assets/img/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;700;800&display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </head>
 <body>
-  <div class="layout" id="layout">
-  <aside class="sidebar">
-      <div class="sidebar-top">
-        <button class="hamburger" id="hamburger" title="menu"><span></span><span></span><span></span></button>
-        <button class="theme-toggle" onclick="toggleTheme()" title="alternar tema"><span id="theme-icon"></span></button>
-        <img class="sidebar-logo" id="sidebar-logo" src="/assets/img/logo-escuro.png" alt="vml company"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <span class="logo-fallback" style="display:none">vml company</span>
-      </div>
-      <div class="sidebar-body">
-        <div class="sidebar-nav-top">
+  <div id="app-loading"><div class="spinner"></div><p>carregando dados...</p></div>
+  <div id="app" style="display:none">
+    <div class="layout" id="layout">
 
-          <!-- home -->
-          <a class="nav-home active" href="/" style="text-decoration:none;display:flex;align-items:center;gap:8px">
-            <span class="nav-icon" style="background:rgba(160,56,242,.18);color:#a038f2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span>home
-          </a>
-
-          <!-- áreas -->
-          <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
-            áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
-          </div>
-          <div id="areas-list">
-            <a class="nav-tab" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-icon" style="background:#a038f2"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>redes sociais</a>
-            <a class="nav-tab" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
-            <a class="nav-tab" href="/pages/crm" style="text-decoration:none"><span class="nav-icon" style="background:#391bce"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>crm</a>
-            <a class="nav-tab" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
-          </div>
-
-          <div class="sidebar-divider"></div>
-
-          <!-- período -->
-          <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="display:none;cursor:pointer;align-items:center;justify-content:space-between">
-            período <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
-          </div>
-          <div id="periodo-list" style="display:none">
-            <div id="monthNav"></div>
-            <button class="nav-tab" id="btn-annual" style="display:none"></button>
-          </div>
-
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <button class="hamburger" id="hamburger" title="menu"><span></span><span></span><span></span></button>
+          <button class="theme-toggle" onclick="toggleTheme()" title="alternar tema"><span id="theme-icon"></span></button>
+          <img class="sidebar-logo" id="sidebar-logo" src="/assets/img/logo-escuro.png" alt="vml company"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <span class="logo-fallback" style="display:none">vml company</span>
         </div>
-        <div class="sidebar-nav-bottom">
-          <a class="nav-upload" href="/pages/upload">↑ enviar relatório</a>
-          <div class="sidebar-credit">
-            <div>
-              <div class="credit-brand">vml company</div>
-              <div class="credit-copy">© 2026 todos os direitos<br>reservados.</div>
+        <div class="sidebar-body">
+          <div class="sidebar-nav-top">
+            <a class="nav-home active" href="/" style="text-decoration:none;display:flex;align-items:center;gap:8px">
+              <span class="nav-icon" style="background:rgba(160,56,242,.18);color:#a038f2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span>home
+            </a>
+            <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+              áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
+            </div>
+            <div id="areas-list">
+              <a class="nav-tab" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-icon" style="background:#a038f2"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>redes sociais</a>
+              <a class="nav-tab" href="/pages/crm" style="text-decoration:none"><span class="nav-icon" style="background:#391bce"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>email marketing</a>
+              <a class="nav-tab" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
+              <a class="nav-tab" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
+            </div>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+              período <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
+            </div>
+            <div id="periodo-list"><div id="monthNav"></div></div>
+          </div>
+          <div class="sidebar-nav-bottom">
+            <a class="nav-upload" href="/pages/upload">↑ enviar relatório</a>
+            <div class="sidebar-credit">
+              <div><div class="credit-brand">vml company</div><div class="credit-copy">© 2026 todos os direitos<br>reservados.</div></div>
             </div>
           </div>
         </div>
-      </div>
-    </aside>
-    <main class="main">
-      <div class="home-hero" style="margin-bottom:1.5rem">
-        <div class="home-hero-eyebrow">analytics · vml company</div>
-        <div class="home-hero-title">dashboard central</div>
-        <div class="home-hero-sub">visão integrada de todas as áreas · selecione abaixo para filtrar</div>
-      </div>
-      <div class="area-filter" id="area-filter">
-        <button class="area-filter-btn active" data-area="all">todas as áreas</button>
-        <button class="area-filter-btn" data-area="redes-sociais">redes sociais</button>
-        <button class="area-filter-btn" data-area="seo">seo</button>
-        <button class="area-filter-btn" data-area="crm">crm</button>
-        <button class="area-filter-btn" data-area="midia-paga">mídia paga</button>
-      </div>
-      <div class="area-cards-grid" id="area-cards">
-        <a class="area-card" href="/pages/redes-sociais" data-area="redes-sociais" style="--card-accent:#a038f2">
-          <div class="area-card-top">
-            <div class="area-card-icon" style="background:#a038f2"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></div>
-            <div class="area-card-status" id="re-status"><div class="area-status-dot loading"></div><span>carregando</span></div>
-          </div>
-          <div class="area-card-name">redes sociais</div>
-          <div class="area-card-sub">instagram · publicações e engajamento</div>
-          <div class="area-card-metrics">
-            <div class="area-metric"><div class="area-metric-val" id="rs-views">—</div><div class="area-metric-lbl">visualizações</div></div>
-            <div class="area-metric"><div class="area-metric-val" id="rs-posts">—</div><div class="area-metric-lbl">publicações</div></div>
-            <div class="area-metric"><div class="area-metric-val" id="rs-reach">—</div><div class="area-metric-lbl">alcance</div></div>
-          </div>
-          <div class="area-card-cta">acessar área →</div>
-        </a>
-        <a class="area-card" href="/pages/seo" data-area="seo" style="--card-accent:#a2e259;--cta-color:#07091a">
-          <div class="area-card-top">
-            <div class="area-card-icon" style="background:#a2e259"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-            <div class="area-card-status" id="se-status"><div class="area-status-dot loading"></div><span>carregando</span></div>
-          </div>
-          <div class="area-card-name">seo</div>
-          <div class="area-card-sub">busca orgânica · google search console</div>
-          <div class="area-card-metrics">
-            <div class="area-metric"><div class="area-metric-val" id="seo-sessoes">—</div><div class="area-metric-lbl">sessões orgânicas</div></div>
-            <div class="area-metric"><div class="area-metric-val" id="seo-cliques">—</div><div class="area-metric-lbl">cliques</div></div>
-            <div class="area-metric"><div class="area-metric-val" id="seo-posicao">—</div><div class="area-metric-lbl">posição média</div></div>
-          </div>
-          <div class="area-card-cta">acessar área →</div>
-        </a>
-        <a class="area-card" href="/pages/crm" data-area="crm" style="--card-accent:#391bce">
-          <div class="area-card-top">
-            <div class="area-card-icon" style="background:#391bce"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-            <div class="area-card-status" id="cr-status"><div class="area-status-dot loading"></div><span>carregando</span></div>
-          </div>
-          <div class="area-card-name">crm</div>
-          <div class="area-card-sub">leads · funil de vendas · receita</div>
-          <div class="area-card-metrics">
-            <div class="area-metric"><div class="area-metric-val" id="crm-leads">—</div><div class="area-metric-lbl">novos leads</div></div>
-            <div class="area-metric"><div class="area-metric-val" id="crm-fechados">—</div><div class="area-metric-lbl">fechados</div></div>
-            <div class="area-metric"><div class="area-metric-val" id="crm-conversao">—</div><div class="area-metric-lbl">conversão</div></div>
-          </div>
-          <div class="area-card-cta">acessar área →</div>
-        </a>
-        <a class="area-card" href="/pages/midia-paga" data-area="midia-paga" style="--card-accent:#c9b8f8;--cta-color:#07091a">
-          <div class="area-card-top">
-            <div class="area-card-icon" style="background:#c9b8f8"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
-            <div class="area-card-status" id="mi-status"><div class="area-status-dot loading"></div><span>carregando</span></div>
-          </div>
-          <div class="area-card-name">mídia paga</div>
-          <div class="area-card-sub">campanhas pagas · meta · google ads</div>
-          <div class="area-card-metrics">
-            <div class="area-metric"><div class="area-metric-val" id="mp-invest">—</div><div class="area-metric-lbl">investimento</div></div>
-            <div class="area-metric"><div class="area-metric-val" id="mp-cliques">—</div><div class="area-metric-lbl">cliques</div></div>
-            <div class="area-metric"><div class="area-metric-val" id="mp-roas">—</div><div class="area-metric-lbl">roas</div></div>
-          </div>
-          <div class="area-card-cta">acessar área →</div>
-        </a>
-      </div>
-    </main>
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-  <script>
-  (function(){const s=localStorage.getItem('dashboard-theme')||'';document.documentElement.dataset.theme=s;_ul(s==='light');})();
-  function _ul(l){const i=document.getElementById('sidebar-logo');if(i)i.src=l?'/assets/img/logo-escuro.png':'/assets/img/logo.png';const ic=document.getElementById('theme-icon');if(!ic)return;ic.innerHTML=l?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>':'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';}
+      </aside>
 
-  function toggleAreas(){
-    var el=document.getElementById('areas-list');
-    el.classList.toggle('coll');
-    var chev=document.querySelector('#areas-toggle .chev');
-    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
+      <main class="main">
+        <div style="padding:20px 0 0 0">
+          <div id="page-eyebrow" style="font-size:11px;font-weight:700;text-transform:lowercase;letter-spacing:.04em;color:var(--muted);margin-bottom:4px">visão geral</div>
+          <h1 style="font-size:22px;font-weight:800;margin:2px 0 4px;text-transform:lowercase">marketing analytics</h1>
+          <p style="font-size:13px;color:var(--muted);margin:0 0 24px">resultados consolidados de todas as áreas</p>
+        </div>
+
+        <div class="no-data-banner" id="no-data-banner">
+          <span style="font-size:24px">📭</span>
+          <span>nenhum dado encontrado. <a href="/pages/upload" style="color:var(--accent)">enviar relatório</a></span>
+        </div>
+
+        <!-- KPIs resumo -->
+        <div class="kpi-row" id="kpi-row"></div>
+
+        <!-- Cards de área -->
+        <div class="area-cards-grid" id="area-cards" style="margin-bottom:28px"></div>
+
+        <!-- Gráfico de distribuição do investimento -->
+        <div class="two-col section-gap">
+          <div class="card">
+            <div class="card-header"><div class="card-title">investimento · distribuição por canal</div></div>
+            <div style="height:220px;padding:0 4px 8px"><canvas id="chart-invest"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">email marketing · eficiência</div></div>
+            <div style="height:220px;padding:0 4px 8px"><canvas id="chart-email"></canvas></div>
+          </div>
+        </div>
+      </main>
+
+    </div>
+  </div>
+
+  <script src="/assets/js/area.js"></script>
+  <script>
+  /* ── Home page ─────────────────────────────── */
+  window.AREA_COLOR = '#a038f2';
+
+  window._onThemeChange = () => renderHomeCharts(window._homeData);
+
+  /* Imports para parsers de cada área */
+  const _pnL = s => parseFloat(String(s||'0').replace(/\./g,'').replace(',','.').replace('%',''))||0;
+
+  function parsePostsSimple(rows) {
+    if (!rows||!rows.length) return null;
+    const totalRows = rows.filter(r => String(r['Data']||'').trim()==='Total');
+    if (!totalRows.length) return null;
+    return {
+      visualizacoes: totalRows.reduce((s,r)=>s+_pnL(r['Visualizações']),0),
+      alcance:       totalRows.reduce((s,r)=>s+_pnL(r['Alcance']),0),
+      nPosts:        totalRows.length,
+    };
   }
-  function togglePeriodo(){
-    var el=document.getElementById('periodo-list');
-    el.classList.toggle('coll');
-    var chev=document.querySelector('#periodo-toggle .chev');
-    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
+  function parseStoriesSimple(rows) {
+    if (!rows||!rows.length) return null;
+    const totalRows = rows.filter(r => String(r['Data']||'').trim()==='Total');
+    return { visualizacoes: totalRows.reduce((s,r)=>s+_pnL(r['Visualizações']),0) };
   }
-  function toggleTheme(){const h=document.documentElement;const l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);_ul(h.dataset.theme==='light');}
-  document.getElementById('hamburger').addEventListener('click',()=>{document.getElementById('layout').classList.toggle('collapsed');});
-  document.getElementById('area-filter').addEventListener('click',e=>{const b=e.target.closest('.area-filter-btn');if(!b)return;const a=b.dataset.area;document.querySelectorAll('.area-filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');const g=document.getElementById('area-cards');document.querySelectorAll('.area-card').forEach(c=>{c.style.display=(a==='all'||c.dataset.area===a)?'':'none';});g.style.gridTemplateColumns=a==='all'?'':'minmax(0,560px)';});
-  const _f=n=>(n==null||n===''||isNaN(+n))?'—':(+n).toLocaleString('pt-BR');
-  const _fp=n=>(n==null||n===''||isNaN(+n))?'—':(+n).toFixed(1)+'%';
-  const _fb=n=>(n==null||n===''||isNaN(+n))?'—':'R$ '+(+n).toLocaleString('pt-BR');
-  function ss(a,ok){const e=document.getElementById(`${a}-status`);if(!e)return;e.innerHTML=ok?'<div class="area-status-dot ok"></div><span>com dados</span>':'<div class="area-status-dot empty"></div><span>sem dados</span>';}
-  async function fl(file){const now=new Date();for(let i=0;i<8;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1);const y=d.getFullYear();const mo=String(d.getMonth()+1).padStart(2,'0');try{const r=await fetch(`/assets/data/${y}/${mo}/${file}`);if(!r.ok)continue;const t=await r.text();if(!t.trim())continue;const p=Papa.parse(t.trim(),{header:true,skipEmptyLines:true});if(p.data.length)return p.data[0];}catch{}}return null;}
-  async function flrs(){const now=new Date();for(let i=0;i<8;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1);const y=d.getFullYear();const mo=String(d.getMonth()+1).padStart(2,'0');try{const r=await fetch(`/assets/data/${y}/${mo}/${y}-${mo}.csv`);if(!r.ok)continue;const t=await r.text();const rows=Papa.parse(t,{header:true,skipEmptyLines:true}).data;const posts=rows.filter(r=>(r['Data']||'').trim()==='Total');if(posts.length)return posts.reduce((a,p)=>{a.views=(a.views||0)+(parseInt(p['Visualizações'],10)||0);a.reach=(a.reach||0)+(parseInt(p['Alcance'],10)||0);a.posts=(a.posts||0)+1;return a;},{});}catch{}}return null;}
-  (async function(){
-    const rs=await flrs();ss('rs',!!rs);
-    if(rs){document.getElementById('rs-views').textContent=_f(rs.views);document.getElementById('rs-posts').textContent=_f(rs.posts);document.getElementById('rs-reach').textContent=_f(rs.reach);}
-    const seo=await fl('seo.csv');ss('seo',!!seo);
-    if(seo){document.getElementById('seo-sessoes').textContent=_f(seo['Sessões Orgânicas']);document.getElementById('seo-cliques').textContent=_f(seo['Cliques']);document.getElementById('seo-posicao').textContent=seo['Posição Média']?(+seo['Posição Média']).toFixed(1):'—';}
-    const crm=await fl('crm.csv');ss('crm',!!crm);
-    if(crm){document.getElementById('crm-leads').textContent=_f(crm['Novos Leads']);document.getElementById('crm-fechados').textContent=_f(crm['Negócios Fechados']);document.getElementById('crm-conversao').textContent=_fp(crm['Taxa de Conversão']);}
-    const mp=await fl('midia-paga.csv');ss('mp',!!mp);
-    if(mp){document.getElementById('mp-invest').textContent=_fb(mp['Investimento']);document.getElementById('mp-cliques').textContent=_f(mp['Cliques']);document.getElementById('mp-roas').textContent=mp['ROAS']?(+mp['ROAS']).toFixed(1)+'x':'—';}
-  })();</script>
+  function parseLISimple(rows) {
+    if (!rows||!rows.length) return null;
+    const totalRow = rows.find(r => String(r['Período']||'').trim().toUpperCase()==='TOTAL' || (!r['Canal']||!String(r['Canal']).trim()));
+    if (!totalRow) return null;
+    return { investimento: _pnL(totalRow['Investimento (R$)']), leads: _pnL(totalRow['Leads (Form)']) };
+  }
+  function parseMetaSimple(rows) {
+    if (!rows||!rows.length) return null;
+    const dataRows = rows.filter(r=>r['Canal']&&String(r['Canal']).trim());
+    return {
+      investimento: dataRows.reduce((s,r)=>s+_pnL(r['Investimento (R$)']),0),
+      leads: dataRows.reduce((s,r)=>s+_pnL(r['Leads']),0),
+    };
+  }
+  function parseSpotifySimple(rows) {
+    if (!rows||!rows.length) return null;
+    return { gasto: rows.reduce((s,r)=>s+parseFloat(String(r['Gasto']||'0').replace(',','.'))||0, 0) };
+  }
+  function parseCRMSimple(rows) {
+    if (!rows||!rows.length) return null;
+    const col='Data de envio (dd/mm/aaaa)';
+    const dr = rows.filter(r=>{
+      const d=String(r[col]||'').trim();
+      return d.match(/^\d{4}-\d{2}-\d{2}/);
+    });
+    const leads = dr.map(r=>_pnL(r['Leads selecionados']));
+    const ab    = dr.map(r=>{ const v=_pnL(r['Taxa de abertura']); return v<2?v*100:v; }).filter(v=>v>0);
+    return {
+      nCampanhas:   dr.length,
+      totalLeads:   leads.reduce((s,l)=>s+l,0),
+      mediaAbertura: ab.length ? ab.reduce((s,v)=>s+v,0)/ab.length : 0,
+    };
+  }
+
+  async function loadMonthData(m) {
+    const [postsRows, storiesRows, liRows, metaRows, spRows, crmRows] = await Promise.all([
+      loadFile(m.year, m.mo, 'redes-sociais-postagens', {preferXLSX:true}),
+      loadFile(m.year, m.mo, 'redes-sociais-stories',   {preferXLSX:true}),
+      loadFile(m.year, m.mo, 'midia-linkedin'),
+      loadFile(m.year, m.mo, 'midia-meta'),
+      loadFile(m.year, m.mo, 'midia-spotify', {findHeader:'ID da campanha'}),
+      loadFile(m.year, m.mo, 'crm', {preferXLSX:true}),
+    ]);
+    return {
+      posts:   postsRows   ? parsePostsSimple(postsRows)     : null,
+      stories: storiesRows ? parseStoriesSimple(storiesRows) : null,
+      li:      liRows      ? parseLISimple(liRows)           : null,
+      meta:    metaRows    ? parseMetaSimple(metaRows)       : null,
+      sp:      spRows      ? parseSpotifySimple(spRows)      : null,
+      crm:     crmRows     ? parseCRMSimple(crmRows)         : null,
+    };
+  }
+
+  function renderHomeKPIs(data) {
+    const row = document.getElementById('kpi-row');
+    if (!row) return;
+    const investTotal = (data.li?.investimento||0)+(data.meta?.investimento||0)+(data.sp?.gasto||0);
+    const leadsTotal  = (data.li?.leads||0)+(data.meta?.leads||0);
+    const visTotal    = (data.posts?.visualizacoes||0)+(data.stories?.visualizacoes||0);
+    row.innerHTML = `
+      <div class="kpi" style="--kpi-line:#a038f2">
+        <div class="kpi-label">visualizações sociais</div>
+        <div class="kpi-val">${_fmtK(visTotal)}</div>
+        <div class="kpi-sub">posts + stories</div>
+      </div>
+      <div class="kpi" style="--kpi-line:#c9b8f8">
+        <div class="kpi-label">investimento total</div>
+        <div class="kpi-val">${_fmtBRL(investTotal)}</div>
+        <div class="kpi-sub">li + meta + spotify</div>
+      </div>
+      <div class="kpi" style="--kpi-line:#a2e259">
+        <div class="kpi-label">leads captados</div>
+        <div class="kpi-val">${_fmt(leadsTotal)}</div>
+        <div class="kpi-sub">mídia paga</div>
+      </div>
+      <div class="kpi" style="--kpi-line:#391bce">
+        <div class="kpi-label">leads email</div>
+        <div class="kpi-val">${_fmtK(data.crm?.totalLeads)}</div>
+        <div class="kpi-sub">${data.crm?.nCampanhas||0} campanhas · ${_fmtPct(data.crm?.mediaAbertura)} abertura</div>
+      </div>
+    `;
+  }
+
+  function renderAreaCards(data, month) {
+    const grid = document.getElementById('area-cards');
+    if (!grid) return;
+    const investTotal = (data.li?.investimento||0)+(data.meta?.investimento||0)+(data.sp?.gasto||0);
+    const leadsTotal  = (data.li?.leads||0)+(data.meta?.leads||0);
+
+    const card = (href, color, icon, title, metrics, available) => `
+      <a href="${href}" class="area-card" style="text-decoration:none;--card-line:${color};opacity:${available?1:.45}">
+        <div class="area-card-header">
+          <span class="area-card-icon" style="background:${color}">${icon}</span>
+          <span class="area-card-title">${title}</span>
+          ${available ? '' : '<span style="font-size:10px;color:var(--muted)">sem dados</span>'}
+        </div>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
+          ${metrics.map(m=>`
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <span style="font-size:11px;color:var(--muted)">${m.lbl}</span>
+              <span style="font-size:16px;font-weight:800">${m.val}</span>
+            </div>`).join('')}
+        </div>
+        <div class="area-card-cta">ver detalhes →</div>
+      </a>`;
+
+    grid.innerHTML = [
+      card('/pages/redes-sociais','#a038f2',
+        `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>`,
+        'redes sociais',
+        [
+          {lbl:'visualizações (posts)', val:_fmtK(data.posts?.visualizacoes)},
+          {lbl:'visualizações (stories)', val:_fmtK(data.stories?.visualizacoes)},
+          {lbl:'publicações', val:_fmt(data.posts?.nPosts)},
+        ],
+        !!(data.posts || data.stories)
+      ),
+      card('/pages/crm','#391bce',
+        `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
+        'email marketing',
+        [
+          {lbl:'leads alcançados', val:_fmtK(data.crm?.totalLeads)},
+          {lbl:'campanhas', val:_fmt(data.crm?.nCampanhas)},
+          {lbl:'taxa de abertura', val:_fmtPct(data.crm?.mediaAbertura)},
+        ],
+        !!data.crm
+      ),
+      card('/pages/midia-paga','#c9b8f8',
+        `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
+        'mídia paga',
+        [
+          {lbl:'investimento total', val:_fmtBRL(investTotal)},
+          {lbl:'leads captados', val:_fmt(leadsTotal)},
+          {lbl:'cpl médio', val:leadsTotal>0?_fmtBRL(investTotal/leadsTotal):'—'},
+        ],
+        !!(data.li || data.meta || data.sp)
+      ),
+    ].join('');
+  }
+
+  function renderHomeCharts(data) {
+    if (!data) return;
+    const investTotal = (data.li?.investimento||0)+(data.meta?.investimento||0)+(data.sp?.gasto||0);
+
+    if (investTotal > 0) {
+      _mkChart('chart-invest', {
+        type: 'doughnut',
+        data: {
+          labels: ['LinkedIn Ads','Meta Ads','Spotify Ads'],
+          datasets:[{
+            data: [data.li?.investimento||0, data.meta?.investimento||0, data.sp?.gasto||0],
+            backgroundColor: ['#0A66C2','#1877F2','#1DB954'],
+            borderWidth: 0,
+          }]
+        },
+        options: {
+          ..._donutOpts(),
+          plugins: { ..._donutOpts().plugins, tooltip: { ..._donutOpts().plugins.tooltip, callbacks: { label: item => `  ${item.label}: ${_fmtBRL(item.raw)}` }}}
+        }
+      });
+    }
+
+    if (data.crm) {
+      _mkChart('chart-email', {
+        type: 'bar',
+        data: {
+          labels: ['entrega','abertura','clique'],
+          datasets:[{
+            data: [data.crm.mediaAbertura, data.crm.mediaAbertura, 0],
+            backgroundColor: ['#391bcecc','#a038f2cc','#c9b8f8cc'],
+            borderRadius: 6, borderWidth: 0,
+          }]
+        },
+        options: _baseOpts({y: {max: 100, ticks:{callback:v=>v+'%'}}})
+      });
+    }
+  }
+
+  /* ── Init ── */
+  (async function init() {
+    initTheme(); initHamburger();
+
+    const months = await discoverMonths(['midia-meta','redes-sociais-postagens','crm']);
+
+    if (!months.length) {
+      showApp();
+      document.getElementById('no-data-banner').style.display = 'flex';
+      return;
+    }
+
+    const latest = months[months.length-1];
+    buildSidebarNav(months, latest.key, loadAndRender);
+    await loadAndRender(latest);
+  })();
+
+  async function loadAndRender(m) {
+    document.getElementById('page-eyebrow').textContent = `visão geral · ${_MO[m.mi]} ${m.year}`;
+    const data = await loadMonthData(m);
+    window._homeData = data;
+
+    showApp();
+    const hasAny = data.posts||data.stories||data.li||data.meta||data.sp||data.crm;
+    document.getElementById('no-data-banner').style.display = hasAny ? 'none' : 'flex';
+
+    if (hasAny) {
+      renderHomeKPIs(data);
+      renderAreaCards(data, m);
+      renderHomeCharts(data);
+    }
+  }
+  </script>
 </body>
 </html>

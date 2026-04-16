@@ -1640,3 +1640,155 @@ label {
 .nav-home .nav-icon svg {
   stroke: #a038f2;
 }
+
+/* ── Platform cards (mídia paga) ── */
+.platform-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.platform-card {
+  background:    var(--surface);
+  border:        1px solid var(--border);
+  border-top:    3px solid #a038f2;
+  border-radius: var(--radius);
+  padding:       20px;
+}
+.platform-card-name {
+  font-size:      11px;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom:  14px;
+}
+.platform-kpis {
+  display:               grid;
+  grid-template-columns: 1fr 1fr;
+  gap:                   12px;
+}
+.platform-kpi-val {
+  font-size:   18px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.platform-kpi-lbl {
+  font-size:  10px;
+  color:      var(--muted);
+  margin-top: 3px;
+}
+
+/* ── KPI group label ── */
+.kpi-group-label {
+  width:          100%;
+  font-size:      10px;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color:          var(--muted);
+  padding:        6px 0 2px;
+  border-bottom:  1px solid var(--border);
+  margin-bottom:  4px;
+}
+
+/* ── Tipo badge ── */
+.tipo-badge {
+  display:        inline-flex;
+  align-items:    center;
+  font-size:      10px;
+  font-weight:    700;
+  padding:        2px 8px;
+  border-radius:  20px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.tipo-reel    { background: rgba(160,56,242,.15); color: #a038f2; }
+.tipo-carrossel { background: rgba(57,27,206,.15);  color: #6b5fd4; }
+.tipo-post    { background: rgba(201,184,248,.15); color: var(--muted); }
+
+/* ── Segment label (crm) ── */
+.segment-lbl {
+  display:        inline-flex;
+  align-items:    center;
+  font-size:      9px;
+  font-weight:    700;
+  padding:        2px 7px;
+  border-radius:  20px;
+  border:         1px solid var(--border);
+  color:          var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  white-space:    nowrap;
+}
+
+/* ── No-data banner ── */
+.no-data-banner {
+  display:       none;
+  align-items:   center;
+  gap:           14px;
+  background:    rgba(255,255,255,.04);
+  border:        1px solid var(--border);
+  border-radius: var(--radius);
+  padding:       16px 20px;
+  margin-bottom: 24px;
+  font-size:     14px;
+  color:         var(--muted);
+}
+[data-theme=light] .no-data-banner { background: rgba(0,0,0,.03); }
+
+/* ── Page eyebrow ── */
+.page-eyebrow {
+  font-size:      11px;
+  font-weight:    700;
+  text-transform: lowercase;
+  letter-spacing: .04em;
+  color:          var(--muted);
+  margin-bottom:  4px;
+}
+
+/* ── table num alignment ── */
+td.num, th.num { text-align: right; white-space: nowrap; }
+
+/* ── Responsive: platform cards ── */
+@media (max-width: 900px) {
+  .platform-cards { grid-template-columns: 1fr; }
+}
+
+/* ── Upload box ── */
+.upload-file-group {
+  border:        1px solid var(--border);
+  border-radius: var(--radius);
+  padding:       18px 20px;
+  margin-bottom: 12px;
+  transition:    border-color .15s, background .15s;
+}
+.upload-file-group.has-error {
+  border-color: #ff8a8a;
+  background:   rgba(255,138,138,.05);
+}
+.upload-file-group.has-success {
+  border-color: var(--green);
+  background:   rgba(162,226,89,.05);
+}
+.upload-icon-box {
+  width:         44px;
+  height:        44px;
+  border:        1.5px solid var(--border);
+  border-radius: 10px;
+  display:       inline-flex;
+  align-items:   center;
+  justify-content: center;
+  flex-shrink:   0;
+}
+.upload-area-title  { font-size: 13px; font-weight: 700; }
+.upload-file-rule   { font-size: 11px; color: var(--muted); font-family: 'Courier New', monospace; }
+.upload-msg         { font-size: 12px; margin-top: 8px; }
+.upload-msg.error   { color: #ff8a8a; }
+.upload-msg.success { color: var(--green); }
+
+/* ── Year group collapsible ── */
+.year-group {
+  overflow:   hidden;
+  transition: max-height .3s ease;
+}
+.year-group.coll { max-height: 0 !important; }
