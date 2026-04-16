@@ -649,65 +649,75 @@ function buildAnnual(yearMonths, year, acctMap) {
    Metric fetching
 ───────────────────────────────────────────── */
 
-async function fetchMetricCsv(year, mo, name) {
+async function fetchCsvText(url) {
   try {
-    const r = await fetch(`/assets/data/${year}/${mo}/${name}.csv`);
+    let r = await fetch(url);
+    if (!r.ok) {
+      if (url.endsWith('.csv')) r = await fetch(url.replace('.csv', '.CSV'));
+      else if (url.endsWith('.CSV')) r = await fetch(url.replace('.CSV', '.csv'));
+    }
     if (!r.ok) return null;
-    const buf  = await r.arrayBuffer();
-    const text = new TextDecoder('utf-16').decode(buf);
-    const lines = text.replace(/\r/g, '').split('\n').filter(l => l.trim());
-    const dataLines = lines.filter(l => l.includes(',') && !l.startsWith('sep='));
-    if (dataLines.length < 2) return null;
-    const parsed = Papa.parse(dataLines.join('\n'), { header: true, skipEmptyLines: true });
-    return parsed.data;
-  } catch (e) { return null; }
+    const buf = await r.arrayBuffer();
+    let text = new TextDecoder('utf-8').decode(buf);
+    if (text.indexOf('\u0000') !== -1) {
+      text = new TextDecoder('utf-16').decode(buf);
+    }
+    return text.replace(/\r/g, '');
+  } catch (e) {
+    return null;
+  }
+}
+
+async function fetchMetricCsv(year, mo, name) {
+  const text = await fetchCsvText(`/assets/data/${year}/${mo}/${name}.csv`);
+  if (!text) return null;
+  const dataLines = text.split('\n').filter(l => l.includes(',') && !l.startsWith('sep='));
+  if (dataLines.length < 2) return null;
+  const parsed = Papa.parse(dataLines.join('\n'), { header: true, skipEmptyLines: true, transformHeader: h => h.trim() });
+  return parsed.data;
 }
 
 async function fetchPublicoCsv(year, mo) {
-  try {
-    const r = await fetch(`/assets/data/${year}/${mo}/Público.csv`);
-    if (!r.ok) return null;
-    const buf      = await r.arrayBuffer();
-    const text     = new TextDecoder('utf-16').decode(buf);
-    const rawLines = text.replace(/\r/g, '').split('\n').filter(l => l.trim() && !l.startsWith('sep='));
-    const ages = [], countries = [], cities = [];
+  const text = await fetchCsvText(`/assets/data/${year}/${mo}/Público.csv`);
+  if (!text) return null;
+  const rawLines = text.split('\n').filter(l => l.trim() && !l.startsWith('sep='));
+  const ages = [], countries = [], cities = [];
 
-    function parseLine(l) { return Papa.parse(l, { delimiter: ',' }).data[0] || []; }
+  function parseLine(l) { return Papa.parse(l, { delimiter: ',' }).data[0] || []; }
 
-    let mode = '', i = 0;
-    while (i < rawLines.length) {
-      const line     = rawLines[i].trim();
-      const stripped = line.replace(/"/g, '').trim();
+  let mode = '', i = 0;
+  while (i < rawLines.length) {
+    const line     = rawLines[i].trim();
+    const stripped = line.replace(/"/g, '').trim();
 
-      if (stripped === 'faixa etária e gênero') { mode = 'ages';      i++; continue; }
-      if (stripped === 'Principais países')      { mode = 'countries'; i++; continue; }
-      if (stripped === 'Principais cidades')     { mode = 'cities';    i++; continue; }
-      if (stripped.startsWith(',') && mode === 'ages') { i++; continue; }
+    if (stripped === 'faixa etária e gênero') { mode = 'ages';      i++; continue; }
+    if (stripped === 'Principais países')      { mode = 'countries'; i++; continue; }
+    if (stripped === 'Principais cidades')     { mode = 'cities';    i++; continue; }
+    if (stripped.startsWith(',') && mode === 'ages') { i++; continue; }
 
-      const cols = parseLine(line);
-      if (!cols.length || !cols[0]) { i++; continue; }
+    const cols = parseLine(line);
+    if (!cols.length || !cols[0]) { i++; continue; }
 
-      if (mode === 'ages') {
-        if (/^\d{2}[-+]/.test(cols[0])) {
-          ages.push({ range: cols[0], f: parseFloat(cols[1]) || 0, m: parseFloat(cols[2]) || 0 });
+    if (mode === 'ages') {
+      if (/^\d{2}[-+]/.test(cols[0])) {
+        ages.push({ range: cols[0], f: parseFloat(cols[1]) || 0, m: parseFloat(cols[2]) || 0 });
+      }
+      i++;
+    } else if (mode === 'countries' || mode === 'cities') {
+      const nextLine = rawLines[i + 1]?.trim();
+      if (nextLine) {
+        const nextCols = parseLine(nextLine);
+        if (nextCols.length && nextCols.every(c => !isNaN(parseFloat(c)) && c.trim() !== '')) {
+          const target = mode === 'cities' ? cities : countries;
+          cols.forEach((n, idx) => { if (n.trim() && nextCols[idx]) target.push({ name: n.trim(), pct: parseFloat(nextCols[idx]) || 0 }); });
+          i += 2; continue;
         }
-        i++;
-      } else if (mode === 'countries' || mode === 'cities') {
-        const nextLine = rawLines[i + 1]?.trim();
-        if (nextLine) {
-          const nextCols = parseLine(nextLine);
-          if (nextCols.length && nextCols.every(c => !isNaN(parseFloat(c)) && c.trim() !== '')) {
-            const target = mode === 'cities' ? cities : countries;
-            cols.forEach((n, idx) => { if (n.trim() && nextCols[idx]) target.push({ name: n.trim(), pct: parseFloat(nextCols[idx]) || 0 }); });
-            i += 2; continue;
-          }
-        }
-        i++;
-      } else { i++; }
-    }
+      }
+      i++;
+    } else { i++; }
+  }
 
-    return { ages, countries, cities };
-  } catch (e) { console.error('Público parse error:', e); return null; }
+  return { ages, countries, cities };
 }
 
 /* ─────────────────────────────────────────────
@@ -965,7 +975,6 @@ function showView(vid) {
   const currMo   = String(now.getMonth() + 1).padStart(2, '0');
   const currKey  = `${currYear}-${currMo}`;
 
-  /* Read optional initial view from <body data-initial-view="..."> */
   const initialView = document.body.dataset.initialView || 'view-home';
 
   function splitByMonth(posts) {
@@ -982,7 +991,6 @@ function showView(vid) {
     return Object.values(byKey);
   }
 
-  /* Build candidates for all years in YEAR_RANGE */
   const candidates = [];
   YEAR_RANGE.forEach(y => {
     for (let i = 0; i < 12; i++) {
@@ -991,18 +999,13 @@ function showView(vid) {
     }
   });
 
-  const mFetches = candidates.map(({ year, mi, key, mo }) =>
-    fetch(`/assets/data/${year}/${mo}/${key}.csv`)
-      .then(r => r.ok ? r.text() : null)
-      .catch(() => null)
-      .then(text => {
-        if (!text) return null;
-        const posts = parsePosts(Papa.parse(text, { header: true, skipEmptyLines: true }).data);
-        return posts.length ? { mi, year, key, mo, posts } : null;
-      })
-  );
+  const mFetches = candidates.map(async ({ year, mi, key, mo }) => {
+    const text = await fetchCsvText(`/assets/data/${year}/${mo}/${key}.csv`);
+    if (!text) return null;
+    const posts = parsePosts(Papa.parse(text, { header: true, skipEmptyLines: true, transformHeader: h => h.trim() }).data);
+    return posts.length ? { mi, year, key, mo, posts } : null;
+  });
 
-  /* Multi-mês: apenas para o ano atual e anterior, para não gerar centenas de 404s */
   const multiCands = [];
   [currYear - 1, currYear].forEach(y => {
     for (let f = 1; f <= 12; f++) {
@@ -1012,16 +1015,12 @@ function showView(vid) {
     }
   });
 
-  const multiFetches = multiCands.map(({ y, key }) =>
-    fetch(`/assets/data/${y}/${key}.csv`)
-      .then(r => r.ok ? r.text() : null)
-      .catch(() => null)
-      .then(text => {
-        if (!text) return null;
-        const all = parsePosts(Papa.parse(text, { header: true, skipEmptyLines: true }).data);
-        return all.length ? splitByMonth(all) : null;
-      })
-  );
+  const multiFetches = multiCands.map(async ({ y, key }) => {
+    const text = await fetchCsvText(`/assets/data/${y}/${key}.csv`);
+    if (!text) return null;
+    const all = parsePosts(Papa.parse(text, { header: true, skipEmptyLines: true, transformHeader: h => h.trim() }).data);
+    return all.length ? splitByMonth(all) : null;
+  });
 
   const [monthlyRaw, multiRaw] = await Promise.all([Promise.all(mFetches), Promise.all(multiFetches)]);
 
@@ -1040,7 +1039,6 @@ function showView(vid) {
 
   const years = [...new Set(results.map(m => m.year))].sort();
 
-  /* Load dados_gerais.xlsx */
   const acctMap = {};
   try {
     const res = await fetch('/assets/data/dados_gerais.xlsx');
@@ -1062,7 +1060,6 @@ function showView(vid) {
 
   window.acctMap = acctMap;
 
-  /* Check for daily metric files */
   const hasMetrics = {};
   await Promise.all(results.map(async m => {
     const mo = (m.mo || m.key.split('-')[1]).padStart(2, '0');
@@ -1078,7 +1075,6 @@ function showView(vid) {
     }
   }));
 
-  /* Build sidebar nav */
   allMonths = results;
   const multiYear = years.length > 1;
 
@@ -1109,7 +1105,6 @@ function showView(vid) {
 
   const nav = document.getElementById('monthNav');
   years.forEach(y => {
-    // ── Year row: label (click = annual view) + chevron (click = toggle months) ──
     const yDiv = document.createElement('div');
     yDiv.className = 'sidebar-section year-header';
     yDiv.style.cssText = 'cursor:default;display:flex;align-items:center;justify-content:space-between;gap:4px';
@@ -1128,7 +1123,6 @@ function showView(vid) {
     yDiv.appendChild(yChev);
     nav.appendChild(yDiv);
 
-    // ── Month buttons group ──
     const group = document.createElement('div');
     group.className = 'year-group';
     results.filter(m => m.year === y).forEach(m => {
@@ -1142,10 +1136,8 @@ function showView(vid) {
     nav.appendChild(group);
     requestAnimationFrame(() => { group.style.maxHeight = group.scrollHeight + 'px'; });
 
-    // Year label click → annual view
     yLabel.addEventListener('click', () => showView(`view-annual-${y}`));
 
-    // Chevron click → toggle month list
     yChev.addEventListener('click', () => {
       const c = group.classList.toggle('coll');
       yDiv.classList.toggle('coll', c);
@@ -1156,8 +1148,6 @@ function showView(vid) {
 
   document.getElementById('btn-annual').style.display = 'none';
 
-
-  /* Render all views into DOM */
   const byYear = {};
   results.forEach(m => { if (!byYear[m.year]) byYear[m.year] = []; byYear[m.year].push(m); });
 
@@ -1171,7 +1161,6 @@ function showView(vid) {
   years.forEach(y => { html += buildAnnual(byYear[y], y, acctMap); });
   document.getElementById('mainContent').innerHTML = html;
 
-  /* Home sparklines */
   years.forEach(y => {
     const yM       = byYear[y] || [];
     const sparkData = Array.from({ length: 12 }, (_, i) => { const m = yM.find(m => m.mi === i); return m ? sum(m.posts, 'Visualizações') : null; });
@@ -1193,7 +1182,6 @@ function showView(vid) {
     });
   });
 
-  /* Comparison chart */
   if (years.length > 1 && document.getElementById('home-ch-compare')) {
     const accents  = ['#391bce', '#a038f2', '#a2e259', '#c9b8f8'];
     const datasets = years.map((y, yi) => {
@@ -1209,7 +1197,6 @@ function showView(vid) {
     });
   }
 
-  /* Followers evolution chart */
   const allMonthsFlat2 = results.sort((a, b) => a.key.localeCompare(b.key));
   const homeFoll = allMonthsFlat2.map(m => ({ label: `${MS[m.mi]}/${String(m.year).slice(-2)}`, val: parseFloat((acctMap[m.key] || {})['Total seguidores']) || null }));
   if (homeFoll.some(f => f.val !== null) && document.getElementById('home-ch-foll')) {
@@ -1220,18 +1207,15 @@ function showView(vid) {
     });
   }
 
-  /* Hamburger */
   const layout = document.getElementById('layout');
   document.getElementById('hamburger').addEventListener('click', () => {
     layout.classList.toggle('collapsed');
     setTimeout(() => window.dispatchEvent(new Event('resize')), 280);
   });
 
-  /* Done */
   document.getElementById('app-loading').style.display = 'none';
   document.getElementById('app').style.display = 'block';
 
-  /* Se a view inicial não existir no DOM (ex: 2026.html sem dados de 2026), cai na home */
   const targetView = document.getElementById(initialView) ? initialView : 'view-home';
   showView(targetView);
 })();

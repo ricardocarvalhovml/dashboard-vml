@@ -23,12 +23,10 @@
       <div class="sidebar-body">
         <div class="sidebar-nav-top">
 
-          <!-- home -->
           <a class="nav-home active" href="/" style="text-decoration:none;display:flex;align-items:center;gap:8px">
             <span class="nav-icon" style="background:rgba(160,56,242,.18);color:#a038f2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span>home
           </a>
 
-          <!-- áreas -->
           <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
             áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
           </div>
@@ -41,7 +39,6 @@
 
           <div class="sidebar-divider"></div>
 
-          <!-- período -->
           <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="display:none;cursor:pointer;align-items:center;justify-content:space-between">
             período <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
           </div>
@@ -159,8 +156,52 @@
   const _fp=n=>(n==null||n===''||isNaN(+n))?'—':(+n).toFixed(1)+'%';
   const _fb=n=>(n==null||n===''||isNaN(+n))?'—':'R$ '+(+n).toLocaleString('pt-BR');
   function ss(a,ok){const e=document.getElementById(`${a}-status`);if(!e)return;e.innerHTML=ok?'<div class="area-status-dot ok"></div><span>com dados</span>':'<div class="area-status-dot empty"></div><span>sem dados</span>';}
-  async function fl(file){const now=new Date();for(let i=0;i<8;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1);const y=d.getFullYear();const mo=String(d.getMonth()+1).padStart(2,'0');try{const r=await fetch(`/assets/data/${y}/${mo}/${file}`);if(!r.ok)continue;const t=await r.text();if(!t.trim())continue;const p=Papa.parse(t.trim(),{header:true,skipEmptyLines:true});if(p.data.length)return p.data[0];}catch{}}return null;}
-  async function flrs(){const now=new Date();for(let i=0;i<8;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1);const y=d.getFullYear();const mo=String(d.getMonth()+1).padStart(2,'0');try{const r=await fetch(`/assets/data/${y}/${mo}/${y}-${mo}.csv`);if(!r.ok)continue;const t=await r.text();const rows=Papa.parse(t,{header:true,skipEmptyLines:true}).data;const posts=rows.filter(r=>(r['Data']||'').trim()==='Total');if(posts.length)return posts.reduce((a,p)=>{a.views=(a.views||0)+(parseInt(p['Visualizações'],10)||0);a.reach=(a.reach||0)+(parseInt(p['Alcance'],10)||0);a.posts=(a.posts||0)+1;return a;},{});}catch{}}return null;}
+  async function fl(file){
+    const now=new Date();
+    for(let i=0;i<8;i++){
+      const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+      const y=d.getFullYear();
+      const mo=String(d.getMonth()+1).padStart(2,'0');
+      try{
+        let r=await fetch(`/assets/data/${y}/${mo}/${file}`);
+        if(!r.ok)r=await fetch(`/assets/data/${y}/${mo}/${file.replace('.csv','.CSV')}`);
+        if(!r.ok)continue;
+        const buf=await r.arrayBuffer();
+        let t=new TextDecoder('utf-8').decode(buf);
+        if(t.indexOf('\u0000')!==-1)t=new TextDecoder('utf-16').decode(buf);
+        t=t.replace(/\r/g,'').trim();
+        if(!t)continue;
+        const p=Papa.parse(t,{header:true,skipEmptyLines:true,transformHeader:h=>h.trim()});
+        if(p.data.length)return p.data[0];
+      }catch{}
+    }
+    return null;
+  }
+  async function flrs(){
+    const now=new Date();
+    for(let i=0;i<8;i++){
+      const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+      const y=d.getFullYear();
+      const mo=String(d.getMonth()+1).padStart(2,'0');
+      try{
+        let r=await fetch(`/assets/data/${y}/${mo}/${y}-${mo}.csv`);
+        if(!r.ok)r=await fetch(`/assets/data/${y}/${mo}/${y}-${mo}.CSV`);
+        if(!r.ok)continue;
+        const buf=await r.arrayBuffer();
+        let t=new TextDecoder('utf-8').decode(buf);
+        if(t.indexOf('\u0000')!==-1)t=new TextDecoder('utf-16').decode(buf);
+        t=t.replace(/\r/g,'').trim();
+        const rows=Papa.parse(t,{header:true,skipEmptyLines:true,transformHeader:h=>h.trim()}).data;
+        const posts=rows.filter(r=>(r['Data']||'').trim()==='Total');
+        if(posts.length)return posts.reduce((a,p)=>{
+          a.views=(a.views||0)+(parseInt(p['Visualizações'],10)||0);
+          a.reach=(a.reach||0)+(parseInt(p['Alcance'],10)||0);
+          a.posts=(a.posts||0)+1;return a;
+        },{});
+      }catch{}
+    }
+    return null;
+  }
   (async function(){
     const rs=await flrs();ss('rs',!!rs);
     if(rs){document.getElementById('rs-views').textContent=_f(rs.views);document.getElementById('rs-posts').textContent=_f(rs.posts);document.getElementById('rs-reach').textContent=_f(rs.reach);}
