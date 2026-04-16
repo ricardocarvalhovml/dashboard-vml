@@ -721,8 +721,8 @@ body {
   transition:      border-color .2s, transform .15s, box-shadow .2s;
   min-width:       0;
   position:        relative;
-  padding:         12px;
-  gap:             12px;
+  padding:         0;
+  gap:             0;
 }
 
 .post-card-v2:hover {
@@ -732,13 +732,13 @@ body {
 }
 
 .post-card-v2-img {
-  flex:          0 0 42%;
-  aspect-ratio:  4 / 5;
+  flex:          0 0 44%;
   position:      relative;
   overflow:      hidden;
   background:    var(--surface2);
-  border-radius: 10px;
+  border-radius: 0;
   align-self:    stretch;
+  min-height:    280px;
 }
 .post-card-v2-img img {
   position: absolute;
@@ -750,7 +750,7 @@ body {
 }
 
 .post-card-v2-body {
-  padding:        0;
+  padding:        16px 18px;
   display:        flex;
   flex-direction: column;
   min-width:      0;
@@ -1276,8 +1276,7 @@ code {
   .annual-grid            { grid-template-columns: repeat(2, 1fr); }
   .acct-row               { grid-template-columns: repeat(3, 1fr); }
   .post-card-v2           { flex-direction: column; }
-  .post-card-v2           { flex-direction: column; }
-  .post-card-v2-img       { width: 100% !important; aspect-ratio: 4/5; height: auto !important; }
+  .post-card-v2-img       { width: 100% !important; min-height: 0; aspect-ratio: 4/5; flex: 0 0 auto !important; }
 }
 
 @media (max-width: 600px) {
