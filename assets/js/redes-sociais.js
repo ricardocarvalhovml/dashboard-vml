@@ -147,13 +147,9 @@ function postCard(p, rank, rankColor) {
     imgHtml = `<div class="post-card-v2-img" style="height:${h}px;display:flex;align-items:center;justify-content:center;font-size:28px;opacity:.2">📷</div>`;
   } else {
     imgHtml = `<div class="post-card-v2-img" style="height:${h}px;position:relative;overflow:hidden">
-      <img src="/assets/img/posts/${code2}.jpg"
-        style="width:100%;height:100%;object-fit:cover;display:block;border-radius:0"
-        onerror="if(this.src.endsWith('.jpg')){this.src='/assets/img/posts/${code2}.png';}else{this.style.display='none';this.nextElementSibling.style.display='block';}"
-        alt="">
       <iframe src="${em}"
-        style="display:none;position:absolute;top:-${hp}px;left:0;width:326px;height:800px;transform:scale(${s});transform-origin:top left;border:none;pointer-events:auto"
-        frameborder="0" scrolling="no" allowtransparency="true" loading="lazy"></iframe>
+        style="position:absolute;top:-${hp}px;left:0;width:326px;height:800px;transform:scale(${s});transform-origin:top left;border:none;pointer-events:auto"
+        frameborder="0" scrolling="no" allowtransparency="true"></iframe>
     </div>`;
   }
 
@@ -203,11 +199,7 @@ function postsByFormat(posts) {
       const s    = gW / 326;
       const hp   = Math.round(65 * s);
       const inner = code
-        ? `<img src="/assets/img/posts/${code}.jpg"
-            style="width:100%;height:100%;object-fit:cover;display:block"
-            onerror="if(this.src.endsWith('.jpg')){this.src='/assets/img/posts/${code}.png';}else{this.style.display='none';this.nextElementSibling.style.display='block';}"
-            alt="">
-           <iframe src="${em}" style="display:none;position:absolute;top:-${hp}px;left:0;width:326px;height:600px;transform:scale(${s.toFixed(4)});transform-origin:top left;border:none;pointer-events:none" frameborder="0" scrolling="no" allowtransparency="true" loading="lazy"></iframe>`
+        ? `<iframe src="${em}" style="position:absolute;top:-${hp}px;left:0;width:326px;height:600px;transform:scale(${s.toFixed(4)});transform-origin:top left;border:none;pointer-events:none" frameborder="0" scrolling="no" allowtransparency="true"></iframe>`
         : `<span style="font-size:20px;opacity:.2">📷</span>`;
       return `<a class="gallery-item" href="${url}" target="_blank" rel="noopener"
           title="${(p['Descrição'] || '').split('\n')[0].trim()}"
