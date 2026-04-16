@@ -1178,6 +1178,17 @@ function showView(vid) {
   years.forEach(y => { html += buildAnnual(byYear[y], y, acctMap); });
   document.getElementById('mainContent').innerHTML = html;
 
+  /* ── Mede cada .post-card-v2-img e define a escala exata do embed-clip ── */
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.post-card-v2-img').forEach(container => {
+      const w = container.offsetWidth;
+      if (w < 10) return;
+      const s = w / 326;
+      container.style.setProperty('--ec-scale', s.toFixed(4));
+      container.style.setProperty('--ec-top',   `-${Math.round(65 * s)}px`);
+    });
+  });
+
   years.forEach(y => {
     const yM       = byYear[y] || [];
     const sparkData = Array.from({ length: 12 }, (_, i) => { const m = yM.find(m => m.mi === i); return m ? sum(m.posts, 'Visualizações') : null; });
