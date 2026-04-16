@@ -141,11 +141,10 @@ function postCard(p, rank, rankColor) {
   if (url === '#' || !code2) {
     imgHtml = `<div class="post-card-v2-img" style="display:flex;align-items:center;justify-content:center;font-size:28px;opacity:.2">📷</div>`;
   } else {
-    /* Fallback ao iframe: envolto em .embed-clip que clippa o chrome via CSS container queries */
-    const embedClip = `<div class=\\"embed-clip\\"><iframe src=\\"${em}\\" frameborder=\\"0\\" scrolling=\\"no\\" allowtransparency=\\"true\\" allow=\\"autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share\\"></iframe></div>`;
+    const embedClip = `<div class="embed-clip"><iframe src="${em}" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>`;
     imgHtml = `<div class="post-card-v2-img">
       <img src="/assets/img/posts/${code2}.png"
-        onerror="this.src='/assets/img/posts/${code2}.jpg';this.onerror=function(){this.outerHTML='${embedClip.replace(/'/g, "\\'")}'}"
+        onerror="this.src='/assets/img/posts/${code2}.jpg';this.onerror=function(){this.outerHTML='${embedClip.replace(/'/g, "\\'").replace(/"/g, '&quot;')}'}"
         alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none">
     </div>`;
   }
