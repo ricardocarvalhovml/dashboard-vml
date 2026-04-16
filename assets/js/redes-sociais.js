@@ -136,21 +136,16 @@ function postCard(p, rank, rankColor) {
   const color = rankColor || 'var(--orange)';
   const em    = url !== '#' ? url.replace(/\/?$/, '/') + 'embed/' : '';
 
-  const w = 160;
-  const h = Math.round(w * 5/4);
-  const s = (w / 326).toFixed(4);
-  const hp = Math.round(65 * s);
-
   const code2 = sc(url);
   let imgHtml;
   if (url === '#' || !code2) {
-    imgHtml = `<div class="post-card-v2-img" style="height:${h}px;display:flex;align-items:center;justify-content:center;font-size:28px;opacity:.2">📷</div>`;
+    imgHtml = `<div class="post-card-v2-img" style="display:flex;align-items:center;justify-content:center;font-size:28px;opacity:.2">📷</div>`;
   } else {
-    const iframeSrc = em;
-    const iframeHtml = `<iframe src="${iframeSrc}" style="position:absolute;top:-${hp}px;left:0;width:326px;height:800px;transform:scale(${s});transform-origin:top left;border:none;pointer-events:auto" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>`;
-    imgHtml = `<div class="post-card-v2-img" style="height:${h}px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#f0eef8">
+    /* Fallback ao iframe: envolto em .embed-clip que clippa o chrome via CSS container queries */
+    const embedClip = `<div class=\\"embed-clip\\"><iframe src=\\"${em}\\" frameborder=\\"0\\" scrolling=\\"no\\" allowtransparency=\\"true\\" allow=\\"autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share\\"></iframe></div>`;
+    imgHtml = `<div class="post-card-v2-img">
       <img src="/assets/img/posts/${code2}.png"
-        onerror="this.src='/assets/img/posts/${code2}.jpg';this.onerror=function(){this.outerHTML='${iframeHtml.replace(/'/g, "\\'").replace(/"/g, '&quot;')}'}"
+        onerror="this.src='/assets/img/posts/${code2}.jpg';this.onerror=function(){this.outerHTML='${embedClip.replace(/'/g, "\\'")}'}"
         alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none">
     </div>`;
   }

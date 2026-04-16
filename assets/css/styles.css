@@ -732,21 +732,44 @@ body {
 }
 
 .post-card-v2-img {
-  flex:          0 0 44%;
-  position:      relative;
-  overflow:      hidden;
-  background:    var(--surface2);
-  border-radius: 0;
-  align-self:    stretch;
-  min-height:    280px;
+  flex:                0 0 44%;
+  position:            relative;
+  overflow:            hidden;
+  background:          var(--surface2);
+  border-radius:       0;
+  align-self:          stretch;
+  min-height:          280px;
+  container-type:      inline-size;
 }
 .post-card-v2-img img {
-  position: absolute;
-  inset:    0;
-  width:    100%;
-  height:   100%;
+  position:   absolute;
+  inset:      0;
+  width:      100%;
+  height:     100%;
   object-fit: cover;
-  display:  block;
+  display:    block;
+}
+
+/* ── Embed clip: escala o iframe via container queries,
+   mostra só a foto (sem header/chrome do Instagram) ── */
+.embed-clip {
+  position:         absolute;
+  top:              0;
+  left:             0;
+  width:            326px;
+  height:           408px;   /* altura da foto 4:5 em escala nativa */
+  overflow:         hidden;
+  transform-origin: top left;
+  transform:        scale(calc(100cqi / 326));
+}
+.embed-clip iframe {
+  position:         absolute;
+  top:              -65px;   /* oculta o header do Instagram */
+  left:             0;
+  width:            326px;
+  height:           900px;
+  border:           none;
+  pointer-events:   none;
 }
 
 .post-card-v2-body {
