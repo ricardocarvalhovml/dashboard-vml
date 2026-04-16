@@ -101,9 +101,22 @@ function buildSidebarNav(months) {
   months.forEach(m => { if (!byYear[m.year]) byYear[m.year] = []; byYear[m.year].push(m); });
 
   Object.keys(byYear).sort().forEach(y => {
+    // ── Year row: label (click = annual view if exists) + chevron (toggle months) ──
     const section = document.createElement('div');
     section.className = 'sidebar-section year-header';
-    section.innerHTML = `${y} <span class="chev">▼</span>`;
+    section.style.cssText = 'cursor:default;display:flex;align-items:center;justify-content:space-between;gap:4px';
+
+    const yLabel = document.createElement('span');
+    yLabel.textContent = y;
+    yLabel.style.cssText = 'flex:1;cursor:pointer;padding:2px 0';
+
+    const yChev = document.createElement('span');
+    yChev.className = 'chev';
+    yChev.textContent = '▾';
+    yChev.style.cssText = 'font-size:8px;opacity:.5;transition:transform .2s;cursor:pointer;padding:2px 4px';
+
+    section.appendChild(yLabel);
+    section.appendChild(yChev);
     nav.appendChild(section);
 
     const group = document.createElement('div');
@@ -121,10 +134,19 @@ function buildSidebarNav(months) {
     nav.appendChild(group);
     requestAnimationFrame(() => { group.style.maxHeight = group.scrollHeight + 'px'; });
 
-    section.addEventListener('click', () => {
+    // Chevron: toggle month list
+    yChev.addEventListener('click', () => {
       const c = group.classList.toggle('coll');
       section.classList.toggle('coll', c);
       group.style.maxHeight = c ? '0' : group.scrollHeight + 'px';
+      yChev.style.transform = c ? 'rotate(-90deg)' : '';
+    });
+    // Year label: no annual view in area.js (single-area), just toggle
+    yLabel.addEventListener('click', () => {
+      const c = group.classList.toggle('coll');
+      section.classList.toggle('coll', c);
+      group.style.maxHeight = c ? '0' : group.scrollHeight + 'px';
+      yChev.style.transform = c ? 'rotate(-90deg)' : '';
     });
   });
 }

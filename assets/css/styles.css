@@ -3,16 +3,6 @@
    vml company · 2026
 ───────────────────────────────────────────── */
 
-/* ── IBrand (título) — adicione ibrand.woff2 na raiz do projeto ── */
-@font-face {
-  font-family: 'IBrand';
-  src: url('ibrand.woff2') format('woff2'),
-       url('ibrand.woff')  format('woff');
-  font-weight: 400 800;
-  font-style:  normal;
-  font-display: swap;
-}
-
 /* ── Tokens ── */
 /* ── Modo escuro (padrão) ── */
 :root {
@@ -39,7 +29,7 @@
 
   --radius:     12px;
   --font:       'Poppins', sans-serif;
-  --font-title: 'IBrand', 'Poppins', sans-serif;
+  --font-title: 'Poppins', sans-serif;
   --sidebar-open:   224px;
   --sidebar-closed:  46px;
 }
@@ -81,6 +71,7 @@ body {
   background:   var(--bg);
   color:        var(--beige);
   font-family:  var(--font);
+  font-weight:  300;
   font-size:    15px;
   min-height:   100vh;
   overflow-x:   hidden;
@@ -217,7 +208,7 @@ body {
 
 .logo-fallback {
   font-size:   14px;
-  font-weight: 800;
+  font-weight: 600;
   color:       var(--orange);
   white-space: nowrap;
   transition:  opacity .2s;
@@ -241,7 +232,7 @@ body {
 
 .sidebar-section {
   font-size:      10px;
-  font-weight:    700;
+  font-weight: 600;
   color:          var(--muted);
   padding:        5px 10px;
   margin:         12px 8px 3px;
@@ -318,6 +309,27 @@ body {
   flex-shrink:   0;
 }
 
+/* ── Sidebar nav icon box ── */
+.nav-icon {
+  width:           22px;
+  height:          22px;
+  border-radius:   6px;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  flex-shrink:     0;
+  color:           #ffffff;
+}
+.nav-icon svg {
+  width:  11px;
+  height: 11px;
+  stroke: #ffffff;
+  fill:   none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .year-group {
   overflow:   hidden;
   transition: max-height .25s ease;
@@ -355,16 +367,16 @@ body {
 
 .page-eyebrow {
   font-size:      11px;
-  font-weight:    700;
+  font-weight: 600;
   color:          var(--green);
   margin-bottom:  5px;
 }
 
 .page-title {
   font-size:      28px;
-  font-weight:    800;
+  font-weight: 600;
   font-family:    var(--font-title);
-  letter-spacing: .09em;
+  letter-spacing: 0;
   color:          var(--beige);
   line-height:    1;
 }
@@ -384,7 +396,7 @@ body {
   padding:       4px 10px;
   border-radius: 99px;
   font-size:     12px;
-  font-weight:   700;
+  font-weight: 600;
   border:        1px solid;
 }
 
@@ -465,14 +477,14 @@ body {
   font-size:      10px;
   color:          var(--muted);
   margin-bottom:  6px;
-  font-weight:    700;
+  font-weight: 600;
 }
 
 .kpi-val {
   font-size:      24px;
-  font-weight:    800;
+  font-weight: 600;
   font-family:    var(--font-title);
-  letter-spacing: .09em;
+  letter-spacing: 0;
   color:          var(--beige);
   line-height:    1;
 }
@@ -501,14 +513,14 @@ body {
   font-size:      10px;
   color:          var(--muted);
   margin-bottom:  5px;
-  font-weight:    700;
+  font-weight: 600;
 }
 
 .acct-val {
   font-size:      20px;
-  font-weight:    800;
+  font-weight: 600;
   font-family:    var(--font-title);
-  letter-spacing: .09em;
+  letter-spacing: 0;
   color:          var(--beige);
   line-height:    1;
 }
@@ -557,7 +569,7 @@ body {
 
 .card-title {
   font-size:      11px;
-  font-weight:    700;
+  font-weight: 600;
   color:          var(--muted);
 }
 
@@ -611,7 +623,7 @@ body {
 
 .eng-num {
   font-size:   12px;
-  font-weight: 800;
+  font-weight: 600;
   color:       var(--beige);
   width:       34px;
   flex-shrink: 0;
@@ -646,7 +658,7 @@ body {
 
 .weekday-name {
   font-size:      12px;
-  font-weight:    800;
+  font-weight: 600;
   color:          var(--muted);
   margin-bottom:  8px;
 }
@@ -658,12 +670,12 @@ body {
   color:          var(--muted);
   margin-top:     8px;
   margin-bottom:  2px;
-  font-weight:    700;
+  font-weight: 600;
 }
 
 .wd-metric-val {
   font-size:      16px;
-  font-weight:    800;
+  font-weight: 600;
   color:          var(--beige);
   line-height:    1;
 }
@@ -693,7 +705,7 @@ body {
   margin-bottom: .75rem;
 }
 
-.bw-section-title        { font-size: 15px; font-weight: 800; }
+.bw-section-title        { font-size: 15px; font-weight: 600; }
 .bw-section-title-best   { color: var(--blue); }
 .bw-section-title-worst  { color: var(--muted); }
 
@@ -748,14 +760,14 @@ body {
 
 .post-card-rank {
   font-size:      11px;
-  font-weight:    700;
+  font-weight: 600;
   margin-bottom:  6px;
   color:          var(--blue);
 }
 
 .post-card-v2-desc {
   font-size:          12px;
-  font-weight:        700;
+  font-weight: 600;
   color:              var(--beige);
   line-height:        1.3;
   display:            -webkit-box;
@@ -786,8 +798,8 @@ body {
 }
 .pcm-row:last-child { border-bottom: none; }
 
-.pcm-lbl { font-size: 10px; color: var(--muted); font-weight: 500; }
-.pcm-val { font-size: 11px; font-weight: 700; color: var(--beige); }
+.pcm-lbl { font-size: 10px; color: var(--muted); font-weight: 300; }
+.pcm-val { font-size: 11px; font-weight: 600; color: var(--beige); }
 
 /* ─────────────────────────────────────────────
    Gallery (format sections)
@@ -814,7 +826,7 @@ body {
   background:      rgba(0, 0, 0, .75);
   color:           white;
   font-size:       10px;
-  font-weight:     700;
+  font-weight: 600;
   padding:         2px 6px;
   border-radius:   4px;
   backdrop-filter: blur(4px);
@@ -835,7 +847,7 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-.format-title { font-size: 15px; font-weight: 800; }
+.format-title { font-size: 15px; font-weight: 600; }
 .format-count { font-size: 12px; color: var(--muted); }
 
 /* ─────────────────────────────────────────────
@@ -850,7 +862,7 @@ th {
   padding:        8px 10px;
   font-size:      10px;
   color:          var(--muted);
-  font-weight:    700;
+  font-weight: 600;
   border-bottom:  1px solid var(--border);
   white-space:    nowrap;
 }
@@ -892,7 +904,7 @@ tr.top-row td     { background: rgba(57,27,206,.06); }
   font-size:     10px;
   padding:       3px 8px;
   border-radius: 99px;
-  font-weight:   700;
+  font-weight: 600;
   white-space:   nowrap;
 }
 
@@ -902,7 +914,7 @@ tr.top-row td     { background: rgba(57,27,206,.06); }
 .badge-s { background: rgba(196, 176, 253, .12); color: var(--purple); }
 
 /* Engagement pills */
-.eng-pill { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 12px; font-weight: 700; }
+.eng-pill { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 12px; font-weight: 600; }
 .eng-h    { background: rgba(57, 27, 206, .15);  color: var(--orange); }
 .eng-m    { background: rgba(160, 56, 242, .12); color: var(--blue); }
 .eng-l    { color: var(--muted); }
@@ -928,7 +940,7 @@ tr.top-row td     { background: rgba(57,27,206,.06); }
 .demo-bar-f   { height: 8px; border-radius: 99px; background: var(--orange); }
 .demo-bar-m   { height: 8px; border-radius: 99px; background: var(--blue); }
 
-.demo-pcts   { display: flex; gap: 6px; font-size: 11px; font-weight: 700; }
+.demo-pcts   { display: flex; gap: 6px; font-size: 11px; font-weight: 600; }
 .demo-pct-f  { color: var(--orange); }
 .demo-pct-m  { color: var(--blue); }
 
@@ -938,7 +950,7 @@ tr.top-row td     { background: rgba(57,27,206,.06); }
 
 .rank-num {
   font-size:   11px;
-  font-weight: 700;
+  font-weight: 600;
   color:       var(--muted);
   width:       16px;
   flex-shrink: 0;
@@ -951,6 +963,7 @@ tr.top-row td     { background: rgba(57,27,206,.06); }
   flex:          1;
   white-space:   nowrap;
   overflow:      hidden;
+  flex-shrink:   0;
   text-overflow: ellipsis;
 }
 
@@ -964,7 +977,7 @@ tr.top-row td     { background: rgba(57,27,206,.06); }
 }
 
 .rank-bar   { height: 100%; border-radius: 99px; }
-.rank-pct   { font-size: 12px; font-weight: 700; color: var(--beige); width: 36px; text-align: right; flex-shrink: 0; }
+.rank-pct   { font-size: 12px; font-weight: 600; color: var(--beige); width: 36px; text-align: right; flex-shrink: 0; }
 
 /* ─────────────────────────────────────────────
    Annual view
@@ -992,12 +1005,12 @@ tr.top-row td     { background: rgba(57,27,206,.06); }
   box-shadow:   0 8px 28px rgba(0, 0, 0, .3);
 }
 
-.ms-name    { font-size: 13px; font-weight: 700; color: var(--beige); margin-bottom: 4px; }
-.ms-views   { font-size: 20px; font-weight: 800; font-family: var(--font-title);
-  letter-spacing: .09em; color: var(--beige); }
+.ms-name    { font-size: 13px; font-weight: 600; color: var(--beige); margin-bottom: 4px; }
+.ms-views   { font-size: 20px; font-weight: 600; font-family: var(--font-title);
+  letter-spacing: 0; color: var(--beige); }
 .ms-label   { font-size: 10px; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
 .ms-row     { display: flex; gap: 8px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
-.ms-val     { font-weight: 700; color: var(--beige); }
+.ms-val     { font-weight: 600; color: var(--beige); }
 
 .ms-card.no-data .ms-name   { color: var(--muted); }
 .ms-card.no-data .ms-views  { font-size: 14px; color: var(--muted); }
@@ -1028,16 +1041,16 @@ tr.top-row td     { background: rgba(57,27,206,.06); }
 
 .home-hero-eyebrow {
   font-size:      11px;
-  font-weight:    700;
+  font-weight: 600;
   color:          var(--green);
   margin-bottom:  8px;
 }
 
 .home-hero-title {
   font-size:      34px;
-  font-weight:    800;
+  font-weight: 600;
   font-family:    var(--font-title);
-  letter-spacing: .09em;
+  letter-spacing: 0;
   color:          var(--beige);
   line-height:    1.1;
   margin-bottom:  6px;
@@ -1054,9 +1067,9 @@ tr.top-row td     { background: rgba(57,27,206,.06); }
 
 .home-hero-stat-val {
   font-size:      26px;
-  font-weight:    800;
+  font-weight: 600;
   font-family:    var(--font-title);
-  letter-spacing: .09em;
+  letter-spacing: 0;
   color:          var(--beige);
   line-height:    1;
 }
@@ -1065,7 +1078,7 @@ tr.top-row td     { background: rgba(57,27,206,.06); }
   font-size:      10px;
   color:          var(--muted);
   margin-top:     3px;
-  font-weight:    700;
+  font-weight: 600;
 }
 
 /* Year boxes grid */
@@ -1114,16 +1127,16 @@ tr.top-row td     { background: rgba(57,27,206,.06); }
 
 .year-box-year {
   font-size:      32px;
-  font-weight:    800;
+  font-weight: 600;
   font-family:    var(--font-title);
-  letter-spacing: .09em;
+  letter-spacing: 0;
   color:          var(--beige);
   line-height:    1;
 }
 
 .year-box-badge {
   font-size:      10px;
-  font-weight:    700;
+  font-weight: 600;
   padding:        4px 9px;
   border-radius:  99px;
   background: rgba(162,226,89,.18);
@@ -1149,9 +1162,9 @@ tr.top-row td     { background: rgba(57,27,206,.06); }
 
 .year-box-metric-val {
   font-size:      18px;
-  font-weight:    800;
+  font-weight: 600;
   font-family:    var(--font-title);
-  letter-spacing: .09em;
+  letter-spacing: 0;
   color:          var(--beige);
   line-height:    1;
 }
@@ -1177,7 +1190,7 @@ tr.top-row td     { background: rgba(57,27,206,.06); }
 
 .year-box-cta {
   font-size:   12px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--green);
   display:     flex;
   align-items: center;
@@ -1193,7 +1206,7 @@ tr.top-row td     { background: rgba(57,27,206,.06); }
   gap:           8px;
   padding:       10px 14px;
   font-size:     13px;
-  font-weight:   700;
+  font-weight: 600;
   color:         var(--muted);
   cursor:        pointer;
   border:        none;
@@ -1235,7 +1248,7 @@ tr.top-row td     { background: rgba(57,27,206,.06); }
   text-align:      center;
 }
 
-.empty-wrap .et { font-size: 16px; font-weight: 700; color: var(--beige); }
+.empty-wrap .et { font-size: 16px; font-weight: 600; color: var(--beige); }
 .empty-wrap p   { font-size: 14px; color: var(--muted); max-width: 340px; line-height: 1.6; }
 
 code {
@@ -1327,7 +1340,7 @@ a.nav-home, a.nav-tab {
 }
 a.nav-home {
   font-size:     13px;
-  font-weight:   700;
+  font-weight: 600;
   border-bottom: 1px solid var(--border);
   margin-bottom: 6px;
   padding:       10px 14px;
@@ -1415,6 +1428,8 @@ a.nav-tab.active::before {
   display:         flex;
   align-items:     center;
   justify-content: center;
+  color:           #ffffff;
+  flex-shrink:     0;
 }
 .area-card-status {
   display:     flex;
@@ -1439,7 +1454,7 @@ a.nav-tab.active::before {
 
 .area-card-name {
   font-size:      20px;
-  font-weight:    800;
+  font-weight: 600;
   font-family:    var(--font-title);
   color:          var(--beige);
   margin-bottom:  4px;
@@ -1461,7 +1476,7 @@ a.nav-tab.active::before {
 }
 .area-metric-val {
   font-size:      18px;
-  font-weight:    800;
+  font-weight: 600;
   font-family:    var(--font-title);
   color:          var(--beige);
   line-height:    1;
@@ -1473,11 +1488,18 @@ a.nav-tab.active::before {
   margin-top: 3px;
 }
 .area-card-cta {
-  font-size:   12px;
-  font-weight: 700;
-  color:       var(--card-accent, var(--green));
-  padding-top: .75rem;
-  border-top:  1px solid var(--border);
+  display:         inline-block;
+  margin-top:      1.25rem;
+  padding:         8px 16px;
+  background:      var(--card-accent, var(--orange));
+  color:           var(--cta-color, #ffffff);
+  border-radius:   20px;
+  font-size:       12px;
+  font-weight:     600;
+  transition:      opacity .15s;
+}
+.area-card:hover .area-card-cta {
+  opacity: .85;
 }
 
 @media (max-width: 900px) {
@@ -1493,16 +1515,7 @@ a.nav-tab.active::before {
 a.nav-tab.active::before,
 .nav-home.active::before { background: var(--blue); }
 
-/* IBrand titles — refined spacing */
-.page-title          { letter-spacing: .13em; }
-.home-hero-title     { letter-spacing: .13em; }
-.kpi-val             { letter-spacing: .07em; }
-.acct-val            { letter-spacing: .07em; }
-.year-box-year       { letter-spacing: .12em; }
-.year-box-metric-val { letter-spacing: .07em; }
-.home-hero-stat-val  { letter-spacing: .09em; }
-.ms-views            { letter-spacing: .07em; }
-.area-card-name      { letter-spacing: .1em;  }
+.area-card-name      { letter-spacing: 0; }
 
 /* Sidebar label lowercase enforcement */
 .sidebar-section,
@@ -1533,6 +1546,7 @@ label {
   transition:    none;
   white-space:   nowrap;
   overflow:      hidden;
+  flex-shrink:   0;
   margin-top:    auto;
 }
 .sidebar-credit img.credit-logo {
@@ -1544,20 +1558,85 @@ label {
 }
 .sidebar-credit .credit-brand {
   font-size:   12px;
-  font-weight: 800;
+  font-weight: 600;
   color:       var(--beige);
   line-height: 1.2;
   text-transform: lowercase;
 }
 .sidebar-credit .credit-brand sup {
   font-size:  8px;
-  font-weight: 700;
+  font-weight: 600;
 }
 .sidebar-credit .credit-copy {
   font-size:   10px;
   color:       var(--muted);
-  font-weight: 500;
+  font-weight: 300;
   margin-top:  1px;
   text-transform: lowercase;
+  white-space: normal;
+  line-height: 1.4;
 }
 .layout.collapsed .sidebar-credit { opacity: 0; pointer-events: none; }
+
+/* ── Areas collapsible ── */
+#areas-list {
+  overflow:   hidden;
+  max-height: 200px;
+  transition: max-height .3s ease;
+}
+#areas-list.coll { max-height: 0; }
+
+/* ── Sidebar nav layout ── */
+.sidebar-nav-top {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+}
+.sidebar-nav-bottom {
+  flex-shrink: 0;
+  display:     flex;
+  flex-direction: column;
+}
+
+/* ── Enviar relatório button ── */
+.nav-upload {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  margin:          10px 14px;
+  padding:         9px 14px;
+  background:      #a2e259;
+  color:           #07091a !important;
+  border-radius:   8px;
+  font-size:       13px;
+  font-weight:     600;
+  text-decoration: none;
+  border:          none;
+  cursor:          pointer;
+  transition:      background .15s, opacity .15s;
+  white-space:     nowrap;
+  text-align:      center;
+}
+.nav-upload:hover { background: #8ec93e; opacity: 1; }
+
+/* ── CTA contrast fix for light-accent cards ── */
+.area-card-cta.dark-text {
+  color: #07091a;
+}
+
+/* ── Período collapsible ── */
+#periodo-list {
+  overflow:   hidden;
+  max-height: 800px;
+  transition: max-height .35s ease;
+}
+#periodo-list.coll { max-height: 0; }
+
+/* ── nav-home icon variant (ghost/tinted) ── */
+.nav-home .nav-icon {
+  color: #a038f2;
+}
+.nav-home .nav-icon svg {
+  stroke: #a038f2;
+}
