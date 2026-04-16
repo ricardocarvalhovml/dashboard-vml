@@ -649,6 +649,13 @@ function buildAnnual(yearMonths, year, acctMap) {
    Metric fetching
 ───────────────────────────────────────────── */
 
+function detectDelimiter(text) {
+  const firstLine = (text || '').split('\n')[0] || '';
+  const semis  = (firstLine.match(/;/g) || []).length;
+  const commas = (firstLine.match(/,/g) || []).length;
+  return semis > commas ? ';' : ',';
+}
+
 async function fetchCsvText(url) {
   try {
     let r = await fetch(url);
@@ -657,10 +664,23 @@ async function fetchCsvText(url) {
       else if (url.endsWith('.CSV')) r = await fetch(url.replace('.CSV', '.csv'));
     }
     if (!r.ok) return null;
-    const buf = await r.arrayBuffer();
-    let text = new TextDecoder('utf-8').decode(buf);
-    if (text.indexOf('\u0000') !== -1) {
+    const buf  = await r.arrayBuffer();
+    const bytes = new Uint8Array(buf);
+    let text;
+    /* UTF-16 BOM detection */
+    if ((bytes[0] === 0xFF && bytes[1] === 0xFE) || (bytes[0] === 0xFE && bytes[1] === 0xFF)) {
       text = new TextDecoder('utf-16').decode(buf);
+    } else {
+      const utf8 = new TextDecoder('utf-8', { fatal: false }).decode(buf);
+      if (utf8.indexOf('\u0000') !== -1) {
+        /* UTF-16 sem BOM */
+        text = new TextDecoder('utf-16').decode(buf);
+      } else if (utf8.includes('\uFFFD')) {
+        /* Bytes inválidos em UTF-8 → tenta Windows-1252 (Latin-1) */
+        text = new TextDecoder('windows-1252').decode(buf);
+      } else {
+        text = utf8;
+      }
     }
     return text.replace(/\r/g, '');
   } catch (e) {
@@ -671,9 +691,10 @@ async function fetchCsvText(url) {
 async function fetchMetricCsv(year, mo, name) {
   const text = await fetchCsvText(`/assets/data/${year}/${mo}/${name}.csv`);
   if (!text) return null;
-  const dataLines = text.split('\n').filter(l => l.includes(',') && !l.startsWith('sep='));
+  const delimiter = detectDelimiter(text);
+  const dataLines = text.split('\n').filter(l => (l.includes(',') || l.includes(';')) && !l.startsWith('sep='));
   if (dataLines.length < 2) return null;
-  const parsed = Papa.parse(dataLines.join('\n'), { header: true, skipEmptyLines: true, transformHeader: h => h.trim() });
+  const parsed = Papa.parse(dataLines.join('\n'), { header: true, skipEmptyLines: true, transformHeader: h => h.trim(), delimiter });
   return parsed.data;
 }
 
@@ -1002,7 +1023,8 @@ function showView(vid) {
   const mFetches = candidates.map(async ({ year, mi, key, mo }) => {
     const text = await fetchCsvText(`/assets/data/${year}/${mo}/${key}.csv`);
     if (!text) return null;
-    const posts = parsePosts(Papa.parse(text, { header: true, skipEmptyLines: true, transformHeader: h => h.trim() }).data);
+    const delimiter = detectDelimiter(text);
+    const posts = parsePosts(Papa.parse(text, { header: true, skipEmptyLines: true, transformHeader: h => h.trim(), delimiter }).data);
     return posts.length ? { mi, year, key, mo, posts } : null;
   });
 
@@ -1018,7 +1040,8 @@ function showView(vid) {
   const multiFetches = multiCands.map(async ({ y, key }) => {
     const text = await fetchCsvText(`/assets/data/${y}/${key}.csv`);
     if (!text) return null;
-    const all = parsePosts(Papa.parse(text, { header: true, skipEmptyLines: true, transformHeader: h => h.trim() }).data);
+    const delimiter = detectDelimiter(text);
+    const all = parsePosts(Papa.parse(text, { header: true, skipEmptyLines: true, transformHeader: h => h.trim(), delimiter }).data);
     return all.length ? splitByMonth(all) : null;
   });
 
