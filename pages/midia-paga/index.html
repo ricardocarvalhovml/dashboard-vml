@@ -9,361 +9,118 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-  <style>
-    .funnel3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
-    .funnel4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-    @media(max-width:800px){.funnel3,.funnel4{grid-template-columns:repeat(2,1fr)}}
-    .kcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;border-top:3px solid transparent}
-    .kcard.c1{border-top-color:#391bce} .kcard.c2{border-top-color:#a038f2} .kcard.c3{border-top-color:#c9b8f8}
-    .kcard.c4{border-top-color:#f2a038} .kcard.c5{border-top-color:#38c9b8} .kcard.c6{border-top-color:#a2e259}
-    .kcard-label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-    .kcard-value{font-size:36px;font-weight:600;line-height:1}
-    .kcard-value.c1{color:#391bce} .kcard-value.c2{color:#a038f2} .kcard-value.c3{color:#c9b8f8}
-    .kcard-value.c4{color:#f2a038} .kcard-value.c5{color:#38c9b8} .kcard-value.c6{color:#a2e259}
-    .kcard-sub{font-size:12px;color:var(--muted);margin-top:6px}
-    .comp-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-    @media(max-width:600px){.comp-row{grid-template-columns:1fr}}
-    .comp-label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-    .comp-val{font-size:28px;font-weight:600}
-    .comp-sub{font-size:12px;color:var(--muted);margin-top:4px}
-    .var-val{font-size:22px;font-weight:600;color:#a2e259}
-    .var-sub{font-size:12px;color:#a2e259;margin-top:4px}
-    .sec-title{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#c9b8f8;margin-bottom:14px}
-    .sec-title::before{content:'';width:3px;height:14px;background:#c9b8f8;border-radius:2px;display:block;flex-shrink:0}
-    .ctable{width:100%;border-collapse:collapse}
-    .ctable th{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:0 12px 12px;font-weight:600}
-    .ctable th.r{text-align:right}
-    .ctable td{padding:13px 12px;border-top:1px solid var(--border);vertical-align:middle}
-    .ctable td.r{text-align:right}
-    .crow-parent td{font-weight:600}
-    .crow-child td{padding-left:28px;font-size:13px;color:var(--muted);border-top:1px solid rgba(255,255,255,.04)}
-    [data-theme="light"] .crow-child td{border-top-color:rgba(0,0,0,.04)}
-    .leads-badge{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:22px;border-radius:11px;background:#391bce;color:#fff;font-size:11px;font-weight:700;padding:0 7px}
-    .sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
-    .dbar-bg{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden;display:inline-block;width:100%}
-    .dbar-fill{height:100%;background:#391bce;border-radius:2px}
-    .crow-child .dbar-fill{background:#6b5fd4;opacity:.6}
-    .atable{width:100%;border-collapse:collapse}
-    .atable th{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:0 10px 12px;font-weight:600;cursor:pointer;user-select:none;white-space:nowrap}
-    .atable th:hover{color:var(--beige)}
-    .atable th.r{text-align:right}
-    .atable td{padding:12px 10px;border-top:1px solid var(--border);vertical-align:middle}
-    .atable td.r{text-align:right}
-    .ftag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.06em;padding:2px 6px;border-radius:4px;text-transform:uppercase;background:#391bce22;color:#c9b8f8;border:1px solid #c9b8f830}
-    .ftag.video{background:#f2a03822;color:#f2a038;border-color:#f2a03830}
-    .ad-camp{font-size:11px;color:var(--muted);margin-top:2px}
-    .ad-name{font-weight:600;font-size:13px}
-    .cbar-bg{width:60px;height:3px;background:var(--border);border-radius:2px;display:inline-block;vertical-align:middle}
-    .cbar-fill{height:100%;background:#a2e259;border-radius:2px}
-    .cpa-g{color:#a2e259;font-weight:600} .cpa-o{color:#f2a038;font-weight:600} .cpa-r{color:#e05555;font-weight:600}
-    .filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
-    .fi{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:13px;color:var(--beige);font-family:var(--font);outline:none}
-    .fi::placeholder{color:var(--muted)}
-    .anuncios-badge{background:#c9b8f820;color:#c9b8f8;border:1px solid #c9b8f840;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:600}
-    .footnote{text-align:center;font-size:11px;color:var(--muted);margin-top:12px;opacity:.7}
-  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script>const AREA_CONFIG = {"name": "mídia paga", "subtitle": "campanhas pagas · meta · google ads", "file": "midia-paga.csv", "color": "#c9b8f8", "kpis": [{"key": "Investimento", "label": "investimento", "sub": "verba total", "color": "#391bce", "currency": true}, {"key": "Impressões", "label": "impressões", "sub": "exibições", "color": "#a038f2"}, {"key": "Cliques", "label": "cliques", "sub": "cliques totais", "color": "#c9b8f8"}, {"key": "CTR", "label": "ctr", "sub": "taxa de cliques", "color": "#6b5fd4", "pct": true}, {"key": "CPC", "label": "cpc", "sub": "custo por clique", "color": "#c9b8f8", "currency": true}, {"key": "ROAS", "label": "roas", "sub": "retorno do anúncio", "color": "#a2e259", "decimal": true}], "charts": [{"id": "chart-investimento", "key": "Investimento", "type": "bar", "color": "#391bce", "label": "investimento mensal"}, {"id": "chart-cliques", "key": "Cliques", "type": "bar", "color": "#c9b8f8", "label": "cliques por mês"}, {"id": "chart-ctr", "key": "CTR", "type": "line", "color": "#6b5fd4", "label": "ctr — evolução"}, {"id": "chart-roas", "key": "ROAS", "type": "line", "color": "#a2e259", "label": "roas — evolução"}]};</script>
 </head>
 <body>
-<div id="app-loading"><div class="spinner"></div><p>carregando dados...</p></div>
-<div id="app" style="display:none">
-  <div class="layout" id="layout">
-    <aside class="sidebar">
+  <div id="app-loading"><div class="spinner"></div><p>carregando dados...</p></div>
+  <div id="app" style="display:none">
+    <div class="layout" id="layout">
+  <aside class="sidebar">
       <div class="sidebar-top">
         <button class="hamburger" id="hamburger" title="menu"><span></span><span></span><span></span></button>
         <button class="theme-toggle" onclick="toggleTheme()" title="alternar tema"><span id="theme-icon"></span></button>
-        <img class="sidebar-logo" id="sidebar-logo" src="/assets/img/logo-escuro.png" alt="vml company" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <img class="sidebar-logo" id="sidebar-logo" src="/assets/img/logo-escuro.png" alt="vml company"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
         <span class="logo-fallback" style="display:none">vml company</span>
       </div>
       <div class="sidebar-body">
         <div class="sidebar-nav-top">
+
+          <!-- home -->
           <a class="nav-home" href="/" style="text-decoration:none;display:flex;align-items:center;gap:8px">
             <span class="nav-icon" style="background:rgba(160,56,242,.18);color:#a038f2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span>home
           </a>
-          <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span></div>
+
+          <!-- áreas -->
+          <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+            áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
+          </div>
           <div id="areas-list">
             <a class="nav-tab" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-icon" style="background:#a038f2"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>redes sociais</a>
             <a class="nav-tab" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
             <a class="nav-tab" href="/pages/crm" style="text-decoration:none"><span class="nav-icon" style="background:#391bce"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>crm</a>
             <a class="nav-tab active" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
           </div>
+
           <div class="sidebar-divider"></div>
-          <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">período <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span></div>
-          <div id="periodo-list"><div id="monthNav"></div></div>
+
+          <!-- período -->
+          <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+            período <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
+          </div>
+          <div id="periodo-list">
+            <div id="monthNav"></div>
+            <button class="nav-tab" id="btn-annual" style="display:none"></button>
+          </div>
+
         </div>
         <div class="sidebar-nav-bottom">
           <a class="nav-upload" href="/pages/upload"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;flex-shrink:0"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>enviar relatório</a>
-          <div class="sidebar-credit"><div><div class="credit-brand">vml company</div><div class="credit-copy">© 2026 todos os direitos<br>reservados.</div></div></div>
+          <div class="sidebar-credit">
+            <div>
+              <div class="credit-brand">vml company</div>
+              <div class="credit-copy">© 2026 todos os direitos<br>reservados.</div>
+            </div>
+          </div>
         </div>
       </div>
     </aside>
-    <main class="main">
-      <div class="page-header">
-        <div>
-          <div class="page-eyebrow" id="page-eyebrow">mídia paga</div>
-          <div class="page-title">mídia paga</div>
-          <div class="page-sub">funil crm · meta ads · campanhas</div>
+      <main class="main">
+        <div class="page-header">
+          <div>
+            <div class="page-eyebrow" id="page-eyebrow">mídia paga</div>
+            <div class="page-title">mídia paga</div>
+            <div class="page-sub" id="page-sub">campanhas pagas · meta · google ads</div>
+          <div id="data-source-badge" style="margin-top:8px"></div>
+          </div>
         </div>
-      </div>
-      <div id="mp-content"><div style="padding:32px;text-align:center;color:var(--muted)">carregando...</div></div>
-    </main>
+        <div id="no-data-banner" class="card section-gap" style="display:none;border-color:#c9b8f833;background:#c9b8f808">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="font-size:24px">📂</div>
+            <div>
+              <div style="font-weight:700;margin-bottom:4px;text-transform:lowercase">nenhum dado encontrado</div>
+              <div style="font-size:13px;color:var(--muted)">faça upload de <code>midia-paga.csv</code> em <code>assets/data/YYYY/MM/</code> para começar.</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:8px">formato esperado:<br><code>Investimento,Impressões,Cliques,CTR,CPC,Conversões,ROAS</code></div>
+            </div>
+            <a href="/pages/upload" style="margin-left:auto;flex-shrink:0;padding:10px 18px;background:var(--blue);color:white;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap">↑ enviar arquivo</a>
+          </div>
+        </div>
+        <div class="kpi-row" id="kpi-row"></div>
+<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">investimento mensal</div></div><div style="position:relative;height:175px"><canvas id="chart-investimento"></canvas></div></div>
+          <div class="card"><div class="card-header"><div class="card-title">cliques por mês</div></div><div style="position:relative;height:175px"><canvas id="chart-cliques"></canvas></div></div></div>
+<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">ctr — evolução</div></div><div style="position:relative;height:150px"><canvas id="chart-ctr"></canvas></div></div>
+          <div class="card"><div class="card-header"><div class="card-title">roas — evolução</div></div><div style="position:relative;height:150px"><canvas id="chart-roas"></canvas></div></div></div>
+        <div class="card" id="data-table"></div>
+      </main>
+    </div>
   </div>
-</div>
+  <script>
+  (function(){const s=localStorage.getItem('dashboard-theme')||'';document.documentElement.dataset.theme=s;const l=document.getElementById('sidebar-logo');if(l)l.src=s==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';const ic=document.getElementById('theme-icon');if(ic)ic.innerHTML=s==='light'?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>':'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';})();
 
-<script>
-(function(){
-  var s=localStorage.getItem('dashboard-theme')||'';
-  document.documentElement.dataset.theme=s;
-  var l=document.getElementById('sidebar-logo');
-  if(l)l.src=s==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';
-  var ic=document.getElementById('theme-icon');
-  if(ic)ic.innerHTML=s==='light'
-    ?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
-    :'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>';
-})();
-
-function toggleAreas(){var e=document.getElementById('areas-list');e.classList.toggle('coll');var c=document.querySelector('#areas-toggle .chev');if(c)c.style.transform=e.classList.contains('coll')?'rotate(-90deg)':'';}
-function togglePeriodo(){var e=document.getElementById('periodo-list');e.classList.toggle('coll');var c=document.querySelector('#periodo-toggle .chev');if(c)c.style.transform=e.classList.contains('coll')?'rotate(-90deg)':'';}
-function toggleTheme(){var h=document.documentElement;var l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);var i=document.getElementById('sidebar-logo');if(i)i.src=h.dataset.theme==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';}
-document.getElementById('hamburger').addEventListener('click',function(){document.getElementById('layout').classList.toggle('sidebar-closed');});
-
-var _MO=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-var adSortKey='Conversoes', adSortDir=-1;
-var _anunciosAll=[];
-
-function num(v){return parseFloat(String(v||'').replace(',','.'))||0;}
-function fmtBRL(v){return 'R$ '+num(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function fmtK(v){var x=num(v);return x>=1000?(x/1000).toFixed(1)+'k':x.toLocaleString('pt-BR');}
-function fmtN(v){return num(v).toLocaleString('pt-BR');}
-
-function loadCsv(url){
-  return fetch(url).then(function(r){
-    if(!r.ok)return null;
-    return r.text().then(function(t){
-      return new Promise(function(res){Papa.parse(t,{header:true,skipEmptyLines:true,complete:function(d){res(d.data);}});});
-    });
-  }).catch(function(){return null;});
-}
-
-function renderMp(main, anuncios, campanhas, year, month){
-  document.getElementById('page-eyebrow').textContent=_MO[month-1]+' '+year;
-  var el=document.getElementById('mp-content');
-  var d=(main&&main[0])||{};
-
-  var mqlPct=d.Leads?((num(d.MQL)/num(d.Leads))*100).toFixed(1):'—';
-  var sqlPct=d.MQL?((num(d.SQL)/num(d.MQL))*100).toFixed(1):'—';
-  var convTx=d.Leads?((num(d.Reuniao_Agendada)/num(d.Leads))*100).toFixed(1):'—';
-  var varL=num(d.Semana_Atual)-num(d.Semana_Anterior);
-  var varP=num(d.Semana_Anterior)?((varL/num(d.Semana_Anterior))*100).toFixed(1):0;
-
-  // Campaign groups
-  var grps={};
-  if(campanhas){campanhas.forEach(function(r){
-    if(!grps[r.Campanha])grps[r.Campanha]={leads:0,pct:num(r.Percentual_Campanha),fontes:[]};
-    grps[r.Campanha].leads+=num(r.Leads);
-    grps[r.Campanha].fontes.push(r);
-  });}
-  var totalLeads=Object.values(grps).reduce(function(a,g){return a+g.leads;},0)||num(d.Leads);
-  var numCamp=Object.keys(grps).length;
-
-  var html='';
-
-  // ── Funil ──
-  html+='<div class="sec-title">leads · funil de conversão</div>';
-  html+='<div class="funnel3">';
-  html+='<div class="kcard c1"><div class="kcard-label">leads</div><div class="kcard-value c1">'+fmtN(d.Leads)+'</div><div class="kcard-sub">'+numCamp+' campanha'+(numCamp!==1?'s':'')+'</div></div>';
-  html+='<div class="kcard c2"><div class="kcard-label">mql</div><div class="kcard-value c2">'+fmtN(d.MQL)+'</div><div class="kcard-sub">'+mqlPct+'% do total</div></div>';
-  html+='<div class="kcard c3"><div class="kcard-label">sql</div><div class="kcard-value c3">'+fmtN(d.SQL)+'</div><div class="kcard-sub">'+sqlPct+'% do mql</div></div>';
-  html+='</div>';
-  html+='<div class="funnel4">';
-  html+='<div class="kcard c4"><div class="kcard-label">lead recebido</div><div class="kcard-value c4">'+fmtN(d.Lead_Recebido)+'</div><div class="kcard-sub">aguardando 1º contato</div></div>';
-  html+='<div class="kcard c4"><div class="kcard-label">qualificação inicial</div><div class="kcard-value c4">'+fmtN(d.Qualificacao_Inicial)+'</div><div class="kcard-sub">em qualificação</div></div>';
-  html+='<div class="kcard c5"><div class="kcard-label">oportunidade</div><div class="kcard-value c5">'+fmtN(d.Oportunidade)+'</div><div class="kcard-sub">avançados no funil</div></div>';
-  html+='<div class="kcard c6"><div class="kcard-label">reunião agendada</div><div class="kcard-value c6">'+fmtN(d.Reuniao_Agendada)+'</div><div class="kcard-sub">'+convTx+'% taxa de conversão</div></div>';
-  html+='</div>';
-
-  // ── Comparativo ──
-  html+='<div class="card section-gap" style="margin-bottom:16px">';
-  html+='<div class="sec-title">comparativo semanal</div>';
-  html+='<div class="comp-row">';
-  html+='<div><div class="comp-label">semana passada</div><div class="comp-val">'+fmtN(d.Semana_Atual)+'</div><div class="comp-sub">leads</div></div>';
-  html+='<div><div class="comp-label">semana retrasada</div><div class="comp-val">'+fmtN(d.Semana_Anterior)+'</div><div class="comp-sub">leads</div></div>';
-  html+='<div><div class="comp-label">variação</div><div class="var-val">▲ +'+varL+' leads</div><div class="var-sub">+'+varP+'% em relação à semana anterior</div></div>';
-  html+='</div></div>';
-
-  // ── Campanha × Fonte ──
-  html+='<div class="card section-gap" style="margin-bottom:16px">';
-  html+='<div class="sec-title">campanha × fonte de origem</div>';
-  html+='<table class="ctable"><thead><tr><th>campanha / fonte origem</th><th class="r">leads</th><th class="r">%</th><th>distribuição</th></tr></thead><tbody id="camp-tbody"></tbody></table>';
-  html+='</div>';
-
-  // ── Anúncios ──
-  html+='<div class="card section-gap">';
-  html+='<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px">';
-  html+='<div class="sec-title" style="margin-bottom:0">meta ads · top anúncios · '+_MO[month-1]+' '+year+'</div>';
-  html+='<span class="anuncios-badge" id="ad-count">— anúncios</span></div>';
-  html+='<div class="filter-bar">';
-  html+='<input class="fi" id="ad-search" placeholder="buscar anúncio ou campanha…" style="min-width:180px">';
-  html+='<select class="fi" id="ad-camp"><option value="">todas as campanhas</option></select>';
-  html+='<select class="fi" id="ad-fmt"><option value="">todos os formatos</option></select>';
-  html+='</div>';
-  html+='<div style="overflow-x:auto">';
-  html+='<table class="atable"><thead><tr>';
-  html+='<th>anúncio</th>';
-  html+='<th class="r" data-k="Gasto">gasto ↕</th>';
-  html+='<th class="r" data-k="Impressoes">impressões ↕</th>';
-  html+='<th class="r" data-k="Alcance">alcance ↕</th>';
-  html+='<th class="r" data-k="Frequencia">freq. ↕</th>';
-  html+='<th class="r" data-k="Taxa_Cliques">ctr ↕</th>';
-  html+='<th class="r" data-k="Conversoes">conversões ↕</th>';
-  html+='<th class="r" data-k="CPA">cpa ↕</th>';
-  html+='</tr></thead><tbody id="ad-tbody"></tbody></table></div>';
-  html+='<div class="footnote">dados meta ads · '+_MO[month-1]+' '+year+' (1–16) · campanhas de conversões, tráfego e engajamento</div>';
-  html+='</div>';
-
-  el.innerHTML=html;
-
-  // ── Render campanha table ──
-  var campTb=document.getElementById('camp-tbody');
-  if(campTb&&Object.keys(grps).length){
-    var campHtml='';
-    Object.keys(grps).sort(function(a,b){return grps[b].leads-grps[a].leads;}).forEach(function(camp){
-      var g=grps[camp];
-      var pct=totalLeads?((g.leads/totalLeads)*100).toFixed(1):0;
-      campHtml+='<tr class="crow-parent"><td>'+camp+'</td><td class="r"><span class="leads-badge">'+g.leads+'</span></td><td class="r" style="font-size:12px;color:var(--muted)">'+pct+'%</td><td><div class="dbar-bg"><div class="dbar-fill" style="width:'+Math.round(num(pct))+'%"></div></div></td></tr>';
-      g.fontes.forEach(function(f){
-        var dc=f.Fonte.indexOf('Facebook')>=0||f.Fonte.indexOf('meta')>=0?'#391bce':f.Fonte.indexOf('oogle')>=0?'#a2e259':f.Fonte.indexOf('Direto')>=0?'#c9b8f8':f.Fonte.indexOf('Eventos')>=0?'#f2a038':'#8b86a8';
-        campHtml+='<tr class="crow-child"><td style="display:flex;align-items:center;gap:8px"><span class="sdot" style="background:'+dc+'"></span>'+f.Fonte+'</td><td class="r">'+fmtN(f.Leads)+'</td><td class="r" style="font-size:12px">'+num(f.Percentual_Fonte)+'%</td><td><div class="dbar-bg"><div class="dbar-fill" style="width:'+Math.round(num(f.Percentual_Fonte))+'%"></div></div></td></tr>';
-      });
-    });
-    campTb.innerHTML=campHtml;
+  function toggleAreas(){
+    var el=document.getElementById('areas-list');
+    el.classList.toggle('coll');
+    var chev=document.querySelector('#areas-toggle .chev');
+    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
   }
 
-  // ── Anúncios setup ──
-  _anunciosAll=anuncios||[];
-  if(_anunciosAll.length){
-    var campSel=document.getElementById('ad-camp');
-    var fmtSel=document.getElementById('ad-fmt');
-    var camps=[...new Set(_anunciosAll.map(function(r){return r.Campanha;}))];
-    var fmts=[...new Set(_anunciosAll.map(function(r){return r.Formato;}))];
-    camps.forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=c;campSel.appendChild(o);});
-    fmts.forEach(function(f){var o=document.createElement('option');o.value=f;o.textContent=f.toLowerCase();fmtSel.appendChild(o);});
-    campSel.addEventListener('change',renderAnuncios);
-    fmtSel.addEventListener('change',renderAnuncios);
-    document.getElementById('ad-search').addEventListener('input',renderAnuncios);
+  function toggleAreas(){
+    var el=document.getElementById('areas-list');
+    el.classList.toggle('coll');
+    var chev=document.querySelector('#areas-toggle .chev');
+    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
   }
-  document.querySelectorAll('.atable th[data-k]').forEach(function(th){
-    th.addEventListener('click',function(){
-      var k=th.dataset.k;
-      if(k===adSortKey)adSortDir=-adSortDir; else{adSortKey=k;adSortDir=-1;}
-      renderAnuncios();
-    });
-  });
-  renderAnuncios();
-}
-
-function renderAnuncios(){
-  var tb=document.getElementById('ad-tbody');
-  var cnt=document.getElementById('ad-count');
-  if(!tb)return;
-  if(!_anunciosAll.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px">nenhum anúncio</td></tr>';return;}
-
-  var search=(document.getElementById('ad-search')||{}).value||'';
-  search=search.toLowerCase();
-  var cf=(document.getElementById('ad-camp')||{}).value||'';
-  var ff=(document.getElementById('ad-fmt')||{}).value||'';
-
-  var rows=_anunciosAll.filter(function(r){
-    if(search&&!(r.Anuncio||'').toLowerCase().includes(search)&&!(r.Campanha||'').toLowerCase().includes(search))return false;
-    if(cf&&r.Campanha!==cf)return false;
-    if(ff&&r.Formato!==ff)return false;
-    return true;
-  });
-  rows.sort(function(a,b){return (num(a[adSortKey])-num(b[adSortKey]))*adSortDir;});
-
-  if(cnt)cnt.textContent=rows.length+' anúncio'+(rows.length!==1?'s':'');
-  var mx=Math.max.apply(null,_anunciosAll.map(function(r){return num(r.Conversoes);}));
-  var html='';
-  rows.forEach(function(r){
-    var cpa=num(r.CPA);
-    var cc=cpa<10?'cpa-g':cpa<20?'cpa-o':'cpa-r';
-    var cw=mx?Math.round((num(r.Conversoes)/mx)*100):0;
-    var isV=r.Formato==='Vídeo';
-    html+='<tr>';
-    html+='<td><div class="ad-name">'+r.Anuncio+'</div><div style="margin-top:4px;display:flex;align-items:center;gap:6px"><span class="ftag'+(isV?' video':'')+'">'+r.Formato+'</span><span class="ad-camp">'+r.Campanha+'</span></div></td>';
-    html+='<td class="r">'+fmtBRL(r.Gasto)+'</td>';
-    html+='<td class="r">'+fmtK(r.Impressoes)+'</td>';
-    html+='<td class="r">'+fmtK(r.Alcance)+'</td>';
-    html+='<td class="r">'+num(r.Frequencia).toFixed(2)+'</td>';
-    html+='<td class="r">'+num(r.Taxa_Cliques).toFixed(2)+'%</td>';
-    html+='<td class="r"><div class="cbar-bg" style="margin-right:6px"><div class="cbar-fill" style="width:'+cw+'%"></div></div><strong style="color:#a2e259">'+fmtN(r.Conversoes)+'</strong></td>';
-    html+='<td class="r"><span class="'+cc+'">'+fmtBRL(r.CPA)+'</span></td>';
-    html+='</tr>';
-  });
-  tb.innerHTML=html;
-}
-
-function loadMonth(year, month){
-  var base='/assets/data/'+year+'/'+String(month).padStart(2,'0');
-  document.getElementById('mp-content').innerHTML='<div style="padding:32px;text-align:center;color:var(--muted)">carregando...</div>';
-  Promise.all([
-    loadCsv(base+'/midia-paga.csv'),
-    loadCsv(base+'/midia-paga-anuncios.csv'),
-    loadCsv(base+'/midia-paga-campanhas.csv')
-  ]).then(function(res){
-    renderMp(res[0],res[1],res[2],year,month);
-  }).catch(function(e){
-    console.error(e);
-    document.getElementById('mp-content').innerHTML='<div class="card" style="padding:32px;text-align:center;color:var(--muted)">erro ao carregar dados.</div>';
-  });
-}
-
-function show(){
-  document.getElementById('app-loading').style.display='none';
-  document.getElementById('app').style.display='';
-}
-
-function init(){
-  fetch('/assets/data/manifest.json')
-    .then(function(r){return r.ok?r.json():Promise.reject('manifest not found');})
-    .then(function(manifest){
-      var nav=document.getElementById('monthNav');
-      var found=Object.keys(manifest)
-        .filter(function(k){return (manifest[k]||[]).indexOf('midia-paga')>=0;})
-        .map(function(k){var p=k.split('/');return{year:Number(p[0]),month:Number(p[1])};})
-        .sort(function(a,b){return a.year-b.year||a.month-b.month;});
-
-      if(!found.length){nav.innerHTML='<div style="font-size:12px;color:var(--muted);padding:8px 12px">nenhum dado</div>';show();return;}
-
-      var byYear={};
-      found.forEach(function(f){if(!byYear[f.year])byYear[f.year]=[];byYear[f.year].push(f.month);});
-      var allBtns=[];
-
-      Object.keys(byYear).sort().forEach(function(y){
-        var sec=document.createElement('div');sec.className='sidebar-section year-header';sec.style.cssText='display:flex;align-items:center;gap:4px';sec.innerHTML='<span style="flex:1">'+y+'</span>';nav.appendChild(sec);
-        var grp=document.createElement('div');grp.className='year-group';
-        byYear[y].forEach(function(m){
-          var btn=document.createElement('button');btn.className='nav-tab';
-          btn.innerHTML='<span class="nav-dot" style="background:#c9b8f8"></span>'+_MO[m-1];
-          btn.addEventListener('click',function(){allBtns.forEach(function(b){b.classList.remove('active');});btn.classList.add('active');loadMonth(Number(y),m);});
-          grp.appendChild(btn);allBtns.push(btn);
-        });
-        nav.appendChild(grp);requestAnimationFrame(function(){grp.style.maxHeight=grp.scrollHeight+'px';});
-      });
-
-      var latest=found[found.length-1];
-      allBtns[allBtns.length-1].classList.add('active');
-      loadMonth(latest.year,latest.month);
-      show();
-    })
-    .catch(function(e){
-      console.error('manifest error:',e);
-      document.getElementById('mp-content').innerHTML='<div class="card" style="padding:32px;text-align:center;color:var(--muted)">erro ao carregar manifest.json</div>';
-      show();
-    });
-}
-
-window.addEventListener('load', init);
-</script>
+  function togglePeriodo(){
+    var el=document.getElementById('periodo-list');
+    el.classList.toggle('coll');
+    var chev=document.querySelector('#periodo-toggle .chev');
+    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
+  }
+  function toggleTheme(){const h=document.documentElement;const l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);const i=document.getElementById('sidebar-logo');if(i)i.src=h.dataset.theme==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';if(window._areaState)renderMonth(window._areaState.current,window._areaState.all);}
+  </script>
+  <script src="/assets/js/area.js"></script>
 </body>
 </html>

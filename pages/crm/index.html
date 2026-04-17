@@ -9,431 +9,118 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-  <style>
-    .taxas-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
-    @media(max-width:700px){.taxas-grid{grid-template-columns:1fr}}
-    .taxa-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;position:relative}
-    .taxa-card.frios{border-top:3px solid #a038f2}
-    .taxa-card.clientes{border-top:3px solid #a2e259}
-    .taxa-card-title{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
-    .taxa-card-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
-    .taxa-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center}
-    .taxa-metric-val{font-size:30px;font-weight:600;line-height:1.1}
-    .taxa-metric-val.frios-c{color:#a038f2}
-    .taxa-metric-val.clientes-c{color:#a2e259}
-    .taxa-metric-label{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
-    .sec-title{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#391bce;margin-bottom:14px}
-    .sec-title::before{content:'';width:3px;height:14px;background:#391bce;border-radius:2px;display:block;flex-shrink:0}
-    .charts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
-    @media(max-width:900px){.charts-grid{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:600px){.charts-grid{grid-template-columns:1fr}}
-    .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
-    .chart-card-title{font-size:13px;font-weight:600;margin-bottom:2px}
-    .chart-card-sub{font-size:11px;color:var(--muted);margin-bottom:12px}
-    .chart-mini-metrics{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-    .cmm{flex:1;text-align:center}
-    .cmm-val{font-size:15px;font-weight:600}
-    .cmm-label{font-size:10px;color:var(--muted);margin-top:2px}
-    .etable{width:100%;border-collapse:collapse;font-size:13px}
-    .etable th{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:left;padding:0 10px 12px;font-weight:600;white-space:nowrap;cursor:pointer;user-select:none}
-    .etable th:hover{color:var(--beige)}
-    .etable th.r{text-align:right}
-    .etable td{padding:11px 10px;border-top:1px solid var(--border);vertical-align:middle}
-    .etable td.r{text-align:right}
-    .ctag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:4px;text-transform:uppercase;white-space:nowrap}
-    .ctag.expo{background:#391bce22;color:#c9b8f8;border:1px solid #c9b8f830}
-    .ctag.intermodal{background:#a038f222;color:#a038f2;border:1px solid #a038f230}
-    .ctag.webinar{background:#38c9b822;color:#38c9b8;border:1px solid #38c9b830}
-    .ctag.auditoria{background:#a2e25922;color:#a2e259;border:1px solid #a2e25930}
-    .sbadge{display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px}
-    .sbadge.frios{background:#391bce15;color:#c9b8f8}
-    .sbadge.baserd{background:#a2e25915;color:#a2e259}
-    .sbadge.clientes{background:#38c9b815;color:#38c9b8}
-    .mini-bar{display:inline-block;width:40px;height:3px;background:var(--border);border-radius:2px;vertical-align:middle;margin-right:4px;overflow:hidden}
-    .mini-bar-fill{height:100%;border-radius:2px}
-    .filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
-    .fi{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:13px;color:var(--beige);font-family:var(--font);outline:none}
-    .fi::placeholder{color:var(--muted)}
-    .count-badge{font-size:12px;color:var(--muted);margin-left:auto}
-  </style>
+  <script>const AREA_CONFIG = {"name": "crm", "subtitle": "leads · funil de vendas · receita", "file": "crm.csv", "color": "#391bce", "kpis": [{"key": "Novos Leads", "label": "novos leads", "sub": "entradas no funil", "color": "#391bce"}, {"key": "Leads Qualificados", "label": "leads qualificados", "sub": "com potencial", "color": "#a038f2"}, {"key": "Oportunidades", "label": "oportunidades", "sub": "em negociação", "color": "#c9b8f8"}, {"key": "Negócios Fechados", "label": "negócios fechados", "sub": "convertidos", "color": "#a2e259"}, {"key": "Taxa de Conversão", "label": "conversão", "sub": "leads → clientes", "color": "#6b5fd4", "pct": true}, {"key": "Receita", "label": "receita", "sub": "gerada no mês", "color": "#a2e259", "currency": true}], "charts": [{"id": "chart-leads", "key": "Novos Leads", "type": "bar", "color": "#391bce", "label": "novos leads por mês"}, {"id": "chart-fechados", "key": "Negócios Fechados", "type": "bar", "color": "#a2e259", "label": "negócios fechados"}, {"id": "chart-conversao", "key": "Taxa de Conversão", "type": "line", "color": "#6b5fd4", "label": "taxa de conversão"}, {"id": "chart-receita", "key": "Receita", "type": "line", "color": "#a2e259", "label": "receita gerada"}]};</script>
 </head>
 <body>
-<div id="app-loading"><div class="spinner"></div><p>carregando dados...</p></div>
-<div id="app" style="display:none">
-  <div class="layout" id="layout">
-    <aside class="sidebar">
+  <div id="app-loading"><div class="spinner"></div><p>carregando dados...</p></div>
+  <div id="app" style="display:none">
+    <div class="layout" id="layout">
+  <aside class="sidebar">
       <div class="sidebar-top">
         <button class="hamburger" id="hamburger" title="menu"><span></span><span></span><span></span></button>
         <button class="theme-toggle" onclick="toggleTheme()" title="alternar tema"><span id="theme-icon"></span></button>
-        <img class="sidebar-logo" id="sidebar-logo" src="/assets/img/logo-escuro.png" alt="vml company" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <img class="sidebar-logo" id="sidebar-logo" src="/assets/img/logo-escuro.png" alt="vml company"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
         <span class="logo-fallback" style="display:none">vml company</span>
       </div>
       <div class="sidebar-body">
         <div class="sidebar-nav-top">
+
+          <!-- home -->
           <a class="nav-home" href="/" style="text-decoration:none;display:flex;align-items:center;gap:8px">
             <span class="nav-icon" style="background:rgba(160,56,242,.18);color:#a038f2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span>home
           </a>
-          <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span></div>
+
+          <!-- áreas -->
+          <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+            áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
+          </div>
           <div id="areas-list">
             <a class="nav-tab" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-icon" style="background:#a038f2"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>redes sociais</a>
             <a class="nav-tab" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
             <a class="nav-tab active" href="/pages/crm" style="text-decoration:none"><span class="nav-icon" style="background:#391bce"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>crm</a>
             <a class="nav-tab" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
           </div>
+
           <div class="sidebar-divider"></div>
-          <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">período <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span></div>
-          <div id="periodo-list"><div id="monthNav"></div></div>
+
+          <!-- período -->
+          <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+            período <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
+          </div>
+          <div id="periodo-list">
+            <div id="monthNav"></div>
+            <button class="nav-tab" id="btn-annual" style="display:none"></button>
+          </div>
+
         </div>
         <div class="sidebar-nav-bottom">
           <a class="nav-upload" href="/pages/upload"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;flex-shrink:0"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>enviar relatório</a>
-          <div class="sidebar-credit"><div><div class="credit-brand">vml company</div><div class="credit-copy">© 2026 todos os direitos<br>reservados.</div></div></div>
+          <div class="sidebar-credit">
+            <div>
+              <div class="credit-brand">vml company</div>
+              <div class="credit-copy">© 2026 todos os direitos<br>reservados.</div>
+            </div>
+          </div>
         </div>
       </div>
     </aside>
-    <main class="main">
-      <div class="page-header">
-        <div>
-          <div class="page-eyebrow" id="page-eyebrow">crm</div>
-          <div class="page-title">crm</div>
-          <div class="page-sub">e-mail marketing · taxas consolidadas · campanhas</div>
+      <main class="main">
+        <div class="page-header">
+          <div>
+            <div class="page-eyebrow" id="page-eyebrow">crm</div>
+            <div class="page-title">crm</div>
+            <div class="page-sub" id="page-sub">leads · funil de vendas · receita</div>
+          <div id="data-source-badge" style="margin-top:8px"></div>
+          </div>
         </div>
-      </div>
-      <div id="crm-content"><div style="padding:32px;text-align:center;color:var(--muted)">carregando...</div></div>
-    </main>
+        <div id="no-data-banner" class="card section-gap" style="display:none;border-color:#391bce33;background:#391bce08">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="font-size:24px">📂</div>
+            <div>
+              <div style="font-weight:700;margin-bottom:4px;text-transform:lowercase">nenhum dado encontrado</div>
+              <div style="font-size:13px;color:var(--muted)">faça upload de <code>crm.csv</code> em <code>assets/data/YYYY/MM/</code> para começar.</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:8px">formato esperado:<br><code>Novos Leads,Leads Qualificados,Oportunidades,Negócios Fechados,Taxa de Conversão,Receita</code></div>
+            </div>
+            <a href="/pages/upload" style="margin-left:auto;flex-shrink:0;padding:10px 18px;background:var(--blue);color:white;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap">↑ enviar arquivo</a>
+          </div>
+        </div>
+        <div class="kpi-row" id="kpi-row"></div>
+<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">novos leads por mês</div></div><div style="position:relative;height:175px"><canvas id="chart-leads"></canvas></div></div>
+          <div class="card"><div class="card-header"><div class="card-title">negócios fechados</div></div><div style="position:relative;height:175px"><canvas id="chart-fechados"></canvas></div></div></div>
+<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">taxa de conversão</div></div><div style="position:relative;height:150px"><canvas id="chart-conversao"></canvas></div></div>
+          <div class="card"><div class="card-header"><div class="card-title">receita gerada</div></div><div style="position:relative;height:150px"><canvas id="chart-receita"></canvas></div></div></div>
+        <div class="card" id="data-table"></div>
+      </main>
+    </div>
   </div>
-</div>
+  <script>
+  (function(){const s=localStorage.getItem('dashboard-theme')||'';document.documentElement.dataset.theme=s;const l=document.getElementById('sidebar-logo');if(l)l.src=s==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';const ic=document.getElementById('theme-icon');if(ic)ic.innerHTML=s==='light'?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>':'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';})();
 
-<script>
-// ── Tema imediato ──
-(function(){
-  var s=localStorage.getItem('dashboard-theme')||'';
-  document.documentElement.dataset.theme=s;
-  var l=document.getElementById('sidebar-logo');
-  if(l)l.src=s==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';
-  var ic=document.getElementById('theme-icon');
-  if(ic)ic.innerHTML=s==='light'
-    ?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
-    :'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>';
-})();
-
-function toggleAreas(){var e=document.getElementById('areas-list');e.classList.toggle('coll');var c=document.querySelector('#areas-toggle .chev');if(c)c.style.transform=e.classList.contains('coll')?'rotate(-90deg)':'';}
-function togglePeriodo(){var e=document.getElementById('periodo-list');e.classList.toggle('coll');var c=document.querySelector('#periodo-toggle .chev');if(c)c.style.transform=e.classList.contains('coll')?'rotate(-90deg)':'';}
-function toggleTheme(){var h=document.documentElement;var l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);var i=document.getElementById('sidebar-logo');if(i)i.src=h.dataset.theme==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';}
-
-// ── Hamburger ──
-document.getElementById('hamburger').addEventListener('click',function(){document.getElementById('layout').classList.toggle('sidebar-closed');});
-
-// ── Helpers ──
-var _MO=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-var CHART_INSTANCES={};
-
-function num(v){return parseFloat(String(v||'').replace(',','.'))||0;}
-function pct(v){return num(v).toFixed(2)+'%';}
-function fmtN(v){return num(v).toLocaleString('pt-BR');}
-
-var CAMP_CFG={
-  'Expo Cotrijal':       {color:'#c9b8f8',bg:'#391bce',tag:'expo'},
-  'Intermodal':          {color:'#a038f2',bg:'#a038f2',tag:'intermodal'},
-  'Webinar':             {color:'#38c9b8',bg:'#38c9b8',tag:'webinar'},
-  'Auditoria de Folha':  {color:'#a2e259',bg:'#a2e259',tag:'auditoria'}
-};
-
-// ── CSV parsing ──
-function loadCsv(url){
-  return fetch(url).then(function(r){
-    if(!r.ok)return null;
-    return r.text().then(function(t){
-      return new Promise(function(res){
-        Papa.parse(t,{header:true,skipEmptyLines:true,complete:function(d){res(d.data);}});
-      });
-    });
-  }).catch(function(){return null;});
-}
-
-// ── Sort state for email table ──
-var sortKey='Data', sortDir=-1;
-
-// ── Main render ──
-function renderCrm(crmRows, emailRows, year, month){
-  document.getElementById('page-eyebrow').textContent=_MO[month-1]+' '+year;
-  var el=document.getElementById('crm-content');
-
-  var frios={}, clientes={};
-  if(crmRows){
-    crmRows.forEach(function(r){
-      if(r.Segmento==='Leads frios')frios=r;
-      if(r.Segmento==='Base de clientes')clientes=r;
-    });
+  function toggleAreas(){
+    var el=document.getElementById('areas-list');
+    el.classList.toggle('coll');
+    var chev=document.querySelector('#areas-toggle .chev');
+    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
   }
 
-  // Group emails by campaign
-  var campGroups={};
-  if(emailRows){
-    emailRows.forEach(function(r){
-      if(!r.Campanha)return;
-      if(!campGroups[r.Campanha])campGroups[r.Campanha]=[];
-      campGroups[r.Campanha].push(r);
-    });
+  function toggleAreas(){
+    var el=document.getElementById('areas-list');
+    el.classList.toggle('coll');
+    var chev=document.querySelector('#areas-toggle .chev');
+    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
   }
-
-  var html='';
-
-  // ── DESTAQUE: Taxas Consolidadas ──
-  html+='<div class="sec-title">taxas consolidadas · destaque do período</div>';
-  html+='<div class="taxas-grid">';
-
-  html+='<div class="taxa-card frios">';
-  html+='<div class="taxa-card-title">leads frios</div>';
-  html+='<div class="taxa-card-sub">base de contatos frios segmentados por campanha</div>';
-  html+='<div class="taxa-metrics">';
-  html+='<div><div class="taxa-metric-val frios-c">'+pct(frios.Taxa_Entrega||0)+'</div><div class="taxa-metric-label">entrega</div></div>';
-  html+='<div><div class="taxa-metric-val frios-c">'+pct(frios.Taxa_Abertura||0)+'</div><div class="taxa-metric-label">abertura</div></div>';
-  html+='<div><div class="taxa-metric-val frios-c">'+pct(frios.Taxa_Clique||0)+'</div><div class="taxa-metric-label">clique (ctr)</div></div>';
-  html+='</div></div>';
-
-  html+='<div class="taxa-card clientes">';
-  html+='<div class="taxa-card-title">base de clientes</div>';
-  html+='<div class="taxa-card-sub">base rd · clientes e colaboradores vml company</div>';
-  html+='<div class="taxa-metrics">';
-  html+='<div><div class="taxa-metric-val clientes-c">'+pct(clientes.Taxa_Entrega||0)+'</div><div class="taxa-metric-label">entrega</div></div>';
-  html+='<div><div class="taxa-metric-val clientes-c">'+pct(clientes.Taxa_Abertura||0)+'</div><div class="taxa-metric-label">abertura</div></div>';
-  html+='<div><div class="taxa-metric-val clientes-c">'+pct(clientes.Taxa_Clique||0)+'</div><div class="taxa-metric-label">clique (ctr)</div></div>';
-  html+='</div></div>';
-  html+='</div>';
-
-  // ── Charts por campanha ──
-  if(Object.keys(campGroups).length>0){
-    html+='<div class="sec-title" style="color:#391bce">performance por campanha</div>';
-    html+='<div class="charts-grid" id="charts-grid">';
-    Object.keys(campGroups).forEach(function(camp){
-      var rows=campGroups[camp];
-      var cfg=CAMP_CFG[camp]||{color:'#c9b8f8',bg:'#6b5fd4',tag:'webinar'};
-      var totalLeads=rows.reduce(function(a,r){return a+num(r.Leads);},0);
-      var avgEnt=rows.reduce(function(a,r){return a+num(r.Taxa_Entrega);},0)/rows.length;
-      var avgAbr=rows.reduce(function(a,r){return a+num(r.Taxa_Abertura);},0)/rows.length;
-      var avgCtr=rows.reduce(function(a,r){return a+num(r.Taxa_Clique);},0)/rows.length;
-      var cid='chrt-'+camp.replace(/[^a-z0-9]/gi,'-').toLowerCase();
-      html+='<div class="chart-card">';
-      html+='<div class="chart-card-title">'+camp+'</div>';
-      html+='<div class="chart-card-sub">'+rows.length+' e-mail'+(rows.length!==1?'s':'')+' · '+fmtN(totalLeads)+' leads</div>';
-      html+='<div style="position:relative;height:130px"><canvas id="'+cid+'"></canvas></div>';
-      html+='<div class="chart-mini-metrics">';
-      html+='<div class="cmm"><div class="cmm-val" style="color:'+cfg.color+'">'+num(avgEnt).toFixed(1)+'%</div><div class="cmm-label">entrega</div></div>';
-      html+='<div class="cmm"><div class="cmm-val" style="color:'+cfg.color+'">'+num(avgAbr).toFixed(1)+'%</div><div class="cmm-label">abertura</div></div>';
-      html+='<div class="cmm"><div class="cmm-val" style="color:'+cfg.color+'">'+num(avgCtr).toFixed(2)+'%</div><div class="cmm-label">ctr</div></div>';
-      html+='</div></div>';
-    });
-    html+='</div>';
+  function togglePeriodo(){
+    var el=document.getElementById('periodo-list');
+    el.classList.toggle('coll');
+    var chev=document.querySelector('#periodo-toggle .chev');
+    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
   }
-
-  // ── Tabela de e-mails ──
-  html+='<div class="card section-gap">';
-  html+='<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px">';
-  html+='<div class="sec-title" style="margin-bottom:0">e-mails enviados · detalhamento</div>';
-  html+='<span class="count-badge" id="email-count"></span></div>';
-  html+='<div class="filter-bar">';
-  html+='<input class="fi" id="email-search" placeholder="buscar e-mail ou assunto…" style="min-width:180px">';
-  html+='<select class="fi" id="email-camp"><option value="">todas as campanhas</option></select>';
-  html+='<select class="fi" id="email-seg"><option value="">todos os segmentos</option></select>';
-  html+='</div>';
-  html+='<div style="overflow-x:auto"><table class="etable"><thead><tr>';
-  html+='<th data-k="Data">data ↕</th><th>campanha</th><th>segmento</th><th>e-mail / assunto</th>';
-  html+='<th class="r" data-k="Leads">leads ↕</th>';
-  html+='<th class="r" data-k="Taxa_Entrega">entrega ↕</th>';
-  html+='<th class="r" data-k="Taxa_Abertura">abertura ↕</th>';
-  html+='<th class="r" data-k="Taxa_Clique">ctr ↕</th>';
-  html+='</tr></thead><tbody id="email-tbody"></tbody></table></div></div>';
-
-  el.innerHTML=html;
-
-  // ── Render charts ──
-  if(typeof Chart!=='undefined' && Object.keys(campGroups).length>0){
-    Object.keys(campGroups).forEach(function(camp){
-      var rows=campGroups[camp];
-      var cfg=CAMP_CFG[camp]||{color:'#c9b8f8',bg:'#6b5fd4',tag:'webinar'};
-      var cid='chrt-'+camp.replace(/[^a-z0-9]/gi,'-').toLowerCase();
-      var canvas=document.getElementById(cid);
-      if(!canvas)return;
-      if(CHART_INSTANCES[cid])CHART_INSTANCES[cid].destroy();
-      var isLight=document.documentElement.dataset.theme==='light';
-      var gridC=isLight?'rgba(18,21,90,.06)':'rgba(255,255,255,.04)';
-      var tickC=isLight?'#5a5070':'#8b86a8';
-      try{
-        CHART_INSTANCES[cid]=new Chart(canvas,{
-          type:'bar',
-          data:{
-            labels:rows.map(function(_,i){return '#'+(i+1);}),
-            datasets:[
-              {label:'entrega %',data:rows.map(function(r){return num(r.Taxa_Entrega);}),backgroundColor:cfg.bg+'66',borderRadius:3},
-              {label:'abertura %',data:rows.map(function(r){return num(r.Taxa_Abertura);}),backgroundColor:cfg.bg+'aa',borderRadius:3},
-              {label:'ctr %',data:rows.map(function(r){return num(r.Taxa_Clique);}),backgroundColor:cfg.bg,borderRadius:3}
-            ]
-          },
-          options:{
-            responsive:true,maintainAspectRatio:false,
-            plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return ctx.dataset.label+': '+ctx.raw.toFixed(2)+'%';}}}},
-            scales:{
-              x:{grid:{display:false},ticks:{color:tickC,font:{size:10}}},
-              y:{grid:{color:gridC},ticks:{color:tickC,font:{size:10},callback:function(v){return v+'%';}},max:100,min:0}
-            }
-          }
-        });
-      }catch(e){console.warn('chart error:',e);}
-    });
-  }
-
-  // ── Populate email filters ──
-  var campSel=document.getElementById('email-camp');
-  var segSel=document.getElementById('email-seg');
-  if(emailRows&&campSel&&segSel){
-    var camps=[...new Set(emailRows.map(function(r){return r.Campanha;}))];
-    var segs=[...new Set(emailRows.map(function(r){return r.Segmento;}))];
-    camps.forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=c;campSel.appendChild(o);});
-    segs.forEach(function(s){var o=document.createElement('option');o.value=s;o.textContent=s;segSel.appendChild(o);});
-    campSel.addEventListener('change',function(){renderEmailTable(emailRows);});
-    segSel.addEventListener('change',function(){renderEmailTable(emailRows);});
-    document.getElementById('email-search').addEventListener('input',function(){renderEmailTable(emailRows);});
-  }
-
-  // ── Sort headers ──
-  document.querySelectorAll('.etable th[data-k]').forEach(function(th){
-    th.addEventListener('click',function(){
-      var k=th.dataset.k;
-      if(k===sortKey)sortDir=-sortDir; else{sortKey=k;sortDir=-1;}
-      renderEmailTable(emailRows);
-    });
-  });
-
-  renderEmailTable(emailRows);
-}
-
-function renderEmailTable(rows){
-  var tbody=document.getElementById('email-tbody');
-  var cnt=document.getElementById('email-count');
-  if(!tbody)return;
-  if(!rows){tbody.innerHTML='';if(cnt)cnt.textContent='';return;}
-
-  var search=(document.getElementById('email-search')||{}).value||'';
-  search=search.toLowerCase();
-  var cf=(document.getElementById('email-camp')||{}).value||'';
-  var sf=(document.getElementById('email-seg')||{}).value||'';
-
-  var filtered=rows.filter(function(r){
-    if(search&&!(r.Nome_Email||'').toLowerCase().includes(search)&&!(r.Assunto||'').toLowerCase().includes(search))return false;
-    if(cf&&r.Campanha!==cf)return false;
-    if(sf&&r.Segmento!==sf)return false;
-    return true;
-  });
-
-  filtered.sort(function(a,b){
-    var av=sortKey==='Data'?String(a[sortKey]||''):num(a[sortKey]);
-    var bv=sortKey==='Data'?String(b[sortKey]||''):num(b[sortKey]);
-    return av<bv?-sortDir:av>bv?sortDir:0;
-  });
-
-  if(cnt)cnt.textContent=filtered.length+' e-mail'+(filtered.length!==1?'s':'');
-
-  var maxLeads=Math.max.apply(null,rows.map(function(r){return num(r.Leads);}));
-  var html='';
-  filtered.forEach(function(r){
-    var cfg=CAMP_CFG[r.Campanha]||{tag:'webinar'};
-    var sc=r.Segmento==='Leads frios'?'frios':r.Segmento==='Base RD'?'baserd':'clientes';
-    var dt=r.Data?new Date(r.Data).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}):'-';
-    var lw=maxLeads?Math.round((num(r.Leads)/maxLeads)*100):0;
-    var entW=Math.min(num(r.Taxa_Entrega),100);
-    var abrW=Math.min(num(r.Taxa_Abertura),100);
-    var ctrW=Math.min(num(r.Taxa_Clique)*10,100);
-    html+='<tr>';
-    html+='<td style="white-space:nowrap;color:var(--muted);font-size:12px">'+dt+'</td>';
-    html+='<td><span class="ctag '+cfg.tag+'">'+r.Campanha+'</span></td>';
-    html+='<td><span class="sbadge '+sc+'">'+r.Segmento+'</span></td>';
-    html+='<td style="min-width:180px"><div style="font-weight:600;font-size:13px">'+r.Nome_Email+'</div><div style="font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px">'+r.Assunto+'</div></td>';
-    html+='<td class="r"><span class="mini-bar"><span class="mini-bar-fill" style="width:'+lw+'%;background:#c9b8f8;display:block;height:100%"></span></span><strong>'+fmtN(r.Leads)+'</strong></td>';
-    html+='<td class="r"><span class="mini-bar"><span class="mini-bar-fill" style="width:'+entW+'%;background:#391bce;display:block;height:100%"></span></span>'+pct(r.Taxa_Entrega)+'</td>';
-    html+='<td class="r"><span class="mini-bar"><span class="mini-bar-fill" style="width:'+abrW+'%;background:#a038f2;display:block;height:100%"></span></span>'+pct(r.Taxa_Abertura)+'</td>';
-    html+='<td class="r"><span class="mini-bar"><span class="mini-bar-fill" style="width:'+ctrW+'%;background:#a2e259;display:block;height:100%"></span></span>'+pct(r.Taxa_Clique)+'</td>';
-    html+='</tr>';
-  });
-  tbody.innerHTML=html;
-}
-
-// ── Load month data ──
-function loadMonth(year, month){
-  var base='/assets/data/'+year+'/'+String(month).padStart(2,'0');
-  document.getElementById('crm-content').innerHTML='<div style="padding:32px;text-align:center;color:var(--muted)">carregando...</div>';
-  Promise.all([
-    loadCsv(base+'/crm.csv'),
-    loadCsv(base+'/crm-emails.csv')
-  ]).then(function(results){
-    renderCrm(results[0], results[1], year, month);
-  }).catch(function(e){
-    console.error(e);
-    document.getElementById('crm-content').innerHTML='<div class="card" style="padding:32px;text-align:center;color:var(--muted)">erro ao carregar dados.</div>';
-  });
-}
-
-// ── Build sidebar nav from manifest ──
-function init(){
-  fetch('/assets/data/manifest.json')
-    .then(function(r){return r.ok?r.json():Promise.reject('manifest not found');})
-    .then(function(manifest){
-      var nav=document.getElementById('monthNav');
-      var found=Object.keys(manifest)
-        .filter(function(k){return (manifest[k]||[]).indexOf('crm')>=0;})
-        .map(function(k){var p=k.split('/');return{year:Number(p[0]),month:Number(p[1])}; })
-        .sort(function(a,b){return a.year-b.year||a.month-b.month;});
-
-      if(!found.length){nav.innerHTML='<div style="font-size:12px;color:var(--muted);padding:8px 12px">nenhum dado</div>';show();return;}
-
-      var byYear={};
-      found.forEach(function(f){if(!byYear[f.year])byYear[f.year]=[];byYear[f.year].push(f.month);});
-      var allBtns=[];
-
-      Object.keys(byYear).sort().forEach(function(y){
-        var sec=document.createElement('div');
-        sec.className='sidebar-section year-header';
-        sec.style.cssText='display:flex;align-items:center;gap:4px';
-        sec.innerHTML='<span style="flex:1">'+y+'</span>';
-        nav.appendChild(sec);
-        var grp=document.createElement('div');
-        grp.className='year-group';
-        byYear[y].forEach(function(m){
-          var btn=document.createElement('button');
-          btn.className='nav-tab';
-          btn.innerHTML='<span class="nav-dot" style="background:#391bce"></span>'+_MO[m-1];
-          btn.addEventListener('click',function(){
-            allBtns.forEach(function(b){b.classList.remove('active');});
-            btn.classList.add('active');
-            loadMonth(Number(y),m);
-          });
-          grp.appendChild(btn);
-          allBtns.push(btn);
-        });
-        nav.appendChild(grp);
-        requestAnimationFrame(function(){grp.style.maxHeight=grp.scrollHeight+'px';});
-      });
-
-      // Load latest month
-      var latest=found[found.length-1];
-      allBtns[allBtns.length-1].classList.add('active');
-      loadMonth(latest.year, latest.month);
-      show();
-    })
-    .catch(function(e){
-      console.error('manifest error:',e);
-      document.getElementById('crm-content').innerHTML='<div class="card" style="padding:32px;text-align:center;color:var(--muted)">erro ao carregar manifest.json</div>';
-      show();
-    });
-}
-
-function show(){
-  document.getElementById('app-loading').style.display='none';
-  document.getElementById('app').style.display='';
-}
-
-window.addEventListener('load', init);
-</script>
+  function toggleTheme(){const h=document.documentElement;const l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);const i=document.getElementById('sidebar-logo');if(i)i.src=h.dataset.theme==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';if(window._areaState)renderMonth(window._areaState.current,window._areaState.all);}
+  </script>
+  <script src="/assets/js/area.js"></script>
 </body>
 </html>
