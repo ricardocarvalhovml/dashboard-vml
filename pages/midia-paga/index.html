@@ -11,23 +11,25 @@
   <link rel="stylesheet" href="/assets/css/styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
   <style>
-    .mp-badge { display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px;white-space:nowrap; }
-    .badge-intermodal { background:rgba(57,27,206,.18);color:#a038f2; }
-    .badge-tributario  { background:rgba(162,226,89,.12);color:#a2e259; }
-    .badge-auditoria   { background:rgba(201,184,248,.15);color:#c9b8f8; }
-    .badge-video       { background:rgba(107,95,212,.18);color:#9b8ef0; }
+    .section-label { font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.06em;margin-bottom:8px;text-transform:lowercase; }
     .mp-table { width:100%;border-collapse:collapse;font-size:13px; }
-    .mp-table th { font-size:10px;font-weight:600;color:var(--muted);text-align:left;padding:6px 10px;border-bottom:1px solid var(--border);text-transform:lowercase;letter-spacing:.04em;white-space:nowrap; }
-    .mp-table td { padding:8px 10px;border-bottom:1px solid var(--border);color:var(--beige);vertical-align:middle; }
+    .mp-table th { font-size:10px;font-weight:600;color:var(--muted);text-align:left;padding:7px 10px;border-bottom:1px solid var(--border);text-transform:lowercase;letter-spacing:.04em;white-space:nowrap; }
+    .mp-table td { padding:9px 10px;border-bottom:1px solid var(--border);color:var(--beige);vertical-align:middle; }
     .mp-table tr:last-child td { border-bottom:none; }
-    .mp-table tr:hover td { background:rgba(57,27,206,.06); }
+    .mp-table tbody tr:hover td { background:rgba(57,27,206,.06); }
     .num { text-align:right;font-variant-numeric:tabular-nums; }
+    .badge { display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:5px;white-space:nowrap; }
+    .b-intermodal { background:rgba(57,27,206,.18);color:#a038f2; }
+    .b-tributario  { background:rgba(162,226,89,.12);color:#a2e259; }
+    .b-auditoria   { background:rgba(201,184,248,.15);color:#c9b8f8; }
+    .b-video       { background:rgba(107,95,212,.18);color:#9b8ef0; }
     .cpa-good { color:#a2e259;font-weight:600; }
     .cpa-mid  { color:#c9b8f8;font-weight:600; }
     .cpa-high { color:#a038f2;font-weight:600; }
-    .rank-dot { display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:10px;font-weight:600;background:rgba(57,27,206,.2);color:#a038f2;flex-shrink:0; }
-    .conv-bar-wrap { display:flex;align-items:center;gap:8px; }
-    .conv-bar { height:6px;border-radius:3px;background:#391bce;flex-shrink:0; }
+    .rank { display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:10px;font-weight:600;background:rgba(57,27,206,.2);color:#a038f2;flex-shrink:0; }
+    .conv-wrap { display:flex;align-items:center;gap:6px;justify-content:flex-end; }
+    .conv-bar  { height:5px;border-radius:3px;background:#391bce;flex-shrink:0; }
+    .trend-line { display:flex;align-items:center;gap:6px;font-size:12px; }
   </style>
 </head>
 <body>
@@ -70,55 +72,61 @@
           <div>
             <div class="page-eyebrow">mídia paga</div>
             <div class="page-title">mídia paga</div>
-            <div class="page-sub">campanhas pagas · meta ads · conversões · cpa</div>
-            <div style="margin-top:8px;font-size:11px;color:var(--muted)">01/04/2026 – 16/04/2026 · campanhas de conversões, tráfego e engajamento</div>
+            <div class="page-sub">meta ads · gasto · conversões · cpa por anúncio</div>
+            <div style="margin-top:6px;font-size:11px;color:var(--muted)">01/04/2026 – 16/04/2026 · campanhas de conversões, tráfego e engajamento</div>
           </div>
         </div>
 
         <!-- KPIs principais -->
         <div class="kpi-row" style="grid-template-columns:repeat(6,minmax(0,1fr))">
-          <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">gasto total</div><div class="kpi-val" style="font-size:20px">R$2.679</div><div class="kpi-sub">8 anúncios ativos</div></div>
-          <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">impressões</div><div class="kpi-val" style="font-size:20px">88,2k</div><div class="kpi-sub">total combinado</div></div>
-          <div class="kpi" style="--kpi-line:#c9b8f8"><div class="kpi-label">alcance</div><div class="kpi-val" style="font-size:20px">43,1k</div><div class="kpi-sub">pessoas únicas</div></div>
-          <div class="kpi" style="--kpi-line:#a2e259"><div class="kpi-label">conversões</div><div class="kpi-val" style="font-size:20px;color:#a2e259">459</div><div class="kpi-sub">total período</div></div>
-          <div class="kpi" style="--kpi-line:#a2e259"><div class="kpi-label">melhor cpa</div><div class="kpi-val" style="font-size:20px;color:#a2e259">R$3,58</div><div class="kpi-sub">img 1 — intermodal</div></div>
-          <div class="kpi" style="--kpi-line:#6b5fd4"><div class="kpi-label">cpa médio</div><div class="kpi-val" style="font-size:20px;color:#c9b8f8">R$5,84</div><div class="kpi-sub">gasto ÷ conversões</div></div>
+          <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">gasto total</div><div class="kpi-val">R$2.679</div><div class="kpi-sub">8 anúncios</div></div>
+          <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">impressões</div><div class="kpi-val">88,2k</div><div class="kpi-sub">total no período</div></div>
+          <div class="kpi" style="--kpi-line:#c9b8f8"><div class="kpi-label">alcance</div><div class="kpi-val">43,1k</div><div class="kpi-sub">pessoas únicas</div></div>
+          <div class="kpi" style="--kpi-line:#a2e259"><div class="kpi-label">conversões</div><div class="kpi-val" style="color:#a2e259">459</div><div class="kpi-sub">total no período</div></div>
+          <div class="kpi" style="--kpi-line:#a2e259"><div class="kpi-label">melhor cpa</div><div class="kpi-val" style="color:#a2e259">R$3,58</div><div class="kpi-sub">img 1 — intermodal</div></div>
+          <div class="kpi" style="--kpi-line:#6b5fd4"><div class="kpi-label">cpa médio</div><div class="kpi-val" style="color:#c9b8f8">R$5,84</div><div class="kpi-sub">gasto ÷ conversões</div></div>
         </div>
 
-        <!-- Charts row -->
+        <!-- Dois gráficos -->
         <div class="two-col section-gap">
           <div class="card">
-            <div class="card-header"><div class="card-title">conversões por anúncio</div></div>
-            <div style="position:relative;height:200px"><canvas id="chart-conv" role="img" aria-label="Barras de conversões por anúncio.">359 · 26 · 23 · 14 · 11 · 10 · 10 · 6</canvas></div>
+            <div class="card-header">
+              <div class="card-title">conversões por anúncio</div>
+              <div style="display:flex;gap:8px">
+                <span class="badge b-intermodal">intermodal</span>
+                <span class="badge b-tributario">tributário</span>
+                <span class="badge b-auditoria">auditoria</span>
+              </div>
+            </div>
+            <div style="position:relative;height:200px"><canvas id="chart-conv" role="img" aria-label="Conversões por anúncio Meta Ads.">359 · 26 · 23 · 14 · 11 · 10 · 10 · 6</canvas></div>
           </div>
           <div class="card">
-            <div class="card-header"><div class="card-title">gasto vs. cpa por anúncio</div></div>
-            <div style="position:relative;height:200px"><canvas id="chart-cpa" role="img" aria-label="Comparativo de gasto e CPA por anúncio.">Gasto e CPA dos 8 anúncios.</canvas></div>
+            <div class="card-header">
+              <div class="card-title">cpa por anúncio (r$)</div>
+              <div style="font-size:11px;color:var(--muted)">menor = mais eficiente</div>
+            </div>
+            <div style="position:relative;height:200px"><canvas id="chart-cpa" role="img" aria-label="CPA por anúncio Meta Ads.">R$3,58 · R$7,20 · R$9,63 · R$10,04 · R$14,10 · R$16,24 · R$18,64 · R$24,88</canvas></div>
           </div>
         </div>
 
-        <!-- Tabela detalhada -->
+        <!-- Tabela completa -->
         <div class="card section-gap">
           <div class="card-header">
-            <div class="card-title">top 8 anúncios — meta ads · abr 2026</div>
-            <div style="display:flex;gap:8px">
-              <span class="mp-badge badge-intermodal">intermodal</span>
-              <span class="mp-badge badge-tributario">tributário</span>
-              <span class="mp-badge badge-auditoria">auditoria</span>
-            </div>
+            <div class="card-title">top 8 anúncios — meta ads · abr 2026 (1–16/abr)</div>
           </div>
           <table class="mp-table" id="ads-table"></table>
         </div>
 
         <!-- Legenda CPA -->
-        <div class="card section-gap" style="background:rgba(57,27,206,.04);border-color:rgba(57,27,206,.15)">
-          <div style="display:flex;gap:24px;flex-wrap:wrap;font-size:12px;color:var(--muted)">
-            <span style="font-weight:600;color:var(--beige)">legenda cpa:</span>
-            <span><span style="color:#a2e259;font-weight:600">verde</span> — abaixo de R$10 (eficiente)</span>
-            <span><span style="color:#c9b8f8;font-weight:600">lilás</span> — R$10 a R$18 (moderado)</span>
-            <span><span style="color:#a038f2;font-weight:600">roxo</span> — acima de R$18 (alto)</span>
+        <div class="card section-gap" style="border-color:rgba(57,27,206,.2);background:rgba(57,27,206,.04)">
+          <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:center">
+            <span style="font-size:11px;font-weight:600;color:var(--muted)">legenda cpa</span>
+            <span class="trend-line"><span class="cpa-good">●</span><span style="font-size:12px;color:var(--muted)">abaixo de R$10 — eficiente</span></span>
+            <span class="trend-line"><span class="cpa-mid">●</span><span style="font-size:12px;color:var(--muted)">R$10 a R$18 — moderado</span></span>
+            <span class="trend-line"><span class="cpa-high">●</span><span style="font-size:12px;color:var(--muted)">acima de R$18 — alto, revisar criativo</span></span>
           </div>
         </div>
+
       </main>
     </div>
   </div>
@@ -134,7 +142,6 @@
       ?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
       :'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
   })();
-
   function toggleAreas(){var el=document.getElementById('areas-list');el.classList.toggle('coll');var ch=document.querySelector('#areas-toggle .chev');if(ch)ch.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';}
   function toggleTheme(){const h=document.documentElement;const l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);const i=document.getElementById('sidebar-logo');if(i)i.src=h.dataset.theme==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';rebuildCharts();}
   document.getElementById('hamburger').addEventListener('click',function(){document.getElementById('layout').classList.toggle('collapsed');});
@@ -152,52 +159,40 @@
 
   // Tabela
   (function(){
-    const table=document.getElementById('ads-table');
-    const thead=document.createElement('thead');
-    thead.innerHTML='<tr><th>#</th><th>anúncio</th><th>campanha</th><th class="num">gasto</th><th class="num">impressões</th><th class="num">alcance</th><th class="num">freq.</th><th class="num">ctr</th><th class="num">conv.</th><th class="num">cpa</th></tr>';
-    table.appendChild(thead);
-    const tbody=document.createElement('tbody');
+    const t=document.getElementById('ads-table');
+    const th=document.createElement('thead');
+    th.innerHTML='<tr><th>#</th><th>anúncio</th><th>campanha</th><th class="num">gasto</th><th class="num">impressões</th><th class="num">alcance</th><th class="num">freq.</th><th class="num">ctr</th><th class="num">conv.</th><th class="num">cpa</th></tr>';
+    t.appendChild(th);
+    const tb=document.createElement('tbody');
     const maxConv=ads[0].conv;
     ads.forEach((a,i)=>{
-      const cb=a.camp==='intermodal'?`<span class="mp-badge badge-intermodal">${a.camp}</span>`:a.camp==='auditoria de folha'?`<span class="mp-badge badge-auditoria">${a.camp}</span>`:`<span class="mp-badge badge-tributario">${a.camp}</span>`;
-      const tb=a.tipo==='vídeo'?`<span class="mp-badge badge-video" style="margin-left:4px">vídeo</span>`:'';
+      const cb=a.camp==='intermodal'?`<span class="badge b-intermodal">${a.camp}</span>`:a.camp==='auditoria de folha'?`<span class="badge b-auditoria">${a.camp}</span>`:`<span class="badge b-tributario">${a.camp}</span>`;
+      const vb=a.tipo==='vídeo'?`<span class="badge b-video" style="margin-left:4px">vídeo</span>`:'';
       const cc=a.cpa<10?'cpa-good':a.cpa<18?'cpa-mid':'cpa-high';
-      const barW=Math.round((a.conv/maxConv)*80);
+      const bw=Math.round((a.conv/maxConv)*64);
       const tr=document.createElement('tr');
-      tr.innerHTML=`<td><span class="rank-dot">${i+1}</span></td><td>${a.name}${tb}</td><td>${cb}</td><td class="num">R$${a.gasto.toFixed(2).replace('.',',')}</td><td class="num">${a.imp}</td><td class="num">${a.alc}</td><td class="num">${a.freq.toFixed(2)}</td><td class="num">${a.ctr.toFixed(2)}%</td><td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:${barW}px"></div><span style="color:#a2e259;font-weight:600;min-width:28px;text-align:right">${a.conv}</span></div></td><td class="num ${cc}">R$${a.cpa.toFixed(2).replace('.',',')}</td>`;
-      tbody.appendChild(tr);
+      tr.innerHTML=`<td><span class="rank">${i+1}</span></td><td>${a.name}${vb}</td><td>${cb}</td><td class="num">R$${a.gasto.toFixed(2).replace('.',',')}</td><td class="num">${a.imp}</td><td class="num">${a.alc}</td><td class="num">${a.freq.toFixed(2)}</td><td class="num">${a.ctr.toFixed(2)}%</td><td class="num"><div class="conv-wrap"><div class="conv-bar" style="width:${bw}px"></div><span style="color:#a2e259;font-weight:600;min-width:24px;text-align:right">${a.conv}</span></div></td><td class="num ${cc}">R$${a.cpa.toFixed(2).replace('.',',')}</td>`;
+      tb.appendChild(tr);
     });
-    table.appendChild(tbody);
+    t.appendChild(tb);
   })();
 
   // Charts
-  let chartConv,chartCpa;
+  let cConv,cCpa;
   function getC(){return document.documentElement.dataset.theme==='light'?{grid:'rgba(18,21,90,.06)',tick:'#5a5070'}:{grid:'rgba(255,255,255,.04)',tick:'#8b86a8'};}
 
   function buildCharts(){
     const c=getC();
     const labels=ads.map(a=>a.name.length>14?a.name.slice(0,14)+'…':a.name);
+    const colors=ads.map(a=>a.camp==='intermodal'?'#391bce':a.camp==='manager + tributário'?'#a2e259':'#c9b8f8');
 
-    if(chartConv)chartConv.destroy();
-    chartConv=new Chart(document.getElementById('chart-conv'),{
-      type:'bar',
-      data:{labels,datasets:[{label:'conversões',data:ads.map(a=>a.conv),backgroundColor:ads.map(a=>a.camp==='intermodal'?'#391bce':a.camp==='manager + tributário'?'#a2e259':'#c9b8f8'),borderRadius:4}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y} conversões`}}},scales:{x:{ticks:{color:c.tick,font:{size:10},autoSkip:false,maxRotation:35},grid:{display:false}},y:{ticks:{color:c.tick,font:{size:11}},grid:{color:c.grid}}}}
-    });
+    if(cConv)cConv.destroy();
+    cConv=new Chart(document.getElementById('chart-conv'),{type:'bar',data:{labels,datasets:[{data:ads.map(a=>a.conv),backgroundColor:colors,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y} conversões — CPA R$${ads[ctx.dataIndex].cpa.toFixed(2)}`}}},scales:{x:{ticks:{color:c.tick,font:{size:10},autoSkip:false,maxRotation:35},grid:{display:false}},y:{ticks:{color:c.tick,font:{size:11}},grid:{color:c.grid}}}}});
 
-    if(chartCpa)chartCpa.destroy();
-    chartCpa=new Chart(document.getElementById('chart-cpa'),{
-      type:'bar',
-      data:{labels,datasets:[
-        {label:'gasto (R$)',data:ads.map(a=>a.gasto),backgroundColor:'rgba(57,27,206,.6)',borderRadius:4,yAxisID:'y'},
-        {label:'cpa (R$)',data:ads.map(a=>a.cpa),backgroundColor:'rgba(162,226,89,.7)',borderRadius:4,yAxisID:'y2'},
-      ]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:c.tick,font:{size:11}}}},scales:{
-        x:{ticks:{color:c.tick,font:{size:10},autoSkip:false,maxRotation:35},grid:{display:false}},
-        y:{ticks:{color:c.tick,font:{size:11},callback:v=>'R$'+v},grid:{color:c.grid},position:'left'},
-        y2:{ticks:{color:c.tick,font:{size:11},callback:v=>'R$'+v},grid:{display:false},position:'right'},
-      }}
-    });
+    // CPA chart — sorted cheapest to most expensive, horizontal
+    const sorted=[...ads].sort((a,b)=>a.cpa-b.cpa);
+    if(cCpa)cCpa.destroy();
+    cCpa=new Chart(document.getElementById('chart-cpa'),{type:'bar',indexAxis:'y',data:{labels:sorted.map(a=>a.name.length>16?a.name.slice(0,16)+'…':a.name),datasets:[{data:sorted.map(a=>a.cpa),backgroundColor:sorted.map(a=>a.cpa<10?'#a2e259':a.cpa<18?'#c9b8f8':'#a038f2'),borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` R$${ctx.parsed.x.toFixed(2)} cpa — ${sorted[ctx.dataIndex].conv} conv.`}}},scales:{x:{ticks:{color:c.tick,font:{size:11},callback:v=>'R$'+v},grid:{color:c.grid}},y:{ticks:{color:c.tick,font:{size:10}},grid:{display:false}}}}});
   }
   function rebuildCharts(){buildCharts();}
   buildCharts();

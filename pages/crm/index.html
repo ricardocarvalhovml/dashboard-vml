@@ -11,31 +11,28 @@
   <link rel="stylesheet" href="/assets/css/styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
   <style>
-    .crm-badge { display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px;white-space:nowrap; }
-    .badge-intermodal { background:rgba(57,27,206,.18);color:#a038f2; }
-    .badge-tributario  { background:rgba(162,226,89,.12);color:#a2e259; }
-    .badge-auditoria   { background:rgba(201,184,248,.15);color:#c9b8f8; }
-    .badge-video       { background:rgba(107,95,212,.18);color:#9b8ef0; }
+    .section-label { font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.06em;margin-bottom:8px;text-transform:lowercase; }
     .crm-table { width:100%;border-collapse:collapse;font-size:13px; }
     .crm-table th { font-size:10px;font-weight:600;color:var(--muted);text-align:left;padding:6px 10px;border-bottom:1px solid var(--border);text-transform:lowercase;letter-spacing:.04em;white-space:nowrap; }
-    .crm-table td { padding:7px 10px;border-bottom:1px solid var(--border);color:var(--beige);vertical-align:middle;font-size:13px; }
+    .crm-table td { padding:7px 10px;border-bottom:1px solid var(--border);color:var(--beige);vertical-align:middle; }
     .crm-table tr:last-child td { border-bottom:none; }
-    .crm-table .group-row td { background:var(--surface2);font-size:11px;font-weight:600;color:var(--muted);padding:5px 10px; }
+    .crm-table .group-row td { background:var(--surface2);font-size:10px;font-weight:600;color:var(--muted);padding:5px 10px; }
     .crm-table .sub-row td { font-size:12px;color:var(--muted);padding-left:24px; }
     .num { text-align:right;font-variant-numeric:tabular-nums; }
-    .mini-bar-wrap { width:90px;height:5px;background:var(--border);border-radius:3px;display:inline-block;vertical-align:middle; }
-    .mini-bar-fill { height:5px;border-radius:3px;background:var(--orange); }
-    .mini-bar-sub  { background:rgba(160,56,242,.4); }
-    .semanal-grid { display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;gap:0;align-items:start; }
-    .sem-divider  { background:var(--border);align-self:stretch;margin:0 20px; }
-    .sem-label    { font-size:10px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:lowercase; }
-    .sem-val      { font-size:32px;font-weight:600;color:var(--beige);line-height:1; }
-    .sem-sub      { font-size:11px;color:var(--muted);margin-top:3px; }
-    .var-pos      { color:#a2e259; }
-    .meta-kpi-row { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:1.25rem; }
-    .cpa-good { color:#a2e259;font-weight:600; }
-    .cpa-mid  { color:#c9b8f8;font-weight:600; }
-    .cpa-high { color:#a038f2;font-weight:600; }
+    .mini-bar-wrap { width:80px;height:5px;background:rgba(255,255,255,.07);border-radius:3px;display:inline-block;vertical-align:middle; }
+    .mini-bar-fill { height:5px;border-radius:3px; }
+    .sem-grid { display:grid;grid-template-columns:1fr 1px 1fr 1px 1.3fr;align-items:start; }
+    .sem-div  { background:var(--border);align-self:stretch;margin:0 18px; }
+    .sem-lbl  { font-size:10px;font-weight:600;color:var(--muted);margin-bottom:4px; }
+    .sem-val  { font-size:28px;font-weight:600;color:var(--beige);line-height:1; }
+    .sem-sub  { font-size:11px;color:var(--muted);margin-top:3px; }
+    .green    { color:#a2e259; }
+    .emk-badge { display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px; }
+    .emk-frio    { background:rgba(57,27,206,.18);color:#a038f2; }
+    .emk-rd      { background:rgba(162,226,89,.12);color:#a2e259; }
+    .emk-cliente { background:rgba(201,184,248,.15);color:#c9b8f8; }
+    .rate-bar-wrap { width:60px;height:4px;background:rgba(255,255,255,.07);border-radius:2px;display:inline-block;vertical-align:middle;margin-left:4px; }
+    .rate-bar-fill { height:4px;border-radius:2px; }
   </style>
 </head>
 <body>
@@ -64,7 +61,7 @@
             </div>
             <div class="sidebar-divider"></div>
             <div class="sidebar-section">período</div>
-            <div style="padding:4px 0"><div class="nav-tab active" style="pointer-events:none;font-size:11px">01/04 – 16/04/2026</div></div>
+            <div style="padding:4px 0"><div class="nav-tab active" style="pointer-events:none;font-size:11px">abr · mar 2026</div></div>
           </div>
           <div class="sidebar-nav-bottom">
             <a class="nav-upload" href="/pages/upload"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;flex-shrink:0"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>enviar relatório</a>
@@ -78,65 +75,84 @@
           <div>
             <div class="page-eyebrow">crm</div>
             <div class="page-title">crm</div>
-            <div class="page-sub">leads · funil de vendas · campanhas · meta ads</div>
-            <div style="margin-top:8px;font-size:11px;color:var(--muted)">01/04/2026 – 16/04/2026 · 10 campanhas ativas</div>
+            <div class="page-sub">funil de vendas · qualificação · e-mail marketing</div>
           </div>
         </div>
 
-        <!-- Funil KPIs -->
-        <div style="font-size:10px;font-weight:600;color:var(--muted);margin-bottom:8px;letter-spacing:.05em">funil de leads</div>
+        <!-- ═══════════════════════════════════════
+             BLOCO 1 — FUNIL (01/04–16/04)
+        ════════════════════════════════════════ -->
+        <div class="section-label" style="margin-top:.25rem">funil de leads · 01/04 – 16/04/2026</div>
         <div class="kpi-row" style="grid-template-columns:repeat(7,minmax(0,1fr))">
           <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">leads</div><div class="kpi-val" style="color:#a038f2">169</div><div class="kpi-sub">10 campanhas</div></div>
           <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">mql</div><div class="kpi-val" style="color:#c9b8f8">90</div><div class="kpi-sub">53.3% do total</div></div>
           <div class="kpi" style="--kpi-line:#a2e259"><div class="kpi-label">sql</div><div class="kpi-val" style="color:#a2e259">79</div><div class="kpi-sub">87.8% do mql</div></div>
-          <div class="kpi" style="--kpi-line:var(--muted)"><div class="kpi-label">lead recebido</div><div class="kpi-val">3</div><div class="kpi-sub">aguard. 1º contato</div></div>
+          <div class="kpi" style="--kpi-line:rgba(255,255,255,.15)"><div class="kpi-label">lead recebido</div><div class="kpi-val">3</div><div class="kpi-sub">aguard. 1º contato</div></div>
           <div class="kpi" style="--kpi-line:#c9b8f8"><div class="kpi-label">qualificação</div><div class="kpi-val" style="color:#c9b8f8">37</div><div class="kpi-sub">em qualificação</div></div>
-          <div class="kpi" style="--kpi-line:#6b5fd4"><div class="kpi-label">oportunidade</div><div class="kpi-val" style="color:#6b5fd4">16</div><div class="kpi-sub">avançados no funil</div></div>
-          <div class="kpi" style="--kpi-line:#a2e259"><div class="kpi-label">reunião agendada</div><div class="kpi-val" style="color:#a2e259">10</div><div class="kpi-sub">5.9% conversão</div></div>
+          <div class="kpi" style="--kpi-line:#6b5fd4"><div class="kpi-label">oportunidade</div><div class="kpi-val" style="color:#6b5fd4">16</div><div class="kpi-sub">avançados</div></div>
+          <div class="kpi" style="--kpi-line:#a2e259"><div class="kpi-label">reunião agendada</div><div class="kpi-val" style="color:#a2e259">10</div><div class="kpi-sub">5.9% de conversão</div></div>
         </div>
 
-        <!-- Comparativo + Funil chart -->
+        <!-- Comparativo semanal + gráfico funil -->
         <div class="two-col section-gap">
           <div class="card">
             <div class="card-header"><div class="card-title">comparativo semanal</div></div>
-            <div class="semanal-grid">
-              <div><div class="sem-label">semana passada</div><div class="sem-val">64</div><div class="sem-sub">leads</div></div>
-              <div class="sem-divider"></div>
-              <div><div class="sem-label">semana retrasada</div><div class="sem-val">52</div><div class="sem-sub">leads</div></div>
-              <div class="sem-divider"></div>
-              <div><div class="sem-label">variação</div><div class="sem-val var-pos">▲ +12</div><div class="sem-sub var-pos">+23.1% em relação à anterior</div></div>
+            <div class="sem-grid">
+              <div><div class="sem-lbl">semana passada</div><div class="sem-val">64</div><div class="sem-sub">leads</div></div>
+              <div class="sem-div"></div>
+              <div><div class="sem-lbl">semana retrasada</div><div class="sem-val">52</div><div class="sem-sub">leads</div></div>
+              <div class="sem-div"></div>
+              <div><div class="sem-lbl">variação</div><div class="sem-val green">▲ +12</div><div class="sem-sub green">+23.1% vs. anterior</div></div>
             </div>
           </div>
           <div class="card">
-            <div class="card-header"><div class="card-title">volume por etapa do funil</div></div>
-            <div style="position:relative;height:110px"><canvas id="chart-funil" role="img" aria-label="Barras por etapa do funil CRM.">169 leads · 90 MQL · 79 SQL · 37 qualificação · 16 oportunidade · 10 reunião.</canvas></div>
+            <div class="card-header"><div class="card-title">volume por etapa</div></div>
+            <div style="position:relative;height:110px"><canvas id="chart-funil" role="img" aria-label="Volume por etapa do funil CRM.">169 leads · 90 MQL · 79 SQL · 37 qualificação · 16 oportunidade · 10 reunião.</canvas></div>
           </div>
         </div>
 
         <!-- Campanhas × Fonte -->
+        <div class="section-label">campanhas × fonte de origem · abril 2026</div>
         <div class="card section-gap">
-          <div class="card-header"><div class="card-title">campanhas × fonte de origem</div></div>
           <table class="crm-table" id="camp-table"></table>
         </div>
 
-        <!-- Meta Ads header -->
-        <div style="font-size:10px;font-weight:600;color:var(--muted);margin-bottom:8px;letter-spacing:.05em">meta ads — top 8 anúncios · abr 2026 (1–16/abr)</div>
-        <div class="meta-kpi-row">
-          <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">gasto total</div><div class="kpi-val" style="font-size:20px">R$2.679</div><div class="kpi-sub">8 anúncios</div></div>
-          <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">impressões</div><div class="kpi-val" style="font-size:20px">88,2k</div><div class="kpi-sub">alcance combinado</div></div>
-          <div class="kpi" style="--kpi-line:#a2e259"><div class="kpi-label">conversões</div><div class="kpi-val" style="font-size:20px;color:#a2e259">459</div><div class="kpi-sub">total no período</div></div>
-          <div class="kpi" style="--kpi-line:#a2e259"><div class="kpi-label">melhor cpa</div><div class="kpi-val" style="font-size:20px;color:#a2e259">R$3,58</div><div class="kpi-sub">imagem 1 — intermodal</div></div>
+        <!-- ═══════════════════════════════════════
+             BLOCO 2 — E-MAIL MARKETING (março)
+        ════════════════════════════════════════ -->
+        <div class="section-label" style="margin-top:.5rem">e-mail marketing — indicadores · março 2026</div>
+
+        <!-- KPIs consolidados -->
+        <div class="kpi-row" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+          <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">leads enviados</div><div class="kpi-val" style="font-size:20px">18.015</div><div class="kpi-sub">20 campanhas</div></div>
+          <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">entrega média</div><div class="kpi-val" style="font-size:20px">92.1%</div><div class="kpi-sub">geral</div></div>
+          <div class="kpi" style="--kpi-line:#a2e259"><div class="kpi-label">abertura média</div><div class="kpi-val" style="font-size:20px">19.2%</div><div class="kpi-sub">geral</div></div>
+          <div class="kpi" style="--kpi-line:#c9b8f8"><div class="kpi-label">ctr médio</div><div class="kpi-val" style="font-size:20px">3.2%</div><div class="kpi-sub">leads frios 5.25%</div></div>
         </div>
 
-        <div class="card section-gap">
-          <div class="card-header"><div class="card-title">conversões por anúncio</div></div>
-          <div style="position:relative;height:160px"><canvas id="chart-ads" role="img" aria-label="Barras de conversões por anúncio Meta Ads.">359 · 26 · 23 · 14 · 11 · 10 · 10 · 6</canvas></div>
+        <!-- Gráfico comparativo grupos -->
+        <div class="two-col section-gap">
+          <div class="card">
+            <div class="card-header"><div class="card-title">taxas por grupo (%)</div></div>
+            <div style="display:flex;gap:12px;margin-bottom:10px">
+              <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><span style="width:10px;height:10px;border-radius:2px;background:#391bce;display:inline-block"></span>entrega</span>
+              <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><span style="width:10px;height:10px;border-radius:2px;background:#a2e259;display:inline-block"></span>abertura</span>
+              <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><span style="width:10px;height:10px;border-radius:2px;background:#c9b8f8;display:inline-block"></span>ctr</span>
+            </div>
+            <div style="position:relative;height:180px"><canvas id="chart-emk-rates" role="img" aria-label="Taxas de entrega, abertura e CTR por grupo de e-mail marketing.">Taxas por grupo de campanha.</canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">leads por grupo</div></div>
+            <div style="position:relative;height:220px"><canvas id="chart-emk-leads" role="img" aria-label="Volume de leads por grupo de campanha.">Leads por grupo.</canvas></div>
+          </div>
         </div>
 
+        <!-- Tabela campanhas e-mail -->
         <div class="card section-gap">
-          <div class="card-header"><div class="card-title">tabela de anúncios</div></div>
-          <table class="crm-table" id="ads-table"></table>
+          <div class="card-header"><div class="card-title">campanhas de e-mail — detalhe por envio</div></div>
+          <table class="crm-table" id="emk-table"></table>
         </div>
+
       </main>
     </div>
   </div>
@@ -152,11 +168,11 @@
       ?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
       :'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
   })();
-
   function toggleAreas(){var el=document.getElementById('areas-list');el.classList.toggle('coll');var ch=document.querySelector('#areas-toggle .chev');if(ch)ch.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';}
   function toggleTheme(){const h=document.documentElement;const l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);const i=document.getElementById('sidebar-logo');if(i)i.src=h.dataset.theme==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';rebuildCharts();}
   document.getElementById('hamburger').addEventListener('click',function(){document.getElementById('layout').classList.toggle('collapsed');});
 
+  // ── Dados Campanhas × Fonte ──
   const camps=[
     {name:'form. meta ads — voucher intermodal',leads:113,pct:66.9,subs:[{src:'busca paga | facebook ads',leads:112,pct:99},{src:'desconhecido',leads:1,pct:1}]},
     {name:'lp sorteio iphone intermodal 2026',leads:29,pct:17.2,subs:[{src:'tráfego direto',leads:20,pct:69},{src:'desconhecido',leads:7,pct:24},{src:'referência | cadastrarnapromocao.com.br',leads:1,pct:3},{src:'busca paga | facebook ads',leads:1,pct:3}]},
@@ -170,64 +186,101 @@
     {name:'formulário contato site vml company',leads:2,pct:1.2,subs:[{src:'tráfego direto',leads:1,pct:50},{src:'desconhecido',leads:1,pct:50}]},
   ];
 
-  const ads=[
-    {name:'imagem 1 — intermodal',camp:'intermodal',tipo:'imagem',gasto:1284.70,imp:'67,6k',alc:'30,0k',freq:2.26,ctr:1.15,conv:359,cpa:3.58},
-    {name:'imagem 4 — intermodal',camp:'intermodal',tipo:'imagem',gasto:250.36,imp:'5,2k',alc:'3,4k',freq:1.54,ctr:1.17,conv:26,cpa:9.63},
-    {name:'imagem 3 — intermodal',camp:'intermodal',tipo:'imagem',gasto:324.39,imp:'4,3k',alc:'2,3k',freq:1.86,ctr:1.38,conv:23,cpa:14.10},
-    {name:'ebook rt',camp:'manager + tributário',tipo:'imagem',gasto:227.34,imp:'1,9k',alc:'1,2k',freq:1.61,ctr:1.83,conv:14,cpa:16.24},
-    {name:'vídeo 1 — auditoria de folha',camp:'auditoria de folha',tipo:'vídeo',gasto:273.64,imp:'4,9k',alc:'3,4k',freq:1.46,ctr:0.67,conv:11,cpa:24.88},
-    {name:'imagem 2 — intermodal',camp:'intermodal',tipo:'imagem',gasto:72.02,imp:'2,2k',alc:'1,4k',freq:1.56,ctr:1.33,conv:10,cpa:7.20},
-    {name:'imagem 3 — eficiência',camp:'manager + tributário',tipo:'imagem',gasto:186.44,imp:'1,1k',alc:'721',freq:1.47,ctr:1.98,conv:10,cpa:18.64},
-    {name:'imagem 1b — intermodal',camp:'intermodal',tipo:'imagem',gasto:60.23,imp:'1,0k',alc:'795',freq:1.28,ctr:0.98,conv:6,cpa:10.04},
+  // ── Dados E-mail Marketing (xlsx — março) ──
+  const emkGroups=[
+    {label:'leads frios — expo cotrijal',badge:'frio',rows:[
+      {name:'[expo cotrijal] compensação tributária',leads:763,d:95.94,o:12.84,c:0},
+      {name:'[expo cotrijal] case limpando balanço',leads:886,d:94.81,o:13.81,c:0},
+      {name:'[expo cotrijal] case rzk — autoridade',leads:815,d:88.96,o:12.0,c:1.24},
+      {name:'[expo cotrijal] convite cristiano — webinar',leads:824,d:91.63,o:13.51,c:0},
+      {name:'[expo cotrijal] diesel e frete',leads:829,d:91.31,o:11.1,c:0.13},
+    ]},
+    {label:'leads frios — intermodal',badge:'frio',rows:[
+      {name:'[intermodal] alta do diesel — app',leads:55,d:89.09,o:10.2,c:2.04},
+      {name:'[intermodal] alta do diesel — base app',leads:26,d:73.08,o:26.32,c:0},
+      {name:'[intermodal] alta do diesel — rs',leads:601,d:96.01,o:14.21,c:0},
+      {name:'[intermodal] alta do diesel — sp transporte',leads:2259,d:75.58,o:18.27,c:0.12},
+    ]},
+    {label:'leads frios — webinar',badge:'frio',rows:[
+      {name:'[webinar] pós-webinar — lista fria',leads:1925,d:92.68,o:12.28,c:0.11},
+      {name:'[webinar] começa em instantes — 18/03',leads:104,d:94.23,o:11.22,c:3.06},
+      {name:'[webinar] faltam 3 dias — lista fria',leads:1021,d:94.61,o:14.18,c:0},
+      {name:'[webinar] faltam 3 dias — lista quente',leads:1372,d:94.24,o:18.72,c:0.85},
+      {name:'[webinar] o erro invisível — lista nova',leads:7,d:100.0,o:14.29,c:0},
+      {name:'[webinar] o erro invisível — lista fria',leads:1462,d:98.63,o:10.47,c:0.35},
+    ]},
+    {label:'base rd — webinar',badge:'rd',rows:[
+      {name:'[webinar] clicaram em emm antigos',leads:126,d:88.1,o:17.12,c:0.9},
+      {name:'[webinar] clientes / colaboradores',leads:1005,d:98.81,o:20.95,c:0.7},
+      {name:'[webinar] base rd geral',leads:301,d:98.34,o:11.15,c:2.03},
+      {name:'[webinar] base rd convite cristiano',leads:3354,d:91.83,o:32.46,c:0.55},
+    ]},
+    {label:'clientes vml — auditoria de folha',badge:'cliente',rows:[
+      {name:'[crm] auditoria de folha — base vml',leads:279,d:97.13,o:20.66,c:0},
+    ]},
   ];
 
-  // Tabela campanhas
+  // Tabela campanhas × fonte
   (function(){
-    const table=document.getElementById('camp-table');
-    const thead=document.createElement('thead');
-    thead.innerHTML='<tr><th>campanha / fonte</th><th class="num">leads</th><th class="num">%</th><th>distribuição</th></tr>';
-    table.appendChild(thead);
-    const tbody=document.createElement('tbody');
+    const t=document.getElementById('camp-table');
+    const th=document.createElement('thead');
+    th.innerHTML='<tr><th>campanha / fonte de origem</th><th class="num">leads</th><th class="num">%</th><th>distribuição</th></tr>';
+    t.appendChild(th);
+    const tb=document.createElement('tbody');
     camps.forEach(c=>{
       const tr=document.createElement('tr');tr.className='group-row';
-      tr.innerHTML=`<td colspan="4">${c.name}<span style="float:right;font-weight:600;color:var(--beige)">${c.leads}</span></td>`;
-      tbody.appendChild(tr);
+      tr.innerHTML=`<td colspan="4">${c.name}<span style="float:right;color:var(--beige);font-weight:600">${c.leads}</span></td>`;
+      tb.appendChild(tr);
       c.subs.forEach(s=>{
         const tr2=document.createElement('tr');tr2.className='sub-row';
-        tr2.innerHTML=`<td>● ${s.src}</td><td class="num">${s.leads}</td><td class="num">${s.pct}%</td><td><div class="mini-bar-wrap"><div class="mini-bar-fill mini-bar-sub" style="width:${Math.min(s.pct,100)}%"></div></div></td>`;
-        tbody.appendChild(tr2);
+        tr2.innerHTML=`<td>● ${s.src}</td><td class="num">${s.leads}</td><td class="num">${s.pct}%</td><td><div class="mini-bar-wrap"><div class="mini-bar-fill" style="width:${Math.min(s.pct,100)}%;background:rgba(160,56,242,.5)"></div></div></td>`;
+        tb.appendChild(tr2);
       });
     });
-    table.appendChild(tbody);
+    t.appendChild(tb);
   })();
 
-  // Tabela ads
+  // Tabela e-mail marketing
   (function(){
-    const table=document.getElementById('ads-table');
-    const thead=document.createElement('thead');
-    thead.innerHTML='<tr><th>anúncio</th><th>campanha</th><th class="num">gasto</th><th class="num">impressões</th><th class="num">alcance</th><th class="num">freq.</th><th class="num">ctr</th><th class="num">conv.</th><th class="num">cpa</th></tr>';
-    table.appendChild(thead);
-    const tbody=document.createElement('tbody');
-    ads.forEach(a=>{
-      const cb=a.camp==='intermodal'?`<span class="crm-badge badge-intermodal">${a.camp}</span>`:a.camp==='auditoria de folha'?`<span class="crm-badge badge-auditoria">${a.camp}</span>`:`<span class="crm-badge badge-tributario">${a.camp}</span>`;
-      const tb=a.tipo==='vídeo'?`<span class="crm-badge badge-video" style="margin-left:4px">vídeo</span>`:'';
-      const cc=a.cpa<10?'cpa-good':a.cpa<18?'cpa-mid':'cpa-high';
-      const tr=document.createElement('tr');
-      tr.innerHTML=`<td>${a.name}${tb}</td><td>${cb}</td><td class="num">R$${a.gasto.toFixed(2).replace('.',',')}</td><td class="num">${a.imp}</td><td class="num">${a.alc}</td><td class="num">${a.freq.toFixed(2)}</td><td class="num">${a.ctr.toFixed(2)}%</td><td class="num" style="color:#a2e259;font-weight:600">${a.conv}</td><td class="num ${cc}">R$${a.cpa.toFixed(2).replace('.',',')}</td>`;
-      tbody.appendChild(tr);
+    const t=document.getElementById('emk-table');
+    const th=document.createElement('thead');
+    th.innerHTML='<tr><th>campanha</th><th>segmento</th><th class="num">leads</th><th class="num">entrega %</th><th class="num">abertura %</th><th class="num">ctr %</th></tr>';
+    t.appendChild(th);
+    const tb=document.createElement('tbody');
+    const badgeMap={frio:'emk-frio',rd:'emk-rd',cliente:'emk-cliente'};
+    const badgeLabel={frio:'lead frio',rd:'base rd',cliente:'cliente vml'};
+    emkGroups.forEach(g=>{
+      const tr=document.createElement('tr');tr.className='group-row';
+      tr.innerHTML=`<td colspan="6">${g.label}</td>`;
+      tb.appendChild(tr);
+      g.rows.forEach(r=>{
+        const tr2=document.createElement('tr');
+        tr2.innerHTML=`<td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r.name}">${r.name}</td><td><span class="emk-badge ${badgeMap[g.badge]}">${badgeLabel[g.badge]}</span></td><td class="num">${r.leads.toLocaleString('pt-BR')}</td><td class="num">${r.d.toFixed(1)}</td><td class="num">${r.o.toFixed(1)}</td><td class="num">${r.c.toFixed(2)}</td>`;
+        tb.appendChild(tr2);
+      });
     });
-    table.appendChild(tbody);
+    t.appendChild(tb);
   })();
 
-  // Charts
-  let chartFunil,chartAds;
+  // ── Charts ──
+  let cFunil,cRates,cLeads;
   function getC(){return document.documentElement.dataset.theme==='light'?{grid:'rgba(18,21,90,.06)',tick:'#5a5070'}:{grid:'rgba(255,255,255,.04)',tick:'#8b86a8'};}
+
   function buildCharts(){
     const c=getC();
-    if(chartFunil)chartFunil.destroy();
-    chartFunil=new Chart(document.getElementById('chart-funil'),{type:'bar',data:{labels:['leads','mql','sql','qualif.','oport.','reunião'],datasets:[{data:[169,90,79,37,16,10],backgroundColor:['#391bce','#a038f2','#a2e259','#c9b8f8','#6b5fd4','#a2e259'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y}`}}},scales:{x:{ticks:{color:c.tick,font:{size:11}},grid:{display:false}},y:{ticks:{color:c.tick,font:{size:11}},grid:{color:c.grid}}}}});
-    if(chartAds)chartAds.destroy();
-    chartAds=new Chart(document.getElementById('chart-ads'),{type:'bar',data:{labels:ads.map(a=>a.name.length>16?a.name.slice(0,16)+'…':a.name),datasets:[{data:ads.map(a=>a.conv),backgroundColor:ads.map(a=>a.camp==='intermodal'?'#391bce':a.camp==='manager + tributário'?'#a2e259':'#c9b8f8'),borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y} conv. — CPA R$${ads[ctx.dataIndex].cpa.toFixed(2)}`}}},scales:{x:{ticks:{color:c.tick,font:{size:10},autoSkip:false,maxRotation:30},grid:{display:false}},y:{ticks:{color:c.tick,font:{size:11}},grid:{color:c.grid}}}}});
+    if(cFunil)cFunil.destroy();
+    cFunil=new Chart(document.getElementById('chart-funil'),{type:'bar',data:{labels:['leads','mql','sql','qualif.','oport.','reunião'],datasets:[{data:[169,90,79,37,16,10],backgroundColor:['#391bce','#a038f2','#a2e259','#c9b8f8','#6b5fd4','#a2e259'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:c.tick,font:{size:11}},grid:{display:false}},y:{ticks:{color:c.tick,font:{size:11}},grid:{color:c.grid}}}}});
+
+    const grpLabels=['expo cotrijal','intermodal','webinar frio','base rd','clientes vml'];
+    if(cRates)cRates.destroy();
+    cRates=new Chart(document.getElementById('chart-emk-rates'),{type:'bar',data:{labels:grpLabels,datasets:[
+      {label:'entrega',data:[92.53,83.44,96.34,94.27,97.13],backgroundColor:'#391bce',borderRadius:3},
+      {label:'abertura',data:[12.65,17.25,25.88,20.42,20.66],backgroundColor:'#a2e259',borderRadius:3},
+      {label:'ctr',data:[0.31,0.54,14.91,1.04,0],backgroundColor:'#c9b8f8',borderRadius:3},
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%`}}},scales:{x:{ticks:{color:c.tick,font:{size:10},autoSkip:false,maxRotation:30},grid:{display:false}},y:{ticks:{color:c.tick,font:{size:11},callback:v=>v+'%'},grid:{color:c.grid}}}}});
+
+    if(cLeads)cLeads.destroy();
+    cLeads=new Chart(document.getElementById('chart-emk-leads'),{type:'bar',indexAxis:'y',data:{labels:grpLabels,datasets:[{data:[4117,2941,5892,4786,279],backgroundColor:['#391bce','#391bce','#a2e259','#a2e259','#c9b8f8'],borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x.toLocaleString('pt-BR')} leads`}}},scales:{x:{ticks:{color:c.tick,font:{size:11},callback:v=>v>=1000?(v/1000).toFixed(0)+'k':v},grid:{color:c.grid}},y:{ticks:{color:c.tick,font:{size:11}},grid:{display:false}}}}});
   }
   function rebuildCharts(){buildCharts();}
   buildCharts();
