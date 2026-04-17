@@ -9,118 +9,198 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-  <script>const AREA_CONFIG = {"name": "mídia paga", "subtitle": "campanhas pagas · meta · google ads", "file": "midia-paga.csv", "color": "#c9b8f8", "kpis": [{"key": "Investimento", "label": "investimento", "sub": "verba total", "color": "#391bce", "currency": true}, {"key": "Impressões", "label": "impressões", "sub": "exibições", "color": "#a038f2"}, {"key": "Cliques", "label": "cliques", "sub": "cliques totais", "color": "#c9b8f8"}, {"key": "CTR", "label": "ctr", "sub": "taxa de cliques", "color": "#6b5fd4", "pct": true}, {"key": "CPC", "label": "cpc", "sub": "custo por clique", "color": "#c9b8f8", "currency": true}, {"key": "ROAS", "label": "roas", "sub": "retorno do anúncio", "color": "#a2e259", "decimal": true}], "charts": [{"id": "chart-investimento", "key": "Investimento", "type": "bar", "color": "#391bce", "label": "investimento mensal"}, {"id": "chart-cliques", "key": "Cliques", "type": "bar", "color": "#c9b8f8", "label": "cliques por mês"}, {"id": "chart-ctr", "key": "CTR", "type": "line", "color": "#6b5fd4", "label": "ctr — evolução"}, {"id": "chart-roas", "key": "ROAS", "type": "line", "color": "#a2e259", "label": "roas — evolução"}]};</script>
+  <style>
+    .mp-badge { display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px;white-space:nowrap; }
+    .badge-intermodal { background:rgba(57,27,206,.18);color:#a038f2; }
+    .badge-tributario  { background:rgba(162,226,89,.12);color:#a2e259; }
+    .badge-auditoria   { background:rgba(201,184,248,.15);color:#c9b8f8; }
+    .badge-video       { background:rgba(107,95,212,.18);color:#9b8ef0; }
+    .mp-table { width:100%;border-collapse:collapse;font-size:13px; }
+    .mp-table th { font-size:10px;font-weight:600;color:var(--muted);text-align:left;padding:6px 10px;border-bottom:1px solid var(--border);text-transform:lowercase;letter-spacing:.04em;white-space:nowrap; }
+    .mp-table td { padding:8px 10px;border-bottom:1px solid var(--border);color:var(--beige);vertical-align:middle; }
+    .mp-table tr:last-child td { border-bottom:none; }
+    .mp-table tr:hover td { background:rgba(57,27,206,.06); }
+    .num { text-align:right;font-variant-numeric:tabular-nums; }
+    .cpa-good { color:#a2e259;font-weight:600; }
+    .cpa-mid  { color:#c9b8f8;font-weight:600; }
+    .cpa-high { color:#a038f2;font-weight:600; }
+    .rank-dot { display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:10px;font-weight:600;background:rgba(57,27,206,.2);color:#a038f2;flex-shrink:0; }
+    .conv-bar-wrap { display:flex;align-items:center;gap:8px; }
+    .conv-bar { height:6px;border-radius:3px;background:#391bce;flex-shrink:0; }
+  </style>
 </head>
 <body>
-  <div id="app-loading"><div class="spinner"></div><p>carregando dados...</p></div>
-  <div id="app" style="display:none">
+  <div id="app" style="display:block">
     <div class="layout" id="layout">
-  <aside class="sidebar">
-      <div class="sidebar-top">
-        <button class="hamburger" id="hamburger" title="menu"><span></span><span></span><span></span></button>
-        <button class="theme-toggle" onclick="toggleTheme()" title="alternar tema"><span id="theme-icon"></span></button>
-        <img class="sidebar-logo" id="sidebar-logo" src="/assets/img/logo-escuro.png" alt="vml company"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <span class="logo-fallback" style="display:none">vml company</span>
-      </div>
-      <div class="sidebar-body">
-        <div class="sidebar-nav-top">
-
-          <!-- home -->
-          <a class="nav-home" href="/" style="text-decoration:none;display:flex;align-items:center;gap:8px">
-            <span class="nav-icon" style="background:rgba(160,56,242,.18);color:#a038f2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span>home
-          </a>
-
-          <!-- áreas -->
-          <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
-            áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
-          </div>
-          <div id="areas-list">
-            <a class="nav-tab" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-icon" style="background:#a038f2"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>redes sociais</a>
-            <a class="nav-tab" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
-            <a class="nav-tab" href="/pages/crm" style="text-decoration:none"><span class="nav-icon" style="background:#391bce"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>crm</a>
-            <a class="nav-tab active" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
-          </div>
-
-          <div class="sidebar-divider"></div>
-
-          <!-- período -->
-          <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
-            período <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
-          </div>
-          <div id="periodo-list">
-            <div id="monthNav"></div>
-            <button class="nav-tab" id="btn-annual" style="display:none"></button>
-          </div>
-
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <button class="hamburger" id="hamburger" title="menu"><span></span><span></span><span></span></button>
+          <button class="theme-toggle" onclick="toggleTheme()" title="alternar tema"><span id="theme-icon"></span></button>
+          <img class="sidebar-logo" id="sidebar-logo" src="/assets/img/logo-escuro.png" alt="vml company" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <span class="logo-fallback" style="display:none">vml company</span>
         </div>
-        <div class="sidebar-nav-bottom">
-          <a class="nav-upload" href="/pages/upload"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;flex-shrink:0"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>enviar relatório</a>
-          <div class="sidebar-credit">
-            <div>
-              <div class="credit-brand">vml company</div>
-              <div class="credit-copy">© 2026 todos os direitos<br>reservados.</div>
+        <div class="sidebar-body">
+          <div class="sidebar-nav-top">
+            <a class="nav-home" href="/" style="text-decoration:none;display:flex;align-items:center;gap:8px">
+              <span class="nav-icon" style="background:rgba(160,56,242,.18);color:#a038f2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span>home
+            </a>
+            <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+              áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
             </div>
+            <div id="areas-list">
+              <a class="nav-tab" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-icon" style="background:#a038f2"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>redes sociais</a>
+              <a class="nav-tab" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
+              <a class="nav-tab" href="/pages/crm" style="text-decoration:none"><span class="nav-icon" style="background:#391bce"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>crm</a>
+              <a class="nav-tab active" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
+            </div>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section">período</div>
+            <div style="padding:4px 0"><div class="nav-tab active" style="pointer-events:none;font-size:11px">01/04 – 16/04/2026</div></div>
+          </div>
+          <div class="sidebar-nav-bottom">
+            <a class="nav-upload" href="/pages/upload"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;flex-shrink:0"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>enviar relatório</a>
+            <div class="sidebar-credit"><div><div class="credit-brand">vml company</div><div class="credit-copy">© 2026 todos os direitos<br>reservados.</div></div></div>
           </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+
       <main class="main">
         <div class="page-header">
           <div>
-            <div class="page-eyebrow" id="page-eyebrow">mídia paga</div>
+            <div class="page-eyebrow">mídia paga</div>
             <div class="page-title">mídia paga</div>
-            <div class="page-sub" id="page-sub">campanhas pagas · meta · google ads</div>
-          <div id="data-source-badge" style="margin-top:8px"></div>
+            <div class="page-sub">campanhas pagas · meta ads · conversões · cpa</div>
+            <div style="margin-top:8px;font-size:11px;color:var(--muted)">01/04/2026 – 16/04/2026 · campanhas de conversões, tráfego e engajamento</div>
           </div>
         </div>
-        <div id="no-data-banner" class="card section-gap" style="display:none;border-color:#c9b8f833;background:#c9b8f808">
-          <div style="display:flex;align-items:center;gap:12px">
-            <div style="font-size:24px">📂</div>
-            <div>
-              <div style="font-weight:700;margin-bottom:4px;text-transform:lowercase">nenhum dado encontrado</div>
-              <div style="font-size:13px;color:var(--muted)">faça upload de <code>midia-paga.csv</code> em <code>assets/data/YYYY/MM/</code> para começar.</div>
-              <div style="font-size:12px;color:var(--muted);margin-top:8px">formato esperado:<br><code>Investimento,Impressões,Cliques,CTR,CPC,Conversões,ROAS</code></div>
+
+        <!-- KPIs principais -->
+        <div class="kpi-row" style="grid-template-columns:repeat(6,minmax(0,1fr))">
+          <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">gasto total</div><div class="kpi-val" style="font-size:20px">R$2.679</div><div class="kpi-sub">8 anúncios ativos</div></div>
+          <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">impressões</div><div class="kpi-val" style="font-size:20px">88,2k</div><div class="kpi-sub">total combinado</div></div>
+          <div class="kpi" style="--kpi-line:#c9b8f8"><div class="kpi-label">alcance</div><div class="kpi-val" style="font-size:20px">43,1k</div><div class="kpi-sub">pessoas únicas</div></div>
+          <div class="kpi" style="--kpi-line:#a2e259"><div class="kpi-label">conversões</div><div class="kpi-val" style="font-size:20px;color:#a2e259">459</div><div class="kpi-sub">total período</div></div>
+          <div class="kpi" style="--kpi-line:#a2e259"><div class="kpi-label">melhor cpa</div><div class="kpi-val" style="font-size:20px;color:#a2e259">R$3,58</div><div class="kpi-sub">img 1 — intermodal</div></div>
+          <div class="kpi" style="--kpi-line:#6b5fd4"><div class="kpi-label">cpa médio</div><div class="kpi-val" style="font-size:20px;color:#c9b8f8">R$5,84</div><div class="kpi-sub">gasto ÷ conversões</div></div>
+        </div>
+
+        <!-- Charts row -->
+        <div class="two-col section-gap">
+          <div class="card">
+            <div class="card-header"><div class="card-title">conversões por anúncio</div></div>
+            <div style="position:relative;height:200px"><canvas id="chart-conv" role="img" aria-label="Barras de conversões por anúncio.">359 · 26 · 23 · 14 · 11 · 10 · 10 · 6</canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">gasto vs. cpa por anúncio</div></div>
+            <div style="position:relative;height:200px"><canvas id="chart-cpa" role="img" aria-label="Comparativo de gasto e CPA por anúncio.">Gasto e CPA dos 8 anúncios.</canvas></div>
+          </div>
+        </div>
+
+        <!-- Tabela detalhada -->
+        <div class="card section-gap">
+          <div class="card-header">
+            <div class="card-title">top 8 anúncios — meta ads · abr 2026</div>
+            <div style="display:flex;gap:8px">
+              <span class="mp-badge badge-intermodal">intermodal</span>
+              <span class="mp-badge badge-tributario">tributário</span>
+              <span class="mp-badge badge-auditoria">auditoria</span>
             </div>
-            <a href="/pages/upload" style="margin-left:auto;flex-shrink:0;padding:10px 18px;background:var(--blue);color:white;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap">↑ enviar arquivo</a>
+          </div>
+          <table class="mp-table" id="ads-table"></table>
+        </div>
+
+        <!-- Legenda CPA -->
+        <div class="card section-gap" style="background:rgba(57,27,206,.04);border-color:rgba(57,27,206,.15)">
+          <div style="display:flex;gap:24px;flex-wrap:wrap;font-size:12px;color:var(--muted)">
+            <span style="font-weight:600;color:var(--beige)">legenda cpa:</span>
+            <span><span style="color:#a2e259;font-weight:600">verde</span> — abaixo de R$10 (eficiente)</span>
+            <span><span style="color:#c9b8f8;font-weight:600">lilás</span> — R$10 a R$18 (moderado)</span>
+            <span><span style="color:#a038f2;font-weight:600">roxo</span> — acima de R$18 (alto)</span>
           </div>
         </div>
-        <div class="kpi-row" id="kpi-row"></div>
-<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">investimento mensal</div></div><div style="position:relative;height:175px"><canvas id="chart-investimento"></canvas></div></div>
-          <div class="card"><div class="card-header"><div class="card-title">cliques por mês</div></div><div style="position:relative;height:175px"><canvas id="chart-cliques"></canvas></div></div></div>
-<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">ctr — evolução</div></div><div style="position:relative;height:150px"><canvas id="chart-ctr"></canvas></div></div>
-          <div class="card"><div class="card-header"><div class="card-title">roas — evolução</div></div><div style="position:relative;height:150px"><canvas id="chart-roas"></canvas></div></div></div>
-        <div class="card" id="data-table"></div>
       </main>
     </div>
   </div>
+
   <script>
-  (function(){const s=localStorage.getItem('dashboard-theme')||'';document.documentElement.dataset.theme=s;const l=document.getElementById('sidebar-logo');if(l)l.src=s==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';const ic=document.getElementById('theme-icon');if(ic)ic.innerHTML=s==='light'?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>':'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';})();
+  (function(){
+    const s=localStorage.getItem('dashboard-theme')||'';
+    document.documentElement.dataset.theme=s;
+    const l=document.getElementById('sidebar-logo');
+    if(l)l.src=s==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';
+    const ic=document.getElementById('theme-icon');
+    if(ic)ic.innerHTML=s==='light'
+      ?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+      :'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+  })();
 
-  function toggleAreas(){
-    var el=document.getElementById('areas-list');
-    el.classList.toggle('coll');
-    var chev=document.querySelector('#areas-toggle .chev');
-    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
-  }
+  function toggleAreas(){var el=document.getElementById('areas-list');el.classList.toggle('coll');var ch=document.querySelector('#areas-toggle .chev');if(ch)ch.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';}
+  function toggleTheme(){const h=document.documentElement;const l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);const i=document.getElementById('sidebar-logo');if(i)i.src=h.dataset.theme==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';rebuildCharts();}
+  document.getElementById('hamburger').addEventListener('click',function(){document.getElementById('layout').classList.toggle('collapsed');});
 
-  function toggleAreas(){
-    var el=document.getElementById('areas-list');
-    el.classList.toggle('coll');
-    var chev=document.querySelector('#areas-toggle .chev');
-    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
+  const ads=[
+    {name:'imagem 1 — intermodal',camp:'intermodal',tipo:'imagem',gasto:1284.70,imp:'67,6k',alc:'30,0k',freq:2.26,ctr:1.15,conv:359,cpa:3.58},
+    {name:'imagem 4 — intermodal',camp:'intermodal',tipo:'imagem',gasto:250.36,imp:'5,2k',alc:'3,4k',freq:1.54,ctr:1.17,conv:26,cpa:9.63},
+    {name:'imagem 3 — intermodal',camp:'intermodal',tipo:'imagem',gasto:324.39,imp:'4,3k',alc:'2,3k',freq:1.86,ctr:1.38,conv:23,cpa:14.10},
+    {name:'ebook rt',camp:'manager + tributário',tipo:'imagem',gasto:227.34,imp:'1,9k',alc:'1,2k',freq:1.61,ctr:1.83,conv:14,cpa:16.24},
+    {name:'vídeo 1 — auditoria de folha',camp:'auditoria de folha',tipo:'vídeo',gasto:273.64,imp:'4,9k',alc:'3,4k',freq:1.46,ctr:0.67,conv:11,cpa:24.88},
+    {name:'imagem 2 — intermodal',camp:'intermodal',tipo:'imagem',gasto:72.02,imp:'2,2k',alc:'1,4k',freq:1.56,ctr:1.33,conv:10,cpa:7.20},
+    {name:'imagem 3 — eficiência',camp:'manager + tributário',tipo:'imagem',gasto:186.44,imp:'1,1k',alc:'721',freq:1.47,ctr:1.98,conv:10,cpa:18.64},
+    {name:'imagem 1b — intermodal',camp:'intermodal',tipo:'imagem',gasto:60.23,imp:'1,0k',alc:'795',freq:1.28,ctr:0.98,conv:6,cpa:10.04},
+  ];
+
+  // Tabela
+  (function(){
+    const table=document.getElementById('ads-table');
+    const thead=document.createElement('thead');
+    thead.innerHTML='<tr><th>#</th><th>anúncio</th><th>campanha</th><th class="num">gasto</th><th class="num">impressões</th><th class="num">alcance</th><th class="num">freq.</th><th class="num">ctr</th><th class="num">conv.</th><th class="num">cpa</th></tr>';
+    table.appendChild(thead);
+    const tbody=document.createElement('tbody');
+    const maxConv=ads[0].conv;
+    ads.forEach((a,i)=>{
+      const cb=a.camp==='intermodal'?`<span class="mp-badge badge-intermodal">${a.camp}</span>`:a.camp==='auditoria de folha'?`<span class="mp-badge badge-auditoria">${a.camp}</span>`:`<span class="mp-badge badge-tributario">${a.camp}</span>`;
+      const tb=a.tipo==='vídeo'?`<span class="mp-badge badge-video" style="margin-left:4px">vídeo</span>`:'';
+      const cc=a.cpa<10?'cpa-good':a.cpa<18?'cpa-mid':'cpa-high';
+      const barW=Math.round((a.conv/maxConv)*80);
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td><span class="rank-dot">${i+1}</span></td><td>${a.name}${tb}</td><td>${cb}</td><td class="num">R$${a.gasto.toFixed(2).replace('.',',')}</td><td class="num">${a.imp}</td><td class="num">${a.alc}</td><td class="num">${a.freq.toFixed(2)}</td><td class="num">${a.ctr.toFixed(2)}%</td><td class="num"><div class="conv-bar-wrap" style="justify-content:flex-end"><div class="conv-bar" style="width:${barW}px"></div><span style="color:#a2e259;font-weight:600;min-width:28px;text-align:right">${a.conv}</span></div></td><td class="num ${cc}">R$${a.cpa.toFixed(2).replace('.',',')}</td>`;
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+  })();
+
+  // Charts
+  let chartConv,chartCpa;
+  function getC(){return document.documentElement.dataset.theme==='light'?{grid:'rgba(18,21,90,.06)',tick:'#5a5070'}:{grid:'rgba(255,255,255,.04)',tick:'#8b86a8'};}
+
+  function buildCharts(){
+    const c=getC();
+    const labels=ads.map(a=>a.name.length>14?a.name.slice(0,14)+'…':a.name);
+
+    if(chartConv)chartConv.destroy();
+    chartConv=new Chart(document.getElementById('chart-conv'),{
+      type:'bar',
+      data:{labels,datasets:[{label:'conversões',data:ads.map(a=>a.conv),backgroundColor:ads.map(a=>a.camp==='intermodal'?'#391bce':a.camp==='manager + tributário'?'#a2e259':'#c9b8f8'),borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y} conversões`}}},scales:{x:{ticks:{color:c.tick,font:{size:10},autoSkip:false,maxRotation:35},grid:{display:false}},y:{ticks:{color:c.tick,font:{size:11}},grid:{color:c.grid}}}}
+    });
+
+    if(chartCpa)chartCpa.destroy();
+    chartCpa=new Chart(document.getElementById('chart-cpa'),{
+      type:'bar',
+      data:{labels,datasets:[
+        {label:'gasto (R$)',data:ads.map(a=>a.gasto),backgroundColor:'rgba(57,27,206,.6)',borderRadius:4,yAxisID:'y'},
+        {label:'cpa (R$)',data:ads.map(a=>a.cpa),backgroundColor:'rgba(162,226,89,.7)',borderRadius:4,yAxisID:'y2'},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:c.tick,font:{size:11}}}},scales:{
+        x:{ticks:{color:c.tick,font:{size:10},autoSkip:false,maxRotation:35},grid:{display:false}},
+        y:{ticks:{color:c.tick,font:{size:11},callback:v=>'R$'+v},grid:{color:c.grid},position:'left'},
+        y2:{ticks:{color:c.tick,font:{size:11},callback:v=>'R$'+v},grid:{display:false},position:'right'},
+      }}
+    });
   }
-  function togglePeriodo(){
-    var el=document.getElementById('periodo-list');
-    el.classList.toggle('coll');
-    var chev=document.querySelector('#periodo-toggle .chev');
-    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
-  }
-  function toggleTheme(){const h=document.documentElement;const l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);const i=document.getElementById('sidebar-logo');if(i)i.src=h.dataset.theme==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';if(window._areaState)renderMonth(window._areaState.current,window._areaState.all);}
+  function rebuildCharts(){buildCharts();}
+  buildCharts();
   </script>
-  <script src="/assets/js/area.js"></script>
 </body>
 </html>
