@@ -1,136 +1,174 @@
 # dashboard analytics · vml company
 
-dashboard de marketing analytics estático, hospedado no vercel com deploy automático via github actions.
+desenvolvido por vml company
 
 ---
 
-## estrutura de dados
+## visão geral
 
-os arquivos são armazenados em `assets/data/YYYY/MM/` com nomenclatura exata. o sistema aceita `.csv` e `.xlsx`.
+dashboard de marketing multi-área alimentado automaticamente via APIs externas (RD Station, Meta Ads, Google Ads, Google Search Console + GA4), com fallback para upload manual de arquivos. hospedado no vercel, código no github, sem custo.
 
-### nomenclatura obrigatória por área
-
-| área | arquivo | fonte |
-|---|---|---|
-| redes sociais | `redes-sociais-postagens.xlsx` ou `.csv` | mLabs · Meta Business Suite |
-| redes sociais | `redes-sociais-stories.xlsx` ou `.csv` | mLabs · Meta Business Suite |
-| mídia paga | `midia-linkedin.csv` ou `.xlsx` | LinkedIn Campaign Manager |
-| mídia paga | `midia-meta.csv` ou `.xlsx` | Meta Ads Manager |
-| mídia paga | `midia-spotify.csv` ou `.xlsx` | Spotify Ad Studio |
-| email marketing | `crm.xlsx` ou `.csv` | RD Station Marketing |
-
-> **importante**: o nome do arquivo deve ser exatamente igual ao listado acima. o dashboard lê os arquivos pelo nome — qualquer variação impede a leitura.
+**áreas disponíveis**
+- redes sociais — instagram (mLabs / Meta Business Suite)
+- seo — google search console + google analytics 4
+- crm — rd station marketing
+- mídia paga — meta ads + google ads
 
 ---
 
-## formato esperado por arquivo
-
-### redes-sociais-postagens
-- uma linha por publicação, com `Data = Total`
-- colunas: `Visualizações`, `Alcance`, `Curtidas`, `Compartilhamentos`, `Seguimentos`, `Comentários`, `Salvamentos`, `Tipo de post`
-
-### redes-sociais-stories
-- uma linha por story, com `Data = Total`
-- colunas: `Visualizações`, `Alcance`, `Cliques no link`, `Respostas`, `Visitas ao perfil`, `Seguimentos`
-
-### midia-linkedin
-- linhas de campanhas + linha de total (canal vazio, período = `TOTAL`)
-- colunas: `Canal`, `Campanha`, `Investimento (R$)`, `Impressões`, `Cliques`, `CTR (%)`, `Leads (Form)`
-
-### midia-meta
-- uma linha por campanha (sem linha de total — o sistema soma)
-- colunas: `Canal`, `Campanha`, `Investimento (R$)`, `Impressões`, `Alcance`, `Cliques no Link`, `Leads`, `CPL (R$)`
-
-### midia-spotify
-- arquivo com 6 linhas de metadado antes do cabeçalho real (`ID da campanha,...`)
-- dados diários por anúncio
-- colunas: `Gasto`, `Impressões com streams`, `Alcance`, `Cliques`
-
-### crm
-- linhas de segmento (ex: `LEADS FRIOS`, `BASE RD`, `CLIENTES VML`) intercaladas com linhas de campanhas
-- linha de campanha: primeira coluna = data no formato `YYYY-MM-DD HH:MM:SS`
-- colunas: `Data de envio (dd/mm/aaaa)`, `Nome do email`, `Assunto`, `Leads selecionados`, `Taxa de entrega`, `Taxa de abertura`, `Taxa de clique (CTR)`
-- taxas podem estar em % (ex: `95.94`) ou fração (ex: `0.9713`) — o sistema normaliza automaticamente
-
----
-
-## estrutura de arquivos
+## estrutura do projeto
 
 ```
-dashboard-vml-main/
-├── index.html                          # home · visão geral
-├── vercel.json                         # clean urls + rewrites
+/
+├── index.html                        ← home (visão geral)
+├── vercel.json                       ← rotas e rewrites
+├── README.md
+│
+├── pages/
+│   ├── redes-sociais/index.html      ← dashboard instagram
+│   ├── seo/index.html                ← dashboard seo
+│   ├── crm/index.html                ← dashboard crm
+│   ├── midia-paga/index.html         ← dashboard mídia paga
+│   └── upload/index.html             ← upload sem login
+│
 ├── assets/
 │   ├── css/styles.css
-│   ├── img/logo.png, logo-escuro.png, favicon.png
 │   ├── js/
-│   │   ├── area.js                     # utilitários compartilhados
-│   │   ├── redes-sociais.js            # instagram: posts + stories
-│   │   ├── midia-paga.js               # linkedin + meta + spotify
-│   │   └── crm.js                      # email marketing (rd station)
+│   │   ├── redes-sociais.js          ← lógica de redes sociais
+│   │   └── area.js                   ← lógica genérica (seo, crm, mídia paga)
+│   ├── img/
+│   │   ├── logo.png
+│   │   ├── logo-escuro.png
+│   │   ├── favicon.png
+│   │   ├── copyright-logo.png
+│   │   └── posts/                    ← thumbnails dos posts (código do instagram)
 │   └── data/
 │       └── YYYY/
 │           └── MM/
-│               ├── redes-sociais-postagens.xlsx
-│               ├── redes-sociais-stories.xlsx
-│               ├── midia-linkedin.csv
-│               ├── midia-meta.csv
-│               ├── midia-spotify.csv
-│               └── crm.xlsx
-├── pages/
-│   ├── redes-sociais/index.html
-│   ├── midia-paga/index.html
-│   ├── crm/index.html
-│   ├── seo/index.html
-│   └── upload/index.html
-└── scripts/
-    └── fetch_rdstation.py              # automação via github actions
+│               ├── YYYY-MM.csv       ← redes sociais (exportação mLabs)
+│               ├── seo.csv           ← ou seo.xlsx
+│               ├── crm.csv           ← ou crm.xlsx
+│               ├── midia-paga.csv    ← ou midia-paga.xlsx
+│               └── api-status.json   ← gerado automaticamente (badge de fonte)
+│
+├── scripts/                          ← scripts de fetch das APIs
+│   ├── fetch_rdstation.py
+│   ├── fetch_midia_paga.py
+│   ├── fetch_seo.py
+│   ├── write_status.py
+│   └── requirements.txt
+│
+└── .github/
+    └── workflows/
+        └── fetch-data.yml            ← GitHub Actions (08h e 16h BRT)
 ```
 
 ---
 
-## upload de arquivos
+## atualização automática via API
 
-acesse `/pages/upload` no dashboard para enviar arquivos via interface gráfica. o sistema:
+o github actions roda dois vezes por dia e alimenta o dashboard automaticamente:
 
-1. valida a extensão (aceita `.csv` e `.xlsx`)
-2. valida o nome exato do arquivo — rejeita qualquer variação
-3. envia para o repositório github via api
-4. o vercel faz deploy automático em instantes
+| horário | o que acontece |
+|---------|---------------|
+| 08:00 BRT | busca dados de todas as APIs e grava os CSVs |
+| 16:00 BRT | mesma operação, dados do dia atualizados |
 
-para o envio funcionar, configure as variáveis de ambiente no vercel:
-- `GITHUB_TOKEN` — token de acesso pessoal com permissão de escrita no repositório
-- `GITHUB_REPO` — no formato `usuario/nome-do-repositorio`
-- `GITHUB_BRANCH` — branch de destino (padrão: `main`)
+após cada execução, um arquivo `api-status.json` é gravado no diretório do mês. o dashboard lê esse arquivo e exibe um badge no header de cada área indicando a fonte dos dados:
+
+- `⚡ via api · 13/04/2026 às 08:00` — dados frescos da API
+- `📄 via arquivo` — dados de upload manual
+
+**fontes por área**
+
+| área | fonte |
+|------|-------|
+| crm | rd station marketing api |
+| mídia paga | meta ads api + google ads api (somados) |
+| seo | google search console api + google analytics 4 api |
+| redes sociais | exportação manual do mLabs (não tem api pública) |
 
 ---
 
-## deploy
+## prioridade dos dados
 
-```bash
-# clonar
-git clone https://github.com/SEU_USUARIO/dashboard-vml.git
-cd dashboard-vml
+```
+GitHub Actions (API) → grava CSV → dashboard lê CSV   ← prioridade máxima
+Upload manual        → grava CSV → dashboard lê CSV   ← fallback
+Nenhum arquivo       → dashboard exibe —              ← layout nunca quebra
+```
 
-# não há dependências de build — é HTML/CSS/JS puro
-# fazer deploy no vercel via git push
-git add .
-git commit -m "update data"
-git push
+o dashboard tenta `.csv` primeiro, depois `.xlsx` como fallback. se nenhum existir, todos os campos mostram `—` sem quebrar o layout.
+
+---
+
+## formato dos arquivos
+
+todos os arquivos aceitam `.csv` ou `.xlsx` com o mesmo nome de coluna.
+
+### redes sociais — `YYYY-MM.csv`
+exportação direta do mLabs ou do meta business suite.
+cada linha de post deve ter `Data = Total`.
+
+### seo — `seo.csv`
+```
+Sessões Orgânicas,Impressões,Cliques,CTR,Posição Média,Keywords Top 10
+1500,45000,1200,2.67,18.3,42
+```
+
+### crm — `crm.csv`
+```
+Novos Leads,Leads Qualificados,Oportunidades,Negócios Fechados,Taxa de Conversão,Receita
+80,45,20,8,10.0,28000
+```
+
+### mídia paga — `midia-paga.csv`
+```
+Investimento,Impressões,Cliques,CTR,CPC,Conversões,ROAS
+5000,120000,3600,3.0,1.39,180,3.6
 ```
 
 ---
 
-## período suportado
+## configuração das APIs (github secrets)
 
-o dashboard suporta dados de **2022 a 2030**. a sidebar de navegação detecta automaticamente quais meses têm dados disponíveis via requisições paralelas.
+todos os tokens ficam em **settings → secrets and variables → actions** do repositório. nenhum token vai para o código.
+
+| secret | descrição |
+|--------|-----------|
+| `GH_PAT` | personal access token do github (permissão `repo`) |
+| `RD_TOKEN` | token de acesso da rd station marketing |
+| `META_ACCESS_TOKEN` | token do usuário do sistema meta |
+| `META_AD_ACCOUNT_ID` | id da conta de anúncios (ex: `act_123456789`) |
+| `GOOGLE_ADS_DEVELOPER_TOKEN` | developer token do google ads |
+| `GOOGLE_ADS_CLIENT_ID` | client id oauth do google |
+| `GOOGLE_ADS_CLIENT_SECRET` | client secret oauth do google |
+| `GOOGLE_ADS_REFRESH_TOKEN` | refresh token oauth do google |
+| `GOOGLE_ADS_CUSTOMER_ID` | id do cliente google ads (sem hífens) |
+| `GOOGLE_SERVICE_ACCOUNT_JSON` | json completo da service account google |
+| `GSC_SITE_URL` | url exata do site no search console (ex: `https://vmlcomp.com.br/`) |
+| `GA4_PROPERTY_ID` | id da propriedade ga4 (ex: `properties/123456789`) |
+
+para o guia completo de onde obter cada credencial, consulte `GUIA-SETUP.md`.
 
 ---
 
-## automação (github actions)
+## upload manual sem github
 
-o workflow `.github/workflows/fetch-data.yml` executa às **08h e 16h BRT** para buscar dados via api quando disponível. exportações manuais (linkedin, spotify) devem ser feitas via página de upload.
+acesse `/upload` no browser. selecione a área, o mês, arraste o arquivo (`.csv` ou `.xlsx`) e clique enviar. o arquivo vai direto para `assets/data/YYYY/MM/` via github api.
+
+**configuração única:**
+1. github → settings → developer settings → personal access tokens → tokens (classic)
+2. marcar permissão `repo` → gerar token
+3. colar em `pages/upload/index.html` no campo `token: 'SEU_TOKEN_AQUI'`
+4. confirmar `owner` e `repo` corretos no mesmo arquivo
 
 ---
 
-vml company · 2026
+## deploy (vercel)
+
+1. push para o repositório github (branch `refactor-estrutura` ou `main`)
+2. importar no vercel
+3. sem configuração adicional — `vercel.json` já cuida das rotas
+
+para visualizar uma branch antes de promover para produção: vercel → deployments → filtrar por branch.
