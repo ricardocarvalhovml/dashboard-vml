@@ -389,13 +389,12 @@
 
   async function buildNav(){
     const nav=document.getElementById('monthNav');if(!nav)return;
-    const probes=[];
-    for(const y of _YEARS)for(let m=1;m<=12;m++)probes.push({year:y,month:m});
-    const results=await Promise.allSettled(probes.map(({year,month})=>
-      fetch(`/assets/data/${year}/${String(month).padStart(2,'0')}/crm.csv`,{method:'HEAD'})
-        .then(r=>r.ok?{year,month}:null).catch(()=>null)
-    ));
-    const found=results.map(r=>r.status==='fulfilled'?r.value:null).filter(Boolean);
+    let manifest={};
+    try{const r=await fetch('/assets/data/manifest.json');if(r.ok)manifest=await r.json();}catch(e){}
+    const found=Object.entries(manifest)
+      .filter(([k,areas])=>areas.includes('crm'))
+      .map(([k])=>{const[y,m]=k.split('/');return{year:Number(y),month:Number(m)};})
+      .sort((a,b)=>a.year-b.year||a.month-b.month);
     if(!found.length){nav.innerHTML='<div style="font-size:12px;color:var(--muted);padding:8px 12px">nenhum dado</div>';return;}
     const byY={};found.forEach(({year,month})=>{if(!byY[year])byY[year]=[];byY[year].push(month);});
     let allBtns=[];
