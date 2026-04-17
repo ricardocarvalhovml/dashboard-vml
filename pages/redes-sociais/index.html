@@ -9,101 +9,384 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-  <script>
-    const CLIENT_NAME = 'vml company';
-    const ACCOUNT     = 'vmlcompany';
-  </script>
+  <style>
+    /* ── Tabs ── */
+    .rs-tabs { display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.25rem; }
+    .rs-tab { background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:var(--font);font-size:13px;font-weight:600;padding:10px 18px;cursor:pointer;transition:color .15s,border-color .15s;margin-bottom:-1px; }
+    .rs-tab:hover { color:var(--beige); }
+    .rs-tab.active { color:#a038f2;border-bottom-color:#a038f2; }
+    .rs-view { display:none; }
+    .rs-view.active { display:block; }
+
+    /* ── Área dos gráficos ── */
+    .chart-full { position:relative;height:180px;margin-top:4px; }
+    .chart-med  { position:relative;height:160px;margin-top:4px; }
+
+    /* ── Dia da semana ── */
+    .dow-grid { display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-bottom:1.25rem; }
+    .dow-card { background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 10px;text-align:center;min-width:0; }
+    .dow-card.best { border-color:#a038f2;background:rgba(160,56,242,.06); }
+    .dow-day  { font-size:10px;font-weight:600;color:var(--muted);margin-bottom:6px;letter-spacing:.06em; }
+    .dow-val  { font-size:20px;font-weight:600;color:var(--beige);line-height:1; }
+    .dow-sub  { font-size:10px;color:var(--muted);margin-top:3px; }
+    .dow-eng  { font-size:13px;font-weight:600;color:#a2e259;margin-top:5px; }
+    .dow-bar-wrap { height:3px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:6px; }
+    .dow-bar-fill { height:3px;border-radius:2px;background:#391bce; }
+    .dow-empty { color:var(--muted);font-size:11px;margin-top:12px; }
+
+    /* ── Posts tab ── */
+    .post-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .post-card { background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;flex-direction:column;gap:10px; }
+    .post-meta { display:flex;align-items:center;gap:8px; }
+    .post-type { display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:5px; }
+    .type-reel { background:rgba(160,56,242,.18);color:#a038f2; }
+    .type-carr { background:rgba(162,226,89,.12);color:#a2e259; }
+    .post-date { font-size:11px;color:var(--muted); }
+    .post-desc { font-size:12px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden; }
+    .post-stats { display:grid;grid-template-columns:repeat(4,1fr);gap:6px; }
+    .pstat { text-align:center; }
+    .pstat-val { font-size:16px;font-weight:600;color:var(--beige); }
+    .pstat-lbl { font-size:10px;color:var(--muted); }
+    .post-link { font-size:11px;color:#a038f2;text-decoration:none; }
+    .post-link:hover { text-decoration:underline; }
+
+    /* ── Público tab ── */
+    .pub-grid { display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.25rem; }
+    .pub-row { display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px; }
+    .pub-row:last-child { border:none; }
+    .pub-label { color:var(--muted); }
+    .pub-val   { font-weight:600;color:var(--beige); }
+    .age-bar-wrap { height:5px;background:rgba(255,255,255,.07);border-radius:3px;margin-top:4px; }
+    .age-bar-m { height:5px;border-radius:3px;background:#391bce; }
+    .age-bar-f { height:5px;border-radius:3px;background:#a038f2;margin-top:2px; }
+
+    /* ── Responsive ── */
+    @media(max-width:900px){
+      .dow-grid { grid-template-columns:repeat(4,1fr); }
+      .post-grid { grid-template-columns:1fr; }
+      .pub-grid  { grid-template-columns:1fr; }
+    }
+  </style>
 </head>
-<body data-initial-view="view-home">
-  <div id="app-loading"><div class="spinner"></div><p>carregando dados...</p></div>
-  <div id="app" style="display:none">
+<body>
+  <div id="app" style="display:block">
     <div class="layout" id="layout">
-  <aside class="sidebar">
-      <div class="sidebar-top">
-        <button class="hamburger" id="hamburger" title="menu"><span></span><span></span><span></span></button>
-        <button class="theme-toggle" onclick="toggleTheme()" title="alternar tema"><span id="theme-icon"></span></button>
-        <img class="sidebar-logo" id="sidebar-logo" src="/assets/img/logo-escuro.png" alt="vml company"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <span class="logo-fallback" style="display:none">vml company</span>
-      </div>
-      <div class="sidebar-body">
-        <div class="sidebar-nav-top">
-
-          <!-- home -->
-          <a class="nav-home" href="/" style="text-decoration:none;display:flex;align-items:center;gap:8px">
-            <span class="nav-icon" style="background:rgba(160,56,242,.18);color:#a038f2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span>home
-          </a>
-
-          <!-- áreas -->
-          <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
-            áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
-          </div>
-          <div id="areas-list">
-            <a class="nav-tab active" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-icon" style="background:#a038f2"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>redes sociais</a>
-            <a class="nav-tab" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
-            <a class="nav-tab" href="/pages/crm" style="text-decoration:none"><span class="nav-icon" style="background:#391bce"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>crm</a>
-            <a class="nav-tab" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
-          </div>
-
-          <div class="sidebar-divider"></div>
-
-          <!-- período -->
-          <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
-            período <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
-          </div>
-          <div id="periodo-list">
-            <div id="monthNav"></div>
-            <button class="nav-tab" id="btn-annual" style="display:none"></button>
-          </div>
-
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <button class="hamburger" id="hamburger" title="menu"><span></span><span></span><span></span></button>
+          <button class="theme-toggle" onclick="toggleTheme()" title="alternar tema"><span id="theme-icon"></span></button>
+          <img class="sidebar-logo" id="sidebar-logo" src="/assets/img/logo-escuro.png" alt="vml company" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <span class="logo-fallback" style="display:none">vml company</span>
         </div>
-        <div class="sidebar-nav-bottom">
-          <a class="nav-upload" href="/pages/upload"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;flex-shrink:0"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>enviar relatório</a>
-          <div class="sidebar-credit">
-            <div>
-              <div class="credit-brand">vml company</div>
-              <div class="credit-copy">© 2026 todos os direitos<br>reservados.</div>
+        <div class="sidebar-body">
+          <div class="sidebar-nav-top">
+            <a class="nav-home" href="/" style="text-decoration:none;display:flex;align-items:center;gap:8px">
+              <span class="nav-icon" style="background:rgba(160,56,242,.18);color:#a038f2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span>home
+            </a>
+            <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+              áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
+            </div>
+            <div id="areas-list">
+              <a class="nav-tab active" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-icon" style="background:#a038f2"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>redes sociais</a>
+              <a class="nav-tab" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
+              <a class="nav-tab" href="/pages/crm" style="text-decoration:none"><span class="nav-icon" style="background:#391bce"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>crm</a>
+              <a class="nav-tab" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
+            </div>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section">período</div>
+            <div style="padding:4px 0"><div class="nav-tab active" style="pointer-events:none;font-size:11px">março 2026</div></div>
+          </div>
+          <div class="sidebar-nav-bottom">
+            <a class="nav-upload" href="/pages/upload"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;flex-shrink:0"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>enviar relatório</a>
+            <div class="sidebar-credit"><div><div class="credit-brand">vml company</div><div class="credit-copy">© 2026 todos os direitos<br>reservados.</div></div></div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <div class="page-header">
+          <div>
+            <div class="page-eyebrow">instagram · @vmlcomp</div>
+            <div class="page-title">redes sociais</div>
+            <div class="page-sub">instagram · visualizações · alcance · engajamento · audiência</div>
+            <div style="margin-top:6px;font-size:11px;color:var(--muted)">01/03/2026 – 31/03/2026 · 8 posts · 28 stories</div>
+          </div>
+        </div>
+
+        <!-- ══════════════════ TABS ══════════════════ -->
+        <div class="rs-tabs">
+          <button class="rs-tab active" onclick="showTab('visao-geral',this)">visão geral</button>
+          <button class="rs-tab" onclick="showTab('posts',this)">posts</button>
+          <button class="rs-tab" onclick="showTab('publico',this)">público</button>
+        </div>
+
+        <!-- ════════════════ VISÃO GERAL ════════════════ -->
+        <div class="rs-view active" id="view-visao-geral">
+
+          <!-- KPI Row 1 — Alcance e visualizações -->
+          <div class="kpi-row" style="grid-template-columns:repeat(5,minmax(0,1fr))">
+            <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">visualizações</div><div class="kpi-val" style="color:#a038f2">295.251</div><div class="kpi-sub">total do mês</div></div>
+            <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">alcance diário</div><div class="kpi-val">212.010</div><div class="kpi-sub">soma do período</div></div>
+            <div class="kpi" style="--kpi-line:#c9b8f8"><div class="kpi-label">interações</div><div class="kpi-val" style="color:#c9b8f8">7.045</div><div class="kpi-sub">com o conteúdo</div></div>
+            <div class="kpi" style="--kpi-line:#6b5fd4"><div class="kpi-label">visitas ao perfil</div><div class="kpi-val">1.329</div><div class="kpi-sub">acessos ao perfil</div></div>
+            <div class="kpi" style="--kpi-line:#a2e259"><div class="kpi-label">cliques no link</div><div class="kpi-val" style="color:#a2e259">1.337</div><div class="kpi-sub">cliques na bio</div></div>
+          </div>
+
+          <!-- KPI Row 2 — Engajamento e seguidores -->
+          <div class="kpi-row" style="grid-template-columns:repeat(6,minmax(0,1fr))">
+            <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">curtidas</div><div class="kpi-val" style="font-size:20px">1.183</div><div class="kpi-sub">reações</div></div>
+            <div class="kpi" style="--kpi-line:#391bce"><div class="kpi-label">compartilhamentos</div><div class="kpi-val" style="font-size:20px">82</div><div class="kpi-sub">envios</div></div>
+            <div class="kpi" style="--kpi-line:#c9b8f8"><div class="kpi-label">comentários</div><div class="kpi-val" style="font-size:20px">39</div><div class="kpi-sub">interações</div></div>
+            <div class="kpi" style="--kpi-line:#6b5fd4"><div class="kpi-label">salvamentos</div><div class="kpi-val" style="font-size:20px">22</div><div class="kpi-sub">saves</div></div>
+            <div class="kpi" style="--kpi-line:#a2e259"><div class="kpi-label">seguidores ganhos</div><div class="kpi-val" style="font-size:20px;color:#a2e259">+122</div><div class="kpi-sub">novos no mês</div></div>
+            <div class="kpi" style="--kpi-line:#a038f2"><div class="kpi-label">conteúdo</div><div class="kpi-val" style="font-size:20px">36</div><div class="kpi-sub">8 posts · 28 stories</div></div>
+          </div>
+
+          <!-- Chart 1 — Visualizações diárias (full width) -->
+          <div class="card section-gap">
+            <div class="card-header"><div class="card-title">visualizações diárias</div><div style="font-size:11px;color:var(--muted)">março 2026</div></div>
+            <div class="chart-full"><canvas id="chart-views" role="img" aria-label="Visualizações diárias de março 2026.">Visualizações diárias com picos em 11/3 (16k), 12/3 (16k) e 16/3 (16k).</canvas></div>
+          </div>
+
+          <!-- Charts 2 e 3 — Alcance e Seguidores -->
+          <div class="two-col section-gap">
+            <div class="card">
+              <div class="card-header"><div class="card-title">alcance diário</div></div>
+              <div class="chart-med"><canvas id="chart-reach" role="img" aria-label="Alcance diário março 2026.">Alcance diário com pico em 16/3 (13.103).</canvas></div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">seguidores ganhos por dia</div></div>
+              <div class="chart-med"><canvas id="chart-followers" role="img" aria-label="Seguidores ganhos por dia março 2026.">Seguidores ganhos por dia, pico em 11/3 (9).</canvas></div>
             </div>
           </div>
+
+          <!-- Chart 4 — Interações diárias -->
+          <div class="card section-gap">
+            <div class="card-header"><div class="card-title">interações diárias</div><div style="font-size:11px;color:var(--muted)">curtidas + comentários + compartilhamentos + salvamentos</div></div>
+            <div class="chart-med"><canvas id="chart-interactions" role="img" aria-label="Interações diárias março 2026.">Interações com pico em 11/3 (555).</canvas></div>
+          </div>
+
+          <!-- Desempenho por dia da semana -->
+          <div style="font-size:10px;font-weight:600;color:var(--muted);margin-bottom:8px;letter-spacing:.06em">desempenho por dia da semana · posts publicados em março</div>
+          <div class="dow-grid" id="dow-grid"></div>
+
+        </div><!-- /view-visao-geral -->
+
+        <!-- ════════════════ POSTS ════════════════ -->
+        <div class="rs-view" id="view-posts">
+          <div style="margin-bottom:12px;font-size:11px;color:var(--muted)">8 publicações · março 2026 · dados exportados do meta business suite</div>
+          <div class="post-grid" id="posts-grid"></div>
         </div>
-      </div>
-    </aside>
-      <main class="main" id="mainContent">
-      <div style="padding:16px 0 0 0">
-        <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;opacity:.5;color:var(--muted);padding:3px 10px;border:1px solid currentColor;border-radius:20px">
-          📄 via arquivo · exportado do mLabs
-        </span>
-      </div>
-    </main>
+
+        <!-- ════════════════ PÚBLICO ════════════════ -->
+        <div class="rs-view" id="view-publico">
+          <div class="pub-grid">
+            <div class="card">
+              <div class="card-header"><div class="card-title">faixa etária e gênero</div></div>
+              <div id="age-content"></div>
+              <div style="display:flex;gap:16px;margin-top:10px;font-size:11px;color:var(--muted)">
+                <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:3px;background:#391bce;border-radius:2px;display:inline-block"></span>homens</span>
+                <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:3px;background:#a038f2;border-radius:2px;display:inline-block"></span>mulheres</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">principais cidades</div></div>
+              <div id="cities-content"></div>
+            </div>
+          </div>
+          <div class="card section-gap">
+            <div class="card-header"><div class="card-title">distribuição por gênero (estimativa)</div></div>
+            <div style="position:relative;height:200px"><canvas id="chart-gender" role="img" aria-label="Distribuição por faixa etária e gênero.">Faixas etárias com maior concentração em 25-34 e 35-44.</canvas></div>
+          </div>
+        </div>
+
+      </main>
     </div>
   </div>
+
   <script>
-  (function(){const s=localStorage.getItem('dashboard-theme')||'';document.documentElement.dataset.theme=s;_ul(s==='light');})();
-  function _ul(l){const i=document.getElementById('sidebar-logo');if(i)i.src=l?'/assets/img/logo-escuro.png':'/assets/img/logo.png';const ic=document.getElementById('theme-icon');if(!ic)return;ic.innerHTML=l?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>':'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';}
+  (function(){
+    const s=localStorage.getItem('dashboard-theme')||'';
+    document.documentElement.dataset.theme=s;
+    const l=document.getElementById('sidebar-logo');
+    if(l)l.src=s==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';
+    const ic=document.getElementById('theme-icon');
+    if(ic)ic.innerHTML=s==='light'
+      ?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+      :'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+  })();
+  function toggleAreas(){var el=document.getElementById('areas-list');el.classList.toggle('coll');var ch=document.querySelector('#areas-toggle .chev');if(ch)ch.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';}
+  function toggleTheme(){const h=document.documentElement;const l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);const i=document.getElementById('sidebar-logo');if(i)i.src=h.dataset.theme==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';rebuildCharts();}
+  document.getElementById('hamburger').addEventListener('click',function(){document.getElementById('layout').classList.toggle('collapsed');});
 
-  function toggleAreas(){
-    var el=document.getElementById('areas-list');
-    el.classList.toggle('coll');
-    var chev=document.querySelector('#areas-toggle .chev');
-    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
+  function showTab(id,btn){
+    document.querySelectorAll('.rs-view').forEach(v=>v.classList.remove('active'));
+    document.querySelectorAll('.rs-tab').forEach(t=>t.classList.remove('active'));
+    document.getElementById('view-'+id).classList.add('active');
+    btn.classList.add('active');
+    if(id==='publico' && !chartGender) buildGenderChart();
   }
 
-  function toggleAreas(){
-    var el=document.getElementById('areas-list');
-    el.classList.toggle('coll');
-    var chev=document.querySelector('#areas-toggle .chev');
-    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
+  // ── Dados ──
+  const dias = ['01/3','02/3','03/3','04/3','05/3','06/3','07/3','08/3','09/3','10/3','11/3','12/3','13/3','14/3','15/3','16/3','17/3','18/3','19/3','20/3','21/3','22/3','23/3','24/3','25/3','26/3','27/3','28/3','29/3','30/3','31/3'];
+  const views  = [7795,10166,9995,6711,7191,6577,7114,6805,10405,8792,16011,16184,12377,9624,8929,16260,7277,9826,8148,8815,7176,6737,7532,7846,11617,10843,10717,8268,8048,9573,11892];
+  const reach  = [5128,6167,6640,4505,4597,4332,4946,4664,7103,6194,9888,10900,8138,6849,5328,13103,5982,5264,6304,7003,5451,5178,5591,5577,7782,8520,7985,6758,6599,9817,9717];
+  const followers = [4,4,2,4,1,3,2,3,3,3,9,5,7,7,4,3,5,8,2,2,7,6,3,4,2,3,2,3,4,3,4];
+  const interactions = [221,288,377,239,245,174,218,258,260,180,555,207,168,235,198,223,189,220,260,213,241,183,178,138,227,216,227,144,135,94,334];
+
+  const posts = [
+    {date:'02/03',type:'reel',views:10325,reach:8661,likes:651,shares:2,comments:2,saves:2,url:'https://www.instagram.com/reel/DVYkZSqlFVC/',desc:'Aqui no Brasil ou você é esmagado pela burocracia, ou se perde em automações que nem sempre entendem o seu negócio. Há mais de 10 anos, unimos o que o mercado tentou separar: a precisão da tecnologia jurídica com o sangue no olho de quem vive o dia a dia da operação.'},
+    {date:'05/03',type:'carrossel',views:790,reach:331,likes:25,shares:2,comments:1,saves:0,url:'https://www.instagram.com/p/DVgKfX6FKoI/',desc:'Até onde vai a eficiência da sua operação tributária? Em grandes grupos do Agro, a ausência de um diagnóstico técnico aprofundado pode gerar perda relevante de caixa. Recuperamos R$ 803 mil para o caixa.'},
+    {date:'09/03',type:'reel',views:1363,reach:870,likes:46,shares:2,comments:1,saves:1,url:'https://www.instagram.com/reel/DVqvPe_E9Wh/',desc:'As alíquotas podem ser simbólicas ainda, mas o jogo já mudou! Com o cruzamento de dados em tempo real por parte do Fisco, ou você está em conformidade, ou os riscos vão bater à porta.'},
+    {date:'11/03',type:'reel',views:3459,reach:1840,likes:151,shares:39,comments:18,saves:8,url:'https://www.instagram.com/reel/DVwjEl-EaNI/',desc:'Se você decide mais pelo "feeling" do que olhando para os seus dados, você não está fazendo gestão. Está contando com a sorte! Comitê de Empreendedores da @amchamrs.'},
+    {date:'20/03',type:'reel',views:1265,reach:740,likes:63,shares:4,comments:5,saves:1,url:'https://www.instagram.com/reel/DWG7egihEvI/',desc:'A Reforma Tributária exige precisão absoluta e tecnologia de ponta. O impacto da transição será severo para quem ignorar os quatro pilares da sobrevivência: contador, software, consultoria e suporte jurídico.'},
+    {date:'21/03',type:'reel',views:1345,reach:714,likes:84,shares:14,comments:5,saves:4,url:'https://www.instagram.com/reel/DWKLuHqhdbk/',desc:'É comum nos procurarem para o contencioso tradicional, e a nossa resposta, muitas vezes, é um "não". Fizemos essa escolha estratégica para manter a fidelidade ao nosso propósito.'},
+    {date:'25/03',type:'carrossel',views:5079,reach:5388,likes:105,shares:7,comments:0,saves:5,url:'https://www.instagram.com/p/DWTu5KXEcPf/',desc:'A alta do diesel ameaça a rentabilidade de quem sustenta a economia do país. Através da recuperação de créditos como PIS/COFINS e ICMS, entregamos o fôlego financeiro e a segurança jurídica.'},
+    {date:'27/03',type:'reel',views:2488,reach:1522,likes:58,shares:12,comments:7,saves:1,url:'https://www.instagram.com/reel/DWY7ZFZjeQc/',desc:'Onde o lucro da sua operação está escorrendo? A folha de pagamento esconde oportunidades de caixa que a maioria das empresas ignora. Nossa abordagem une tecnologia e segurança jurídica.'},
+  ];
+
+  // Desempenho por dia da semana
+  // Mar 1 = Dom. Posts: 02=Seg, 05=Qui, 09=Seg, 11=Qua, 20=Sex, 21=Sab, 25=Qua, 27=Sex
+  const dowDays = ['dom','seg','ter','qua','qui','sex','sab'];
+  const dowData = {
+    dom: [],
+    seg: [posts[0],posts[2]],  // 02/03, 09/03
+    ter: [],
+    qua: [posts[3],posts[6]],  // 11/03, 25/03
+    qui: [posts[1]],           // 05/03
+    sex: [posts[4],posts[7]],  // 20/03, 27/03
+    sab: [posts[5]],           // 21/03
+  };
+
+  // Render desempenho por dia da semana
+  const dowGrid = document.getElementById('dow-grid');
+  const maxAvgView = Math.max(...Object.values(dowData).filter(a=>a.length).map(a=>a.reduce((s,p)=>s+p.views,0)/a.length));
+  dowDays.forEach(d=>{
+    const arr = dowData[d];
+    const div = document.createElement('div');
+    const isEmpty = arr.length === 0;
+    const avgViews = isEmpty ? 0 : Math.round(arr.reduce((s,p)=>s+p.views,0)/arr.length);
+    const totalEng = isEmpty ? 0 : arr.reduce((s,p)=>s+p.likes+p.comments+p.saves+p.shares,0);
+    const totalViews = isEmpty ? 0 : arr.reduce((s,p)=>s+p.views,0);
+    const engRate = totalViews > 0 ? ((totalEng/totalViews)*100).toFixed(1) : 0;
+    const barW = isEmpty ? 0 : Math.round((avgViews/maxAvgView)*100);
+    const isBest = avgViews === maxAvgView && !isEmpty;
+    div.className = 'dow-card' + (isBest?' best':'');
+    div.innerHTML = isEmpty
+      ? `<div class="dow-day">${d.toUpperCase()}</div><div class="dow-empty">sem dados</div>`
+      : `<div class="dow-day">${d.toUpperCase()}</div>
+         <div class="kpi-label" style="font-size:9px;margin-bottom:2px">média views</div>
+         <div class="dow-val">${avgViews.toLocaleString('pt-BR')}</div>
+         <div class="dow-sub">${arr.length} publicaç${arr.length>1?'ões':'ão'}</div>
+         <div class="dow-eng">${engRate}%</div>
+         <div class="dow-sub">engajamento</div>
+         <div class="dow-bar-wrap"><div class="dow-bar-fill" style="width:${barW}%"></div></div>`;
+    dowGrid.appendChild(div);
+  });
+
+  // Render posts grid
+  const pg = document.getElementById('posts-grid');
+  posts.forEach(p=>{
+    const eng = p.likes+p.comments+p.saves+p.shares;
+    const engPct = ((eng/p.views)*100).toFixed(1);
+    const div = document.createElement('div');div.className='post-card';
+    div.innerHTML = `
+      <div class="post-meta">
+        <span class="post-type ${p.type==='reel'?'type-reel':'type-carr'}">${p.type}</span>
+        <span class="post-date">${p.date}/2026</span>
+        <a href="${p.url}" target="_blank" class="post-link" style="margin-left:auto">ver post ↗</a>
+      </div>
+      <div class="post-desc">${p.desc}</div>
+      <div class="post-stats">
+        <div class="pstat"><div class="pstat-val">${p.views.toLocaleString('pt-BR')}</div><div class="pstat-lbl">views</div></div>
+        <div class="pstat"><div class="pstat-val">${p.likes.toLocaleString('pt-BR')}</div><div class="pstat-lbl">curtidas</div></div>
+        <div class="pstat"><div class="pstat-val">${p.shares}</div><div class="pstat-lbl">compart.</div></div>
+        <div class="pstat"><div class="pstat-val" style="color:#a2e259">${engPct}%</div><div class="pstat-lbl">engaj.</div></div>
+      </div>`;
+    pg.appendChild(div);
+  });
+
+  // Render público
+  const ageData = [
+    {range:'18–24',f:4.0,m:1.9},
+    {range:'25–34',f:19.7,m:12.5},
+    {range:'35–44',f:18.3,m:13.8},
+    {range:'45–54',f:10.2,m:9.1},
+    {range:'55–64',f:3.3,m:2.9},
+    {range:'65+',f:2.3,m:2.0},
+  ];
+  const ageEl = document.getElementById('age-content');
+  ageData.forEach(a=>{
+    const div = document.createElement('div');
+    div.style.marginBottom='8px';
+    div.innerHTML = `<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span style="color:var(--muted)">${a.range}</span><span style="color:var(--beige)">${a.f}% M · ${a.m}% H</span></div><div class="age-bar-wrap"><div class="age-bar-m" style="width:${a.m*3}%"></div><div class="age-bar-f" style="width:${a.f*3}%"></div></div>`;
+    ageEl.appendChild(div);
+  });
+
+  const cities = [
+    {city:'Porto Alegre, RS',pct:42.2},
+    {city:'Canoas, RS',pct:4.9},
+    {city:'São Paulo, SP',pct:4.5},
+    {city:'Viamão, RS',pct:2.0},
+    {city:'Gravataí, RS',pct:1.9},
+    {city:'Caxias do Sul, RS',pct:1.8},
+    {city:'Alvorada, RS',pct:1.4},
+    {city:'Guaíba, RS',pct:1.3},
+    {city:'São Leopoldo, RS',pct:1.2},
+    {city:'Rio de Janeiro, RJ',pct:1.0},
+  ];
+  const citEl = document.getElementById('cities-content');
+  cities.forEach(c=>{
+    const div = document.createElement('div');div.className='pub-row';
+    div.innerHTML = `<span class="pub-label">${c.city}</span><span class="pub-val">${c.pct}%</span>`;
+    citEl.appendChild(div);
+  });
+
+  // ── Charts ──
+  let cViews,cReach,cFollowers,cInteractions,chartGender;
+  function getC(){return document.documentElement.dataset.theme==='light'?{grid:'rgba(18,21,90,.06)',tick:'#5a5070',fill:'rgba(57,27,206,.06)'}:{grid:'rgba(255,255,255,.04)',tick:'#8b86a8',fill:'rgba(160,56,242,.08)'};}
+
+  function buildCharts(){
+    const c=getC();
+    const baseOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},elements:{point:{radius:0,hoverRadius:4}}};
+    const scaleX=(color)=>({ticks:{color,font:{size:10},autoSkip:true,maxTicksLimit:10},grid:{display:false}});
+    const scaleY=(color,grid)=>({ticks:{color,font:{size:10},callback:v=>v>=1000?(v/1000).toFixed(0)+'k':v},grid:{color:grid}});
+
+    if(cViews)cViews.destroy();
+    cViews=new Chart(document.getElementById('chart-views'),{type:'line',data:{labels:dias,datasets:[{data:views,borderColor:'#a038f2',backgroundColor:'rgba(160,56,242,.12)',fill:true,tension:.4,borderWidth:2}]},options:{...baseOpts,scales:{x:scaleX(c.tick),y:scaleY(c.tick,c.grid)}}});
+
+    if(cReach)cReach.destroy();
+    cReach=new Chart(document.getElementById('chart-reach'),{type:'line',data:{labels:dias,datasets:[{data:reach,borderColor:'#c9b8f8',backgroundColor:'rgba(201,184,248,.1)',fill:true,tension:.4,borderWidth:2}]},options:{...baseOpts,scales:{x:scaleX(c.tick),y:scaleY(c.tick,c.grid)}}});
+
+    if(cFollowers)cFollowers.destroy();
+    cFollowers=new Chart(document.getElementById('chart-followers'),{type:'bar',data:{labels:dias,datasets:[{data:followers,backgroundColor:'#a2e259',borderRadius:2}]},options:{...baseOpts,scales:{x:{ticks:{color:c.tick,font:{size:10},autoSkip:true,maxTicksLimit:10},grid:{display:false}},y:{ticks:{color:c.tick,font:{size:10}},grid:{color:c.grid}}}}});
+
+    if(cInteractions)cInteractions.destroy();
+    cInteractions=new Chart(document.getElementById('chart-interactions'),{type:'line',data:{labels:dias,datasets:[{data:interactions,borderColor:'#391bce',backgroundColor:'rgba(57,27,206,.1)',fill:true,tension:.4,borderWidth:2}]},options:{...baseOpts,scales:{x:scaleX(c.tick),y:scaleY(c.tick,c.grid)}}});
   }
-  function togglePeriodo(){
-    var el=document.getElementById('periodo-list');
-    el.classList.toggle('coll');
-    var chev=document.querySelector('#periodo-toggle .chev');
-    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
+
+  function buildGenderChart(){
+    const c=getC();
+    chartGender=new Chart(document.getElementById('chart-gender'),{
+      type:'bar',
+      data:{
+        labels:['18–24','25–34','35–44','45–54','55–64','65+'],
+        datasets:[
+          {label:'homens',data:[1.9,12.5,13.8,9.1,2.9,2.0],backgroundColor:'#391bce',borderRadius:3},
+          {label:'mulheres',data:[4.0,19.7,18.3,10.2,3.3,2.3],backgroundColor:'#a038f2',borderRadius:3},
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:c.tick,font:{size:11}}}},scales:{x:{ticks:{color:c.tick},grid:{display:false}},y:{ticks:{color:c.tick,callback:v=>v+'%'},grid:{color:c.grid}}}}
+    });
   }
-  function toggleTheme(){const h=document.documentElement;const l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);_ul(h.dataset.theme==='light');}</script>
-  <script src="/assets/js/redes-sociais.js"></script>
+
+  function rebuildCharts(){
+    buildCharts();
+    if(chartGender){chartGender.destroy();chartGender=null;buildGenderChart();}
+  }
+
+  buildCharts();
+  </script>
 </body>
 </html>
