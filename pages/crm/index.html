@@ -9,118 +9,406 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-  <script>const AREA_CONFIG = {"name": "crm", "subtitle": "leads · funil de vendas · receita", "file": "crm.csv", "color": "#391bce", "kpis": [{"key": "Novos Leads", "label": "novos leads", "sub": "entradas no funil", "color": "#391bce"}, {"key": "Leads Qualificados", "label": "leads qualificados", "sub": "com potencial", "color": "#a038f2"}, {"key": "Oportunidades", "label": "oportunidades", "sub": "em negociação", "color": "#c9b8f8"}, {"key": "Negócios Fechados", "label": "negócios fechados", "sub": "convertidos", "color": "#a2e259"}, {"key": "Taxa de Conversão", "label": "conversão", "sub": "leads → clientes", "color": "#6b5fd4", "pct": true}, {"key": "Receita", "label": "receita", "sub": "gerada no mês", "color": "#a2e259", "currency": true}], "charts": [{"id": "chart-leads", "key": "Novos Leads", "type": "bar", "color": "#391bce", "label": "novos leads por mês"}, {"id": "chart-fechados", "key": "Negócios Fechados", "type": "bar", "color": "#a2e259", "label": "negócios fechados"}, {"id": "chart-conversao", "key": "Taxa de Conversão", "type": "line", "color": "#6b5fd4", "label": "taxa de conversão"}, {"id": "chart-receita", "key": "Receita", "type": "line", "color": "#a2e259", "label": "receita gerada"}]};</script>
+  <style>
+    /* ── Taxas Consolidadas (destaque) ── */
+    .taxas-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+    .taxa-card {
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:24px;
+      position:relative;
+      overflow:hidden;
+    }
+    .taxa-card.frios { border-color:#391bce44; }
+    .taxa-card.clientes { border-color:#a2e25944; }
+    .taxa-card::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; }
+    .taxa-card.frios::before { background:linear-gradient(90deg,#391bce,#a038f2); }
+    .taxa-card.clientes::before { background:linear-gradient(90deg,#a2e259,#38c9b8); }
+    .taxa-card-title { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+    .taxa-card-sub { font-size:12px; color:var(--muted); margin-bottom:20px; }
+    .taxas-row { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+    .taxa-item { text-align:center; }
+    .taxa-item-label { font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+    .taxa-item-value { font-size:28px; font-weight:600; }
+    .taxa-item-value.frios-val { color:#a038f2; }
+    .taxa-item-value.clientes-val { color:#a2e259; }
+    .taxa-divider { width:1px; background:var(--border); margin:0 4px; }
+
+    /* ── Section title ── */
+    .section-title { display:flex; align-items:center; gap:10px; font-size:12px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:#391bce; margin-bottom:14px; }
+    .section-title::before { content:''; display:block; width:3px; height:14px; background:#391bce; border-radius:2px; }
+
+    /* ── Campaign charts ── */
+    .camp-charts-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px; }
+    @media(max-width:900px){ .camp-charts-grid { grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:600px){ .camp-charts-grid { grid-template-columns:1fr; } }
+    .camp-chart-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px; }
+    .camp-chart-card-title { font-size:12px; font-weight:600; color:var(--beige); margin-bottom:4px; }
+    .camp-chart-card-sub { font-size:11px; color:var(--muted); margin-bottom:12px; }
+    .camp-chart-metrics { display:flex; gap:12px; margin-top:10px; flex-wrap:wrap; }
+    .camp-metric { text-align:center; flex:1; }
+    .camp-metric-val { font-size:16px; font-weight:600; }
+    .camp-metric-label { font-size:10px; color:var(--muted); margin-top:2px; }
+
+    /* ── Email table ── */
+    .email-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .email-table th { font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); text-align:left; padding:0 10px 12px; font-weight:600; white-space:nowrap; cursor:pointer; user-select:none; }
+    .email-table th:hover { color:var(--beige); }
+    .email-table th.right { text-align:right; }
+    .email-table td { padding:11px 10px; border-top:1px solid var(--border); vertical-align:middle; }
+    .email-table td.right { text-align:right; }
+    .camp-tag { display:inline-block; font-size:10px; font-weight:700; letter-spacing:.04em; padding:2px 7px; border-radius:4px; text-transform:uppercase; white-space:nowrap; }
+    .camp-tag.expo    { background:#391bce22; color:#c9b8f8; border:1px solid #c9b8f830; }
+    .camp-tag.intermodal { background:#a038f222; color:#a038f2; border:1px solid #a038f230; }
+    .camp-tag.webinar { background:#38c9b822; color:#38c9b8; border:1px solid #38c9b830; }
+    .camp-tag.auditoria { background:#a2e25922; color:#a2e259; border:1px solid #a2e25930; }
+    .seg-badge { display:inline-block; font-size:10px; padding:2px 6px; border-radius:4px; }
+    .seg-badge.frios   { background:#391bce15; color:#c9b8f8; }
+    .seg-badge.baserd  { background:#a2e25915; color:#a2e259; }
+    .seg-badge.clientes { background:#38c9b815; color:#38c9b8; }
+    .pct-bar-bg { width:48px; height:3px; background:var(--border); border-radius:2px; display:inline-block; vertical-align:middle; margin-right:4px; }
+    .pct-bar-fill { height:100%; border-radius:2px; }
+    .email-assunto { max-width:280px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--muted); font-size:12px; margin-top:2px; }
+    .filter-bar { display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+    .filter-input { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:7px 12px; font-size:13px; color:var(--beige); font-family:var(--font); outline:none; min-width:180px; }
+    .filter-input::placeholder { color:var(--muted); }
+    .filter-select { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:7px 12px; font-size:13px; color:var(--beige); font-family:var(--font); outline:none; cursor:pointer; }
+    .filter-label { font-size:12px; color:var(--muted); }
+    .table-count { font-size:12px; color:var(--muted); margin-left:auto; }
+
+    @media(max-width:768px){ .taxas-grid{grid-template-columns:1fr;} }
+  </style>
 </head>
 <body>
   <div id="app-loading"><div class="spinner"></div><p>carregando dados...</p></div>
   <div id="app" style="display:none">
     <div class="layout" id="layout">
-  <aside class="sidebar">
-      <div class="sidebar-top">
-        <button class="hamburger" id="hamburger" title="menu"><span></span><span></span><span></span></button>
-        <button class="theme-toggle" onclick="toggleTheme()" title="alternar tema"><span id="theme-icon"></span></button>
-        <img class="sidebar-logo" id="sidebar-logo" src="/assets/img/logo-escuro.png" alt="vml company"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <span class="logo-fallback" style="display:none">vml company</span>
-      </div>
-      <div class="sidebar-body">
-        <div class="sidebar-nav-top">
-
-          <!-- home -->
-          <a class="nav-home" href="/" style="text-decoration:none;display:flex;align-items:center;gap:8px">
-            <span class="nav-icon" style="background:rgba(160,56,242,.18);color:#a038f2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span>home
-          </a>
-
-          <!-- áreas -->
-          <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
-            áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
-          </div>
-          <div id="areas-list">
-            <a class="nav-tab" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-icon" style="background:#a038f2"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>redes sociais</a>
-            <a class="nav-tab" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
-            <a class="nav-tab active" href="/pages/crm" style="text-decoration:none"><span class="nav-icon" style="background:#391bce"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>crm</a>
-            <a class="nav-tab" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
-          </div>
-
-          <div class="sidebar-divider"></div>
-
-          <!-- período -->
-          <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
-            período <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span>
-          </div>
-          <div id="periodo-list">
-            <div id="monthNav"></div>
-            <button class="nav-tab" id="btn-annual" style="display:none"></button>
-          </div>
-
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <button class="hamburger" id="hamburger" title="menu"><span></span><span></span><span></span></button>
+          <button class="theme-toggle" onclick="toggleTheme()" title="alternar tema"><span id="theme-icon"></span></button>
+          <img class="sidebar-logo" id="sidebar-logo" src="/assets/img/logo-escuro.png" alt="vml company" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <span class="logo-fallback" style="display:none">vml company</span>
         </div>
-        <div class="sidebar-nav-bottom">
-          <a class="nav-upload" href="/pages/upload"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;flex-shrink:0"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>enviar relatório</a>
-          <div class="sidebar-credit">
-            <div>
-              <div class="credit-brand">vml company</div>
-              <div class="credit-copy">© 2026 todos os direitos<br>reservados.</div>
+        <div class="sidebar-body">
+          <div class="sidebar-nav-top">
+            <a class="nav-home" href="/" style="text-decoration:none;display:flex;align-items:center;gap:8px">
+              <span class="nav-icon" style="background:rgba(160,56,242,.18);color:#a038f2"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span>home
+            </a>
+            <div class="sidebar-section" id="areas-toggle" onclick="toggleAreas()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">áreas <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span></div>
+            <div id="areas-list">
+              <a class="nav-tab" href="/pages/redes-sociais" style="text-decoration:none"><span class="nav-icon" style="background:#a038f2"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>redes sociais</a>
+              <a class="nav-tab" href="/pages/seo" style="text-decoration:none"><span class="nav-icon" style="background:#a2e259"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>seo</a>
+              <a class="nav-tab active" href="/pages/crm" style="text-decoration:none"><span class="nav-icon" style="background:#391bce"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>crm</a>
+              <a class="nav-tab" href="/pages/midia-paga" style="text-decoration:none"><span class="nav-icon" style="background:#c9b8f8"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#07091a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>mídia paga</a>
             </div>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section" id="periodo-toggle" onclick="togglePeriodo()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">período <span class="chev" style="font-size:8px;opacity:.5;transition:transform .2s">▾</span></div>
+            <div id="periodo-list"><div id="monthNav"></div></div>
+          </div>
+          <div class="sidebar-nav-bottom">
+            <a class="nav-upload" href="/pages/upload"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;flex-shrink:0"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>enviar relatório</a>
+            <div class="sidebar-credit"><div><div class="credit-brand">vml company</div><div class="credit-copy">© 2026 todos os direitos<br>reservados.</div></div></div>
           </div>
         </div>
-      </div>
-    </aside>
+      </aside>
       <main class="main">
         <div class="page-header">
           <div>
             <div class="page-eyebrow" id="page-eyebrow">crm</div>
             <div class="page-title">crm</div>
-            <div class="page-sub" id="page-sub">leads · funil de vendas · receita</div>
-          <div id="data-source-badge" style="margin-top:8px"></div>
+            <div class="page-sub">e-mail marketing · taxas consolidadas · campanhas</div>
           </div>
         </div>
-        <div id="no-data-banner" class="card section-gap" style="display:none;border-color:#391bce33;background:#391bce08">
-          <div style="display:flex;align-items:center;gap:12px">
-            <div style="font-size:24px">📂</div>
-            <div>
-              <div style="font-weight:700;margin-bottom:4px;text-transform:lowercase">nenhum dado encontrado</div>
-              <div style="font-size:13px;color:var(--muted)">faça upload de <code>crm.csv</code> em <code>assets/data/YYYY/MM/</code> para começar.</div>
-              <div style="font-size:12px;color:var(--muted);margin-top:8px">formato esperado:<br><code>Novos Leads,Leads Qualificados,Oportunidades,Negócios Fechados,Taxa de Conversão,Receita</code></div>
-            </div>
-            <a href="/pages/upload" style="margin-left:auto;flex-shrink:0;padding:10px 18px;background:var(--blue);color:white;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap">↑ enviar arquivo</a>
-          </div>
-        </div>
-        <div class="kpi-row" id="kpi-row"></div>
-<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">novos leads por mês</div></div><div style="position:relative;height:175px"><canvas id="chart-leads"></canvas></div></div>
-          <div class="card"><div class="card-header"><div class="card-title">negócios fechados</div></div><div style="position:relative;height:175px"><canvas id="chart-fechados"></canvas></div></div></div>
-<div class="two-col section-gap">          <div class="card"><div class="card-header"><div class="card-title">taxa de conversão</div></div><div style="position:relative;height:150px"><canvas id="chart-conversao"></canvas></div></div>
-          <div class="card"><div class="card-header"><div class="card-title">receita gerada</div></div><div style="position:relative;height:150px"><canvas id="chart-receita"></canvas></div></div></div>
-        <div class="card" id="data-table"></div>
+        <div id="crm-content"></div>
       </main>
     </div>
   </div>
+
   <script>
-  (function(){const s=localStorage.getItem('dashboard-theme')||'';document.documentElement.dataset.theme=s;const l=document.getElementById('sidebar-logo');if(l)l.src=s==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';const ic=document.getElementById('theme-icon');if(ic)ic.innerHTML=s==='light'?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>':'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';})();
+  (function(){const s=localStorage.getItem('dashboard-theme')||'';document.documentElement.dataset.theme=s;const l=document.getElementById('sidebar-logo');if(l)l.src=s==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';const ic=document.getElementById('theme-icon');if(ic)ic.innerHTML=s==='light'?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>':'<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>';})();
+  function toggleAreas(){var e=document.getElementById('areas-list');e.classList.toggle('coll');var c=document.querySelector('#areas-toggle .chev');if(c)c.style.transform=e.classList.contains('coll')?'rotate(-90deg)':'';}
+  function togglePeriodo(){var e=document.getElementById('periodo-list');e.classList.toggle('coll');var c=document.querySelector('#periodo-toggle .chev');if(c)c.style.transform=e.classList.contains('coll')?'rotate(-90deg)':'';}
+  function toggleTheme(){const h=document.documentElement;const l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);const i=document.getElementById('sidebar-logo');if(i)i.src=h.dataset.theme==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';}
+  document.addEventListener('DOMContentLoaded',()=>{const hb=document.getElementById('hamburger');const la=document.getElementById('layout');if(hb&&la)hb.addEventListener('click',()=>la.classList.toggle('sidebar-closed'));});
 
-  function toggleAreas(){
-    var el=document.getElementById('areas-list');
-    el.classList.toggle('coll');
-    var chev=document.querySelector('#areas-toggle .chev');
-    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
+  const _MO=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  const _YEARS=[2022,2023,2024,2025,2026,2027,2028,2029,2030];
+  let _crmData=null, _emailsData=null;
+  let _emailSortKey='Data', _emailSortDir=-1;
+  const _charts={};
+
+  function parseCsv(t){return new Promise(r=>{Papa.parse(t,{header:true,skipEmptyLines:true,complete:d=>r(d.data)});});}
+  function n(v){return parseFloat(String(v).replace(',','.'))||0;}
+  function pct(v){return n(v).toFixed(2)+'%';}
+
+  const CAMP_COLORS={
+    'Expo Cotrijal':   {bg:'#391bce', light:'#c9b8f8', tag:'expo'},
+    'Intermodal':      {bg:'#a038f2', light:'#a038f2', tag:'intermodal'},
+    'Webinar':         {bg:'#38c9b8', light:'#38c9b8', tag:'webinar'},
+    'Auditoria de Folha': {bg:'#a2e259', light:'#a2e259', tag:'auditoria'},
+  };
+
+  async function loadMonth(year,month){
+    const base=`/assets/data/${year}/${String(month).padStart(2,'0')}`;
+    const [cR,eR]=await Promise.allSettled([
+      fetch(base+'/crm.csv').then(r=>r.ok?r.text():Promise.reject()),
+      fetch(base+'/crm-emails.csv').then(r=>r.ok?r.text():Promise.reject()),
+    ]);
+    _crmData=cR.status==='fulfilled'?await parseCsv(cR.value):null;
+    _emailsData=eR.status==='fulfilled'?await parseCsv(eR.value):null;
+    render(year,month);
   }
 
-  function toggleAreas(){
-    var el=document.getElementById('areas-list');
-    el.classList.toggle('coll');
-    var chev=document.querySelector('#areas-toggle .chev');
-    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
+  function render(year,month){
+    const el=document.getElementById('crm-content');
+    document.getElementById('page-eyebrow').textContent=`${_MO[month-1]} ${year}`;
+
+    if(!_crmData||!_emailsData){el.innerHTML='<div class="card" style="padding:32px;text-align:center;color:var(--muted)">nenhum dado encontrado.</div>';return;}
+
+    // Parse consolidated rates
+    const frios    = _crmData.find(r=>r.Segmento==='Leads frios')||{};
+    const clientes = _crmData.find(r=>r.Segmento==='Base de clientes')||{};
+
+    // Group emails by campaign
+    const campGroups={};
+    _emailsData.forEach(r=>{
+      if(!campGroups[r.Campanha])campGroups[r.Campanha]=[];
+      campGroups[r.Campanha].push(r);
+    });
+
+    el.innerHTML=`
+    <!-- ── DESTAQUE: Taxas Consolidadas ── -->
+    <div class="section-title" style="color:#391bce">taxas consolidadas · destaque</div>
+    <div class="taxas-grid">
+      <div class="taxa-card frios">
+        <div class="taxa-card-title">leads frios</div>
+        <div class="taxa-card-sub">base de contatos frios segmentados por campanha</div>
+        <div class="taxas-row">
+          <div class="taxa-item">
+            <div class="taxa-item-label">entrega</div>
+            <div class="taxa-item-value frios-val">${n(frios.Taxa_Entrega).toFixed(2)}%</div>
+          </div>
+          <div class="taxa-divider"></div>
+          <div class="taxa-item">
+            <div class="taxa-item-label">abertura</div>
+            <div class="taxa-item-value frios-val">${n(frios.Taxa_Abertura).toFixed(2)}%</div>
+          </div>
+          <div class="taxa-divider"></div>
+          <div class="taxa-item">
+            <div class="taxa-item-label">clique (ctr)</div>
+            <div class="taxa-item-value frios-val">${n(frios.Taxa_Clique).toFixed(2)}%</div>
+          </div>
+        </div>
+      </div>
+      <div class="taxa-card clientes">
+        <div class="taxa-card-title">base de clientes</div>
+        <div class="taxa-card-sub">base rd · clientes e colaboradores vml company</div>
+        <div class="taxas-row">
+          <div class="taxa-item">
+            <div class="taxa-item-label">entrega</div>
+            <div class="taxa-item-value clientes-val">${n(clientes.Taxa_Entrega).toFixed(2)}%</div>
+          </div>
+          <div class="taxa-divider"></div>
+          <div class="taxa-item">
+            <div class="taxa-item-label">abertura</div>
+            <div class="taxa-item-value clientes-val">${n(clientes.Taxa_Abertura).toFixed(2)}%</div>
+          </div>
+          <div class="taxa-divider"></div>
+          <div class="taxa-item">
+            <div class="taxa-item-label">clique (ctr)</div>
+            <div class="taxa-item-value clientes-val">${n(clientes.Taxa_Clique).toFixed(2)}%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Charts por Campanha ── -->
+    <div class="section-title">performance por campanha</div>
+    <div class="camp-charts-grid" id="camp-charts-grid"></div>
+
+    <!-- ── Tabela de Emails ── -->
+    <div class="card section-gap">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <div class="section-title" style="margin-bottom:0">e-mails enviados · detalhamento</div>
+        <span class="table-count" id="email-count"></span>
+      </div>
+      <div class="filter-bar">
+        <span class="filter-label">filtrar:</span>
+        <input class="filter-input" id="email-search" placeholder="buscar e-mail ou assunto…">
+        <select class="filter-select" id="email-camp-filter"><option value="">todas as campanhas</option></select>
+        <select class="filter-select" id="email-seg-filter"><option value="">todos os segmentos</option></select>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="email-table" id="email-table">
+          <thead><tr>
+            <th data-k="Data">data ↕</th>
+            <th>campanha</th>
+            <th>segmento</th>
+            <th>e-mail / assunto</th>
+            <th class="right" data-k="Leads">leads ↕</th>
+            <th class="right" data-k="Taxa_Entrega">entrega ↕</th>
+            <th class="right" data-k="Taxa_Abertura">abertura ↕</th>
+            <th class="right" data-k="Taxa_Clique">ctr ↕</th>
+          </tr></thead>
+          <tbody id="email-tbody"></tbody>
+        </table>
+      </div>
+    </div>`;
+
+    // Render campaign charts
+    renderCampCharts(campGroups);
+
+    // Render email table
+    renderEmailTable();
+
+    // Sort and filter events
+    document.querySelectorAll('#email-table th[data-k]').forEach(th=>{
+      th.addEventListener('click',()=>{const k=th.dataset.k;_emailSortDir=(k===_emailSortKey)?-_emailSortDir:-1;_emailSortKey=k;renderEmailTable();});
+    });
+    ['email-search','email-camp-filter','email-seg-filter'].forEach(id=>{
+      const e=document.getElementById(id);if(e)e.addEventListener('input',renderEmailTable);
+    });
+
+    // Populate filters
+    const cs=document.getElementById('email-camp-filter');
+    const ss=document.getElementById('email-seg-filter');
+    [...new Set(_emailsData.map(r=>r.Campanha))].forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;cs.appendChild(o);});
+    [...new Set(_emailsData.map(r=>r.Segmento))].forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;ss.appendChild(o);});
   }
-  function togglePeriodo(){
-    var el=document.getElementById('periodo-list');
-    el.classList.toggle('coll');
-    var chev=document.querySelector('#periodo-toggle .chev');
-    if(chev)chev.style.transform=el.classList.contains('coll')?'rotate(-90deg)':'';
+
+  function renderCampCharts(campGroups){
+    const grid=document.getElementById('camp-charts-grid');
+    if(!grid)return;
+    // destroy old charts
+    Object.keys(_charts).forEach(k=>{_charts[k].destroy();delete _charts[k];});
+
+    let html='';
+    Object.entries(campGroups).forEach(([camp,rows])=>{
+      const cc=CAMP_COLORS[camp]||{bg:'#6b5fd4',light:'#c9b8f8',tag:'webinar'};
+      const id='chart-'+camp.replace(/\s+/g,'-').toLowerCase().replace(/[^a-z0-9-]/g,'');
+      const avgEnt = rows.reduce((a,r)=>a+n(r.Taxa_Entrega),0)/rows.length;
+      const avgAbr = rows.reduce((a,r)=>a+n(r.Taxa_Abertura),0)/rows.length;
+      const avgCtr = rows.reduce((a,r)=>a+n(r.Taxa_Clique),0)/rows.length;
+      const totalLeads = rows.reduce((a,r)=>a+n(r.Leads),0);
+      html+=`<div class="camp-chart-card">
+        <div class="camp-chart-card-title">${camp}</div>
+        <div class="camp-chart-card-sub">${rows.length} e-mail${rows.length!==1?'s':''} · ${totalLeads.toLocaleString('pt-BR')} leads</div>
+        <div style="position:relative;height:140px"><canvas id="${id}"></canvas></div>
+        <div class="camp-chart-metrics">
+          <div class="camp-metric"><div class="camp-metric-val" style="color:${cc.light}">${avgEnt.toFixed(1)}%</div><div class="camp-metric-label">entrega</div></div>
+          <div class="camp-metric"><div class="camp-metric-val" style="color:${cc.light}">${avgAbr.toFixed(1)}%</div><div class="camp-metric-label">abertura</div></div>
+          <div class="camp-metric"><div class="camp-metric-val" style="color:${cc.light}">${avgCtr.toFixed(2)}%</div><div class="camp-metric-label">ctr</div></div>
+        </div>
+      </div>`;
+      // defer chart creation
+      setTimeout(()=>{
+        const canvas=document.getElementById(id);
+        if(!canvas)return;
+        const isLight=document.documentElement.dataset.theme==='light';
+        const gridC=isLight?'rgba(18,21,90,.06)':'rgba(255,255,255,.04)';
+        const tickC=isLight?'#5a5070':'#8b86a8';
+        _charts[id]=new Chart(canvas,{
+          type:'bar',
+          data:{
+            labels:rows.map((_,i)=>`#${i+1}`),
+            datasets:[
+              {label:'entrega %',data:rows.map(r=>n(r.Taxa_Entrega)),backgroundColor:cc.bg+'88',borderRadius:4,borderSkipped:false},
+              {label:'abertura %',data:rows.map(r=>n(r.Taxa_Abertura)),backgroundColor:cc.bg+'cc',borderRadius:4,borderSkipped:false},
+              {label:'ctr %',data:rows.map(r=>n(r.Taxa_Clique)),backgroundColor:cc.bg,borderRadius:4,borderSkipped:false},
+            ]
+          },
+          options:{
+            responsive:true,maintainAspectRatio:false,
+            plugins:{legend:{display:false},tooltip:{backgroundColor:isLight?'#fff':'#0d1030',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:isLight?'#12155a':'#efecef',bodyColor:tickC,callbacks:{title:t=>`e-mail ${t[0].dataIndex+1}`,label:ctx=>`${ctx.dataset.label}: ${ctx.raw.toFixed(2)}%`}}},
+            scales:{
+              x:{grid:{display:false},ticks:{color:tickC,font:{size:10,family:"'Poppins',sans-serif"}}},
+              y:{grid:{color:gridC},ticks:{color:tickC,font:{size:10,family:"'Poppins',sans-serif"},callback:v=>v+'%'},max:100}
+            }
+          }
+        });
+      },50);
+    });
+    grid.innerHTML=html;
   }
-  function toggleTheme(){const h=document.documentElement;const l=h.dataset.theme==='light';h.dataset.theme=l?'':'light';localStorage.setItem('dashboard-theme',h.dataset.theme);const i=document.getElementById('sidebar-logo');if(i)i.src=h.dataset.theme==='light'?'/assets/img/logo-escuro.png':'/assets/img/logo.png';if(window._areaState)renderMonth(window._areaState.current,window._areaState.all);}
+
+  function renderEmailTable(){
+    if(!_emailsData)return;
+    const search=(document.getElementById('email-search')?.value||'').toLowerCase();
+    const cf=document.getElementById('email-camp-filter')?.value||'';
+    const sf=document.getElementById('email-seg-filter')?.value||'';
+
+    let rows=_emailsData.filter(r=>{
+      if(search&&!r.Nome_Email.toLowerCase().includes(search)&&!r.Assunto.toLowerCase().includes(search))return false;
+      if(cf&&r.Campanha!==cf)return false;
+      if(sf&&r.Segmento!==sf)return false;
+      return true;
+    });
+    rows.sort((a,b)=>{
+      const av=_emailSortKey==='Data'?a[_emailSortKey]:n(a[_emailSortKey]);
+      const bv=_emailSortKey==='Data'?b[_emailSortKey]:n(b[_emailSortKey]);
+      return av<bv?-_emailSortDir:av>bv?_emailSortDir:0;
+    });
+
+    const cnt=document.getElementById('email-count');
+    if(cnt)cnt.textContent=`${rows.length} e-mail${rows.length!==1?'s':''}`;
+
+    const maxLeads=Math.max(..._emailsData.map(r=>n(r.Leads)));
+    const tb=document.getElementById('email-tbody');
+    if(!tb)return;
+
+    tb.innerHTML=rows.map(r=>{
+      const cc=CAMP_COLORS[r.Campanha]||{bg:'#6b5fd4',tag:'webinar'};
+      const segClass=r.Segmento==='Leads frios'?'frios':r.Segmento==='Base RD'?'baserd':'clientes';
+      const date=r.Data?new Date(r.Data).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}):'-';
+      const entPct=Math.min(n(r.Taxa_Entrega),100);
+      const abrPct=Math.min(n(r.Taxa_Abertura),100);
+      const ctrPct=Math.min(n(r.Taxa_Clique)*10,100); // scale CTR bar
+      const lw=maxLeads?Math.round((n(r.Leads)/maxLeads)*100):0;
+      return `<tr>
+        <td style="white-space:nowrap;color:var(--muted);font-size:12px">${date}</td>
+        <td><span class="camp-tag ${cc.tag}">${r.Campanha}</span></td>
+        <td><span class="seg-badge ${segClass}">${r.Segmento}</span></td>
+        <td>
+          <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px">${r.Nome_Email}</div>
+          <div class="email-assunto">${r.Assunto}</div>
+        </td>
+        <td class="right">
+          <div class="pct-bar-bg" style="vertical-align:middle"><div class="pct-bar-fill" style="width:${lw}%;background:#c9b8f8;height:100%"></div></div>
+          <strong>${n(r.Leads).toLocaleString('pt-BR')}</strong>
+        </td>
+        <td class="right"><div class="pct-bar-bg"><div class="pct-bar-fill" style="width:${entPct}%;background:#391bce;height:100%"></div></div>${n(r.Taxa_Entrega).toFixed(2)}%</td>
+        <td class="right"><div class="pct-bar-bg"><div class="pct-bar-fill" style="width:${abrPct}%;background:#a038f2;height:100%"></div></div>${n(r.Taxa_Abertura).toFixed(2)}%</td>
+        <td class="right"><div class="pct-bar-bg"><div class="pct-bar-fill" style="width:${ctrPct}%;background:#a2e259;height:100%"></div></div>${n(r.Taxa_Clique).toFixed(2)}%</td>
+      </tr>`;
+    }).join('');
+  }
+
+  async function buildNav(){
+    const nav=document.getElementById('monthNav');if(!nav)return;
+    const found=[];
+    for(const y of _YEARS){for(let m=1;m<=12;m++){try{const r=await fetch(`/assets/data/${y}/${String(m).padStart(2,'0')}/crm.csv`,{method:'HEAD'});if(r.ok)found.push({year:y,month:m});}catch(e){}}}
+    if(!found.length){nav.innerHTML='<div style="font-size:12px;color:var(--muted);padding:8px 12px">nenhum dado</div>';return;}
+    const byY={};found.forEach(({year,month})=>{if(!byY[year])byY[year]=[];byY[year].push(month);});
+    let allBtns=[];
+    Object.keys(byY).sort().forEach(y=>{
+      const sec=document.createElement('div');sec.className='sidebar-section year-header';sec.style.cssText='display:flex;align-items:center;gap:4px';sec.innerHTML=`<span style="flex:1">${y}</span>`;nav.appendChild(sec);
+      const grp=document.createElement('div');grp.className='year-group';
+      byY[y].forEach(m=>{const btn=document.createElement('button');btn.className='nav-tab';btn.innerHTML=`<span class="nav-dot" style="background:#391bce"></span>${_MO[m-1]}`;btn.onclick=()=>{allBtns.forEach(b=>b.classList.remove('active'));btn.classList.add('active');loadMonth(Number(y),m);};grp.appendChild(btn);allBtns.push(btn);});
+      nav.appendChild(grp);requestAnimationFrame(()=>{grp.style.maxHeight=grp.scrollHeight+'px';});
+    });
+    const latest=found[found.length-1];
+    if(allBtns.length)allBtns[allBtns.length-1].classList.add('active');
+    await loadMonth(latest.year,latest.month);
+  }
+
+  document.addEventListener('DOMContentLoaded',async()=>{
+    try{await buildNav();}catch(e){console.error(e);}
+    finally{document.getElementById('app-loading').style.display='none';document.getElementById('app').style.display='';}
+  });
   </script>
-  <script src="/assets/js/area.js"></script>
 </body>
 </html>
